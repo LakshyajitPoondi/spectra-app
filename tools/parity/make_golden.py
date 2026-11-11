@@ -133,6 +133,7 @@ class Suite:
         (self.dir / "golden").mkdir()
         self.cases = []
         self._inputs = {}
+        self.default_subsample = None
 
     def input(self, name, array):
         """Store an input array. Inputs must be float32-representable (see f32())
@@ -163,7 +164,8 @@ class Suite:
         self.cases.append(case)
 
     def pipeline(self, cid, image_name, image, *, film="kodak_portra_400", print_="kodak_portra_endura",
-                 pre=None, post=None, inject=None, collect=None, atol=1e-9, rtol=1e-9, seed=None):
+                 pre=None, post=None, inject=None, collect=None, atol=1e-9, rtol=1e-9, seed=None,
+                 subsample=None):
         from spektrafilm.runtime.process import Simulator
         case = {"id": cid, "kind": "pipeline", "film": film, "print": print_,
                 "input": self.input(image_name, image), "atol": atol, "rtol": rtol}
@@ -180,7 +182,13 @@ class Suite:
         if seed is not None:
             np.random.seed(seed)
         out = sim._pipeline.process(np.array(image, dtype=np.float64), inject=inject, collect=collect)
-        self.add(case, out)
+        subsample = subsample or self.default_subsample
+        if subsample and subsample > 1 and out.shape[0] * out.shape[1] > 1024:
+            # keep the stored golden small: compare every k-th pixel of the full render
+            case["subsample"] = subsample
+            self.add(case, out[::subsample, ::subsample])
+        else:
+            self.add(case, out)
         return out
 
     def unit(self, cid, unit, golden, *, atol=1e-12, rtol=1e-9, **fields):
@@ -489,9 +497,387 @@ def suite_t2_nonspatial():
     s.finish()
 
 
+def small_scene():
+    """200 x 133 portrait-orientation reduction of the upstream test photograph."""
+    return block_reduce(portrait_full(), 5)
+
+
+def detail_scene():
+    """96 x 144 landscape crop of the photograph at full resolution (fine detail)."""
+    return f32(portrait_full()[400:496, 250:394])
+
+
+# film_format_mm chosen so the small test images have a realistic ~6 um pixel pitch.
+def fmt(image, um=6.0):
+    return {"camera": {"film_format_mm": max(image.shape[:2]) * um / 1000.0}}
+
+
+def suite_t3_spatial():
+    s = Suite("t3_spatial")
+    s.default_subsample = 2
+    scene = small_scene()
+    detail = detail_scene()
+    hi = highlights_image()
+    base_scene = merge(NO_STOCHASTIC, fmt(scene))
+    base_detail = merge(NO_STOCHASTIC, fmt(detail))
+    base_hi = merge(NO_STOCHASTIC, fmt(hi))
+    FFT = dict(atol=3e-4, rtol=3e-4)  # the reference convolves the diffusion PSF in float32
+
+    for film, print_ in [("kodak_portra_400", "kodak_portra_endura"), ("kodak_gold_200", "kodak_supra_endura"),
+                         ("kodak_vision3_500t", "kodak_2383"), ("kodak_doublex", "kodak_2302"),
+                         ("fujifilm_c200", "fujifilm_crystal_archive_typeii")]:
+        s.pipeline(f"default_{film}__{print_}", "scene", scene, film=film, print_=print_, pre=base_scene)
+    for film in ["fujifilm_velvia_100", "kodak_kodachrome_64", "kodak_trix"]:
+        s.pipeline(f"default_scanfilm_{film}", "scene", scene, film=film,
+                   pre=merge(base_scene, {"io": {"scan_film": True}}))
+    for tap in ["log_e_film", "cmy_film", "log_e_print", "cmy_print"]:
+        s.pipeline(f"taps_portra400_{tap}", "detail", detail, pre=base_detail, collect=tap)
+    s.pipeline("highlights_default", "highlights", hi, pre=base_hi)
+    s.pipeline("highlights_log_e_film", "highlights", hi, pre=base_hi, collect="log_e_film")
+    s.pipeline("highlights_weak_ah", "highlights", hi, film="kodak_gold_200", pre=base_hi)
+    s.pipeline("highlights_boost", "highlights", hi,
+               pre=merge(base_hi, {"film_render": {"halation": {"boost_ev": 4.0, "boost_range": 0.5, "protect_ev": 2.0}}}))
+    s.pipeline("halation_off", "highlights", hi, pre=merge(base_hi, {"film_render": {"halation": {"active": False}}}))
+    s.pipeline("halation_tuned", "highlights", hi, pre=base_hi,
+               post={"film_render": {"halation": {"scatter_amount": 0.5, "scatter_spatial_scale": 3.0,
+                                                  "halation_amount": 2.0, "halation_spatial_scale": 0.5,
+                                                  "halation_strength": [0.3, 0.1, 0.015], "halation_n_bounces": 5,
+                                                  "halation_bounce_decay": 0.8, "halation_renormalize": False}}})
+    s.pipeline("camera_lens_blur", "detail", detail, pre=merge(base_detail, {"camera": {"lens_blur_um": 14.0}}))
+    s.pipeline("camera_lens_blur_large", "detail", detail, pre=merge(base_detail, {"camera": {"lens_blur_um": 30.0}}))
+    s.pipeline("scanner_blur", "detail", detail, pre=merge(base_detail, {"scanner": {"lens_blur": 1.2}}))
+    s.pipeline("scanner_blur_iir", "detail", detail, pre=merge(base_detail, {"scanner": {"lens_blur": 3.5}}))
+    s.pipeline("scanner_usm_strong", "detail", detail, pre=merge(base_detail, {"scanner": {"unsharp_mask": [1.5, 2.0]}}))
+    s.pipeline("scanner_usm_off", "detail", detail, pre=merge(base_detail, {"scanner": {"unsharp_mask": [0.0, 0.0]}}))
+    s.pipeline("dir_diffusion_tuned", "detail", detail, pre=base_detail,
+               post={"film_render": {"dir_couplers": {"diffusion_size_um": 40.0, "diffusion_tail_um": 120.0,
+                                                      "diffusion_tail_weight": 0.2, "amount": 1.5}}})
+    s.pipeline("dir_diffusion_off", "detail", detail, pre=base_detail,
+               post={"film_render": {"dir_couplers": {"diffusion_size_um": 0.0}}})
+    s.pipeline("dir_diffusion_positive", "detail", detail, film="kodak_ektachrome_100",
+               pre=merge(base_detail, {"io": {"scan_film": True}}))
+    s.pipeline("format_120", "scene", scene, pre=merge(NO_STOCHASTIC, {"camera": {"film_format_mm": 2.4}}))
+    s.pipeline("crop", "scene", scene,
+               pre=merge(base_scene, {"io": {"crop": True, "crop_center": [0.4, 0.55], "crop_size": [0.5, 0.35]}}))
+    s.pipeline("preview_mode", "scene", scene, pre=merge(base_scene, {"settings": {"preview_mode": True}}))
+    for fam in ["glimmerglass", "black_pro_mist", "pro_mist", "cinebloom"]:
+        for strength in [0.25, 2.0]:
+            s.pipeline(f"camera_diffusion_{fam}_{strength}", "highlights", hi,
+                       pre=merge(base_hi, {"camera": {"diffusion_filter": {"active": True, "filter_family": fam,
+                                                                             "strength": strength}}}), **FFT)
+    s.pipeline("camera_diffusion_tuned", "highlights", hi,
+               pre=merge(base_hi, {"camera": {"diffusion_filter": {
+                   "active": True, "filter_family": "pro_mist", "strength": 1.0, "spatial_scale": 0.5,
+                   "halo_warmth": 0.9, "core_intensity": 0.5, "core_size": 2.0, "halo_intensity": 1.6,
+                   "halo_size": 0.7, "bloom_intensity": 0.4, "bloom_size": 1.5}}}), **FFT)
+    s.pipeline("camera_diffusion_bw", "highlights", hi, film="kodak_doublex", print_="kodak_2302",
+               pre=merge(base_hi, {"camera": {"diffusion_filter": {"active": True, "strength": 1.0}}}), **FFT)
+    s.pipeline("enlarger_diffusion", "highlights", hi,
+               pre=merge(base_hi, {"enlarger": {"diffusion_filter": {"active": True, "filter_family": "cinebloom",
+                                                                       "strength": 0.5}}}), **FFT)
+    s.pipeline("all_spatial", "scene", scene,
+               pre=merge(base_scene, {"camera": {"lens_blur_um": 8.0, "diffusion_filter": {"active": True, "strength": 0.5}},
+                                      "enlarger": {"diffusion_filter": {"active": True, "strength": 0.125}},
+                                      "scanner": {"lens_blur": 0.6, "unsharp_mask": [0.9, 0.5]},
+                                      "film_render": {"halation": {"boost_ev": 2.0}}}), **FFT)
+    s.finish()
+
+
+def suite_t5_sweeps():
+    s = Suite("t5_sweeps")
+    img = patches_image()
+    detail = detail_scene()
+    pairs = [("kodak_portra_400", "kodak_portra_endura"), ("kodak_vision3_250d", "kodak_2383")]
+
+    def chem(**kw):
+        return kw
+
+    pre_sweeps = {
+        "ev_m2": {"camera": {"exposure_compensation_ev": -2.0}},
+        "ev_p2": {"camera": {"exposure_compensation_ev": 2.0}},
+        "ae_off": {"camera": {"auto_exposure": False}},
+        "ae_off_ev1": {"camera": {"auto_exposure": False, "exposure_compensation_ev": 1.0}},
+        **{f"ae_{m}": {"camera": {"auto_exposure_method": m}} for m in
+           ["matrix", "multi_zone", "partial", "highlight_weighted", "median", "average"]},
+        **{f"filter_{k}": {"camera": {"color_filter": k}} for k in ["hoya_x0", "hoya_x1", "hoya_y2", "hoya_ya3", "hoya_r1"]},
+        "print_exposure_0.5": {"enlarger": {"print_exposure": 0.5}},
+        "print_exposure_2": {"enlarger": {"print_exposure": 2.0}},
+        "print_comp_off": {"enlarger": {"print_exposure_compensation": False}, "camera": {"exposure_compensation_ev": 1.0}},
+        "print_norm_off": {"enlarger": {"normalize_print_exposure": False}, "camera": {"exposure_compensation_ev": 1.0}},
+        "print_comp_norm_off": {"enlarger": {"normalize_print_exposure": False, "print_exposure_compensation": False,
+                                             "print_exposure": 0.02}},
+        "y_shift_p20": {"enlarger": {"y_filter_shift": 20.0}},
+        "y_shift_m20": {"enlarger": {"y_filter_shift": -20.0}},
+        "m_shift_p20": {"enlarger": {"m_filter_shift": 20.0}},
+        "m_shift_m20": {"enlarger": {"m_filter_shift": -20.0}},
+        "preflash": {"enlarger": {"preflash_exposure": 0.1}},
+        "preflash_shift": {"enlarger": {"preflash_exposure": 0.3, "preflash_y_filter_shift": 15.0,
+                                         "preflash_m_filter_shift": -10.0}},
+        "illuminant_lens": {"enlarger": {"illuminant": "TH-KG3-L"}},
+        "illuminant_bb": {"enlarger": {"illuminant": "BB3200"}},
+        "no_db_filters": {"settings": {"neutral_print_filters_from_database": False}},
+        "manual_filters": {"settings": {"neutral_print_filters_from_database": False},
+                           "enlarger": {"c_filter_neutral": 10.0, "m_filter_neutral": 40.0, "y_filter_neutral": 80.0}},
+        "white_corr": {"scanner": {"white_correction": True}},
+        "black_corr": {"scanner": {"black_correction": True}},
+        "bw_corr": {"scanner": {"white_correction": True, "black_correction": True}},
+        "bw_corr_levels": {"scanner": {"white_correction": True, "black_correction": True, "white_level": 0.9,
+                                       "black_level": 0.05}},
+        **{f"in_{k}": {"io": {"input_color_space": v}} for k, v in
+           [("srgb", "sRGB"), ("p3", "DCI-P3"), ("displayp3", "Display P3"), ("adobe", "Adobe RGB (1998)"),
+            ("bt2020", "ITU-R BT.2020"), ("aces", "ACES2065-1")]},
+        **{f"in_cctf_{k}": {"io": {"input_color_space": v, "input_cctf_decoding": True}} for k, v in
+           [("srgb", "sRGB"), ("prophoto", "ProPhoto RGB"), ("bt2020", "ITU-R BT.2020"), ("adobe", "Adobe RGB (1998)")]},
+        **{f"out_{k}": {"io": {"output_color_space": v}} for k, v in
+           [("p3", "DCI-P3"), ("displayp3", "Display P3"), ("adobe", "Adobe RGB (1998)"), ("bt2020", "ITU-R BT.2020"),
+            ("prophoto", "ProPhoto RGB"), ("aces", "ACES2065-1")]},
+        "out_linear": {"io": {"output_cctf_encoding": False}},
+        **{f"gamut_{a}": {"io": {"output_gamut_compress": {"algorithm": a}}} for a in ["off", "aces_rgc", "oklrab", "jzazbz"]},
+        "gamut_knee": {"io": {"output_gamut_compress": {"knee": [0.5, 1.2, 1.5]}}},
+        "gamut_no_lightness": {"io": {"output_gamut_compress": {"lightness_compression": None}}},
+        "gamut_lightness": {"io": {"output_gamut_compress": {"lightness_compression": [0.3, 0.9, 4.0]}}},
+        "gamut_jz_p3": {"io": {"output_color_space": "Display P3", "output_gamut_compress": {"algorithm": "jzazbz"}}},
+        "gamut_oklrab_bt2020": {"io": {"output_color_space": "ITU-R BT.2020", "output_gamut_compress": {"algorithm": "oklrab"}}},
+        "in_gamut_off": {"io": {"input_gamut_compress": {"active": False}}},
+        "in_gamut_knee": {"io": {"input_gamut_compress": {"knee": [0.7, 1.05, 3.0]}}},
+        "mallett": {"settings": {"rgb_to_raw_method": "mallett2019"}},
+        "mallett_srgb": {"settings": {"rgb_to_raw_method": "mallett2019"}, "io": {"input_color_space": "sRGB",
+                                                                                 "input_cctf_decoding": True}},
+        "window_off": {"settings": {"apply_hanatos2025_adaptation_window": False}},
+        "surface_on": {"settings": {"apply_hanatos2025_adaptation_surface": True}},
+        "spectral_blur": {"settings": {"spectral_gaussian_blur": 3.0}},
+        "film_chem_gamma": {"film_render": {"chemistry": chem(gamma_factor=1.25)}},
+        "film_chem_mix": {"film_render": {"chemistry": chem(gamma_factor_fast=0.8, gamma_factor_slow=1.2,
+                                                           gamma_factor_blue=1.1, developer_exhaustion=0.5)}},
+        "film_chem_off": {"film_render": {"chemistry": chem(active=False)}},
+        "print_chem_gamma": {"print_render": {"chemistry": chem(gamma_factor=0.8)}},
+        "print_chem_mix": {"print_render": {"chemistry": chem(gamma_factor_fast=1.3, gamma_factor_slow=0.85,
+                                                             gamma_factor_red=0.95, developer_exhaustion=0.8)}},
+        "print_chem_off": {"print_render": {"chemistry": chem(active=False)}},
+        "base_tuned": {"film_render": {"base": {"cyan": 0.8, "magenta": 1.2, "yellow": 0.6}}},
+        "base_scale": {"film_render": {"base": {"scale": 0.5}}},
+        "base_off": {"film_render": {"base": {"active": False}}},
+        "scan_film": {"io": {"scan_film": True}},
+        "scan_film_base_tuned": {"io": {"scan_film": True}, "film_render": {"base": {"cyan": 1.3, "scale": 0.7}}},
+        "lut_mode": {"debug": {"lut_mode": True}},
+    }
+    post_sweeps = {
+        "dir_off": {"film_render": {"dir_couplers": {"active": False}}},
+        "dir_amount_2": {"film_render": {"dir_couplers": {"amount": 2.0}}},
+        "dir_amount_4": {"film_render": {"dir_couplers": {"amount": 4.0}}},  # non-monotonic inversion (RISKS R-07)
+        "dir_inhibition": {"film_render": {"dir_couplers": {"inhibition_samelayer": 0.3, "inhibition_interlayer": 2.0}}},
+        "dir_langmuir": {"film_render": {"dir_couplers": {"langmuir_donor_k_rgb": [0.2, 3.0, 0.7]}}},
+        "dir_gammas": {"film_render": {"dir_couplers": {"gamma_samelayer_rgb": [0.1, 0.9, 0.4],
+                                                        "gamma_interlayer_r_to_gb": [0.0, 0.6],
+                                                        "gamma_interlayer_g_to_rb": [0.5, 0.0],
+                                                        "gamma_interlayer_b_to_rg": [0.3, 0.3]}}},
+    }
+    for film, print_ in pairs:
+        short = film.split("_", 1)[1]
+        for tag, pre in pre_sweeps.items():
+            s.pipeline(f"{short}_{tag}", "patches", img, film=film, print_=print_, pre=merge(NONSPATIAL, pre))
+        for tag, post in post_sweeps.items():
+            s.pipeline(f"{short}_{tag}", "patches", img, film=film, print_=print_, pre=NONSPATIAL, post=post)
+    # positive film: receiver-side Langmuir and black/white correction on a film scan
+    pos = merge(NONSPATIAL, {"io": {"scan_film": True}})
+    for film in ["fujifilm_provia_100f", "kodak_trix"]:
+        short = film.split("_", 1)[1]
+        s.pipeline(f"{short}_bw_corr", "patches", img, film=film,
+                   pre=merge(pos, {"scanner": {"white_correction": True, "black_correction": True}}))
+        s.pipeline(f"{short}_white_corr", "patches", img, film=film, pre=merge(pos, {"scanner": {"white_correction": True}}))
+        s.pipeline(f"{short}_black_corr", "patches", img, film=film, pre=merge(pos, {"scanner": {"black_correction": True}}))
+        s.pipeline(f"{short}_dir_receiver", "patches", img, film=film, pre=pos,
+                   post={"film_render": {"dir_couplers": {"amount": 2.5, "langmuir_receiver_k_rgb": [0.3, 1.0, 2.0]}}})
+        s.pipeline(f"{short}_printed", "patches", img, film=film, pre=NONSPATIAL)
+    # B&W development-time families
+    for dt in [4.0, 6.5, 12.0]:
+        s.pipeline(f"doublex_dt{dt}", "patches", img, film="kodak_doublex", print_="kodak_2302",
+                   pre=merge(NONSPATIAL, {"film_render": {"chemistry": {"development_time": dt}}}))
+    for dt in [2.0, 9.0]:
+        s.pipeline(f"2302_dt{dt}", "patches", img, film="kodak_doublex", print_="kodak_2302",
+                   pre=merge(NONSPATIAL, {"print_render": {"chemistry": {"development_time": dt}}}))
+    s.pipeline("doublex_bw_corr", "patches", img, film="kodak_doublex", print_="kodak_2302",
+               pre=merge(NONSPATIAL, {"scanner": {"white_correction": True, "black_correction": True}}))
+    # metering on a real image (uses the anti-aliased metering preview)
+    scene = small_scene()
+    big = f32(np.kron(scene, np.ones((2, 3, 1))))  # 400 x 399, larger than the 256 px metering preview
+    for m in ["center_weighted", "matrix", "multi_zone", "partial", "highlight_weighted", "median", "average"]:
+        s.pipeline(f"metering_big_{m}", "scene_400x399", big, pre=merge(NONSPATIAL, {"camera": {"auto_exposure_method": m}}),
+                   collect="log_e_film", subsample=8)
+    s.finish()
+
+
+GUI_FAST = {"settings": {"use_enlarger_lut": True, "use_scanner_lut": True, "lut_resolution": 17,
+                         "use_fast_stats": True, "preview_mode": True}}
+
+
+def suite_fast_preview():
+    """The Python GUI's faster configuration: 17^3 enlarger / scanner LUTs,
+    fast statistics and preview mode. Two comparisons per case:
+      *_gui : C++ fast preview vs Python with the same settings (exact port);
+      *_ref : C++ fast preview vs the Python reference without LUTs (looser,
+              bounds the error the LUT acceleration introduces).
+    """
+    s = Suite("fast_preview")
+    img = patches_image()
+    scene = small_scene()
+    pairs = [("kodak_portra_400", "kodak_portra_endura"), ("kodak_vision3_500t", "kodak_2383"),
+             ("kodak_gold_200", "fujifilm_crystal_archive_typeii"), ("kodak_doublex", "kodak_2302"),
+             ("kodak_doublex", "kodak_portra_endura"), ("kodak_portra_400", "kodak_2302")]
+    from spektrafilm.runtime.process import Simulator
+    for film, print_ in pairs:
+        tag = f"{film}__{print_}"
+        fast = merge(NO_STOCHASTIC, GUI_FAST)
+        s.pipeline(f"patches_gui_{tag}", "patches", img, film=film, print_=print_, pre=fast)
+        s.pipeline(f"scene_gui_{tag}", "scene", scene, film=film, print_=print_, pre=merge(fast, fmt(scene)),
+                   subsample=2)
+        # reference (no LUT) golden, rendered by the C++ side with the fast settings
+        ref_pre = merge(NO_STOCHASTIC, {"settings": {"preview_mode": True}}, fmt(scene))
+        case = {"film": film, "print": print_, "pre": ref_pre}
+        ref = Simulator(build_params(case))._pipeline.process(np.array(scene))
+        s.add({"id": f"scene_ref_{tag}", "kind": "pipeline", "film": film, "print": print_,
+               "pre": merge(fast, fmt(scene)), "input": s.input("scene", scene), "atol": 0.015, "rtol": 0.0,
+               "p99_max": 0.006, "rmse_max": 0.003, "subsample": 2}, ref[::2, ::2])
+    for film in ["fujifilm_velvia_100", "kodak_trix"]:
+        fast = merge(NO_STOCHASTIC, GUI_FAST, {"io": {"scan_film": True}})
+        s.pipeline(f"patches_gui_scanfilm_{film}", "patches", img, film=film, pre=fast)
+    s.finish()
+
+
+def grain_stats(img, pixel_size_um):
+    """Statistics vector shared with the C++ runner (apps/spectra-cli/parity.cpp)."""
+    img = np.asarray(img, dtype=np.float64)
+    h, w, c = img.shape
+    out = {"mean": [], "std": [], "rms48": [], "spectrum": []}
+    r = 24.0 / pixel_size_um
+    k = int(np.floor(r))
+    yy, xx = np.mgrid[-k:k + 1, -k:k + 1]
+    disc = ((xx * xx + yy * yy) <= r * r).astype(np.float64)
+    disc /= disc.sum()
+    from scipy.signal import correlate2d
+    for ch in range(c):
+        p = img[:, :, ch]
+        out["mean"].append(p.mean())
+        out["std"].append(p.std())
+        ap = correlate2d(p, disc, mode="valid")
+        out["rms48"].append(ap.std() * 1000.0)
+        f = np.fft.fft2(p - p.mean())
+        power = (f.real ** 2 + f.imag ** 2)
+        fy = np.fft.fftfreq(h) * h
+        fx = np.fft.fftfreq(w) * w
+        rad = np.sqrt(fy[:, None] ** 2 + fx[None, :] ** 2)
+        edges = np.linspace(min(h, w) / 32.0, min(h, w) / 2.0, 9)
+        bins = np.array([power[(rad >= edges[i]) & (rad < edges[i + 1])].mean() for i in range(8)])
+        out["spectrum"].extend(bins / bins.sum())
+    return {k2: np.array(v) for k2, v in out.items()}
+
+
+def suite_t4_stochastic():
+    """Statistical parity of the stochastic effects (grain, glare).
+
+    The C++ random numbers cannot match NumPy's, so the comparison is on
+    statistics of flat patches: mean, standard deviation, RMS granularity
+    through a 48 um aperture, and the radial power spectrum.
+    """
+    import scipy.stats
+    from spektrafilm.model.grain import layer_particle_model
+    from spektrafilm.utils.fast_stats import fast_binomial, fast_poisson
+    from spektrafilm.runtime.process import Simulator
+    s = Suite("t4_stochastic")
+    # 768^2 patches: ~9000 independent 48 um apertures, so the RMS-granularity
+    # estimate has ~0.75 % noise per side and the 5 % threshold is > 4 sigma.
+    N = 768
+    um = 6.0
+    flat_fmt = {"camera": {"film_format_mm": N * um / 1000.0, "auto_exposure": False}}
+
+    # --- samplers: empirical distribution of the C++ exact samplers vs the analytic pmf
+    for lam in [0.3, 2.5, 9.9, 10.0, 37.0, 400.0, 5000.0]:
+        kmax = int(lam + 12 * np.sqrt(lam) + 12)
+        s.unit(f"pmf_poisson_{lam}", "sampler_pmf", scipy.stats.poisson.pmf(np.arange(kmax + 1), lam),
+               dist="poisson", lam=lam, kmax=kmax, fast=False, samples=2000000, atol=1.2e-3, rtol=0.0)
+    for n, p in [(5, 0.3), (40, 0.02), (40, 0.5), (40, 0.97), (300, 0.01), (300, 0.4), (5000, 0.2), (5000, 0.999)]:
+        s.unit(f"pmf_binomial_{n}_{p}", "sampler_pmf", scipy.stats.binom.pmf(np.arange(n + 1), n, p),
+               dist="binomial", n=n, p=p, kmax=n, fast=False, samples=2000000, atol=1.2e-3, rtol=0.0)
+    # --- fast samplers vs the reference's fast_stats (empirical on both sides)
+    M = 4000000
+    for lam in [2.5, 29.0, 31.0, 400.0]:
+        kmax = int(lam + 12 * np.sqrt(lam) + 12)
+        draws = fast_poisson(np.full(M, lam))
+        pmf = np.bincount(np.clip(draws, 0, kmax), minlength=kmax + 1) / M
+        s.unit(f"pmf_fast_poisson_{lam}", "sampler_pmf", pmf, dist="poisson", lam=lam, kmax=kmax, fast=True,
+               samples=2000000, atol=1.5e-3, rtol=0.0)
+    for n, p in [(10, 0.3), (40, 0.1), (40, 0.5), (300, 0.4)]:
+        draws = fast_binomial(np.full(M, n, dtype=np.int64), np.full(M, p))
+        pmf = np.bincount(draws, minlength=n + 1) / M
+        s.unit(f"pmf_fast_binomial_{n}_{p}", "sampler_pmf", pmf, dist="binomial", n=n, p=p, kmax=n, fast=True,
+               samples=2000000, atol=1.5e-3, rtol=0.0)
+
+    # --- one emulsion sub-layer: mean / std of the sampled density vs density
+    levels = [0.02, 0.1, 0.3, 0.6, 0.9, 1.2, 1.5, 1.75]
+    for tag, dmax, npp, u in [("coarse", 1.8, 6.0, 0.97), ("medium", 1.8, 45.0, 0.97), ("fine", 1.8, 800.0, 0.6)]:
+        for fast in [False, True]:
+            np.random.seed(5)
+            stats = []
+            for d in levels:
+                g = layer_particle_model(np.full((512, 512), d, dtype=np.float32), density_max=dmax,
+                                         n_particles_per_pixel=npp, grain_uniformity=u, use_fast_stats=fast)
+                stats.append([g.mean(), g.std()])
+            stats = np.array(stats, dtype=np.float64)
+            name = f"layer_{tag}_{'fast' if fast else 'exact'}"
+            s.unit(name + "_mean", "grain_layer_stats", stats[:, 0], stat="mean", levels=levels, density_max=dmax,
+                   n_particles=npp, uniformity=u, fast=fast, size=512, atol=0.004, rtol=0.01)
+            s.unit(name + "_std", "grain_layer_stats", stats[:, 1], stat="std", levels=levels, density_max=dmax,
+                   n_particles=npp, uniformity=u, fast=fast, size=512, atol=0.0, rtol=0.03)
+
+    # --- full grain model on flat patches, per stock and exposure level
+    stocks = ["kodak_portra_400", "kodak_vision3_500t", "kodak_gold_200", "fujifilm_velvia_100", "kodak_doublex",
+              "kodak_trix"]
+    evs = [-5, -3, -2, -1, 0, 1, 2, 3, 4, 6]
+    for film in stocks:
+        for fast in [False, True]:
+            if fast and film not in ("kodak_portra_400", "kodak_doublex"):
+                continue
+            pre = merge(flat_fmt, {"settings": {"use_fast_stats": fast}})
+            case = {"film": film, "pre": pre}
+            sim = Simulator(build_params(case))
+            for ev in evs:
+                value = float(np.float32(0.184 * 2.0 ** ev))
+                img = np.full((N, N, 3), value)
+                out = sim._pipeline.process(img, collect="cmy_film")
+                st = grain_stats(out, um)
+                base = {"kind": "pipeline_stats", "film": film, "pre": pre, "collect": "cmy_film",
+                        "flat": {"value": value, "size": N}, "pixel_size_um": um}
+                tag = f"grain_{film}_{'fast' if fast else 'exact'}_ev{ev}"
+                s.add({**base, "id": tag + "_mean", "stat": "mean", "atol": 0.005, "rtol": 0.0}, st["mean"])
+                s.add({**base, "id": tag + "_std", "stat": "std", "atol": 2e-4, "rtol": 0.05}, st["std"])
+                s.add({**base, "id": tag + "_rms48", "stat": "rms48", "atol": 0.05, "rtol": 0.05}, st["rms48"])
+                s.add({**base, "id": tag + "_spectrum", "stat": "spectrum", "atol": 0.004, "rtol": 0.10},
+                      st["spectrum"])
+    # --- glare on a flat print (linear output so the statistic is not shaped by the CCTF)
+    for tag, glare in [("default", {}), ("rough", {"percent": 0.2, "roughness": 1.5, "blur": 1.5})]:
+        pre = merge(flat_fmt, {"film_render": {"grain": {"active": False}}, "print_render": {"glare": glare},
+                               "io": {"output_cctf_encoding": False, "output_gamut_compress": {"algorithm": "off"}},
+                               "scanner": {"unsharp_mask": [0.0, 0.0]}})
+        case = {"film": "kodak_portra_400", "pre": pre}
+        sim = Simulator(build_params(case))
+        img = np.full((N, N, 3), float(np.float32(0.02)))
+        outs = [grain_stats(sim._pipeline.process(img), um) for _ in range(3)]
+        st = {k: np.mean([o[k] for o in outs], axis=0) for k in outs[0]}
+        base = {"kind": "pipeline_stats", "film": "kodak_portra_400", "pre": pre, "flat": {"value": float(np.float32(0.02)), "size": N},
+                "pixel_size_um": um}
+        s.add({**base, "id": f"glare_{tag}_mean", "stat": "mean", "atol": 2e-5, "rtol": 0.002}, st["mean"])
+        s.add({**base, "id": f"glare_{tag}_std", "stat": "std", "atol": 1e-7, "rtol": 0.05}, st["std"])
+        s.add({**base, "id": f"glare_{tag}_spectrum", "stat": "spectrum", "atol": 0.004, "rtol": 0.10}, st["spectrum"])
+    s.finish()
+
+
 SUITES = {
     "t1_units": suite_t1_units,
     "t2_nonspatial": suite_t2_nonspatial,
+    "t3_spatial": suite_t3_spatial,
+    "t4_stochastic": suite_t4_stochastic,
+    "t5_sweeps": suite_t5_sweeps,
+    "fast_preview": suite_fast_preview,
 }
 
 

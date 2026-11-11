@@ -166,6 +166,24 @@ int sample_binomial(PixelRng& rng, int n, double p, bool fast) {
     return fast ? binomial_fast(rng, n, p) : binomial_exact(rng, n, p);
 }
 
+void sample_grain_layer(const double* density, double* out, int h, int w, double density_max,
+                        double n_particles, double uniformity, uint64_t seed, uint32_t stream,
+                        bool fast) {
+    double od_particle = density_max / n_particles;
+    parallel_for(h, [&](long y0, long y1) {
+        for (long y = y0; y < y1; ++y)
+            for (int x = 0; x < w; ++x) {
+                size_t i = static_cast<size_t>(y) * w + x;
+                double p = std::clamp(density[i] / density_max, 1e-6, 1.0 - 1e-6);
+                double saturation = 1.0 - p * uniformity * (1.0 - 1e-6);
+                PixelRng rng(seed, stream, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+                int seeds = sample_poisson(rng, n_particles / saturation, fast);
+                int developed = sample_binomial(rng, seeds, p, fast);
+                out[i] = developed * od_particle * saturation;
+            }
+    });
+}
+
 GrainLayerParams grain_layer_params(const GrainParams& g, const Curves& cv, double pixel_size_um) {
     GrainLayerParams r;
     int n_ch = cv.n_ch;
@@ -249,15 +267,12 @@ Image apply_grain(const Image& density_cmy, double pixel_size_um, const GrainPar
                 for (long y = y0; y < y1; ++y)
                     for (int x = 0; x < w; ++x) {
                         double d = density_cmy.at(static_cast<int>(y), x, ch);
-                        double dl = fast_interp1(positive ? -d : d, xa.data(), ya.data(), n_le) + dmin_layer;
-                        double p = std::clamp(dl / dmax, 1e-6, 1.0 - 1e-6);
-                        double saturation = 1.0 - p * u * (1.0 - 1e-6);
-                        PixelRng rng(opt.seed, stream, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
-                        int seeds = sample_poisson(rng, npp / saturation, opt.use_fast_stats);
-                        int developed = sample_binomial(rng, seeds, p, opt.use_fast_stats);
-                        plane[static_cast<size_t>(y) * w + x] = developed * od_particle * saturation;
+                        plane[static_cast<size_t>(y) * w + x] =
+                            fast_interp1(positive ? -d : d, xa.data(), ya.data(), n_le) + dmin_layer;
                     }
             });
+            sample_grain_layer(plane.data(), plane.data(), h, w, dmax, npp, u, opt.seed, stream,
+                               opt.use_fast_stats);
             if (g.blur_dye_clouds_um > 0) {
                 gaussian_filter_plane(plane.data(), blurred.data(), h, w,
                                       g.blur_dye_clouds_um * std::sqrt(od_particle));

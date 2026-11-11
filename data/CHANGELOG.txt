@@ -1,0 +1,20 @@
+Changes to the spektrafilm profile data shipped in this directory
+=================================================================
+
+spektrafilm.sfpk is a derivative of the spektrafilm profiles and data by
+Andrea Volpato (https://github.com/andreavolpato/spektrafilm), licensed under
+CC BY-SA 4.0. See SPEKTRAFILM_LICENSE.txt (unchanged from upstream).
+
+Pack version 1 (exported from spektrafilm dev @ 6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507)
+- Re-encoded the profile JSON files, presets, filter spectra, illuminants and
+  the spectral upsampling LUT into one binary container (.sfpk). Numeric values
+  are unchanged: arrays are stored as float64 (the upsampling LUT as float16,
+  as upstream stores it).
+- Filter and illuminant spectra are stored already resampled to the 81-sample
+  380-780 nm grid, using upstream's own code.
+- Added numeric colour-science tables (colour-space matrices, adaptation
+  matrices, CIE 1931 observer) taken from colour-science 0.4.7.
+- No profile values were edited.
+
+pack_manifest.json lists every array with its checksum; a diff of that file
+shows exactly what changed between pack versions.

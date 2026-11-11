@@ -52,8 +52,6 @@ bool set_coupler_field(DirCouplersParams& d, const std::string& key, const json&
 }
 
 bool is_coupler_field(const std::string& key) {
-    DirCouplersParams tmp;
-    static const json dummy3 = json::array({0.0, 0.0, 0.0});
     if (key == "active") return true;
     if (key == "amount" || key == "inhibition_samelayer" || key == "inhibition_interlayer" ||
         key == "diffusion_size_um" || key == "diffusion_tail_um" || key == "diffusion_tail_weight")
@@ -84,7 +82,7 @@ void apply_halation_preset(Params& p, const Profile& film) {
 void apply_grain_preset(Params& p, const Profile& film, const json& presets) {
     if (!presets.contains(film.stock)) return;
     const json& preset = presets.at(film.stock);
-    const json& defaults = sub(sub(sub(presets, "defaults"), film.is_bw() ? "bw" : "color"),
+    json defaults = sub(sub(sub(presets, "defaults"), film.is_bw() ? "bw" : "color"),
                                film.is_positive() ? "positive" : "negative");
     GrainParams& g = p.film_render.grain;
     for (auto it = defaults.begin(); it != defaults.end(); ++it)
@@ -94,7 +92,7 @@ void apply_grain_preset(Params& p, const Profile& film, const json& presets) {
 
 void apply_couplers_preset(Params& p, const Profile& film, const json& presets) {
     bool bw = film.is_bw(), positive = film.is_positive();
-    const json& all_defaults =
+    json all_defaults =
         sub(sub(sub(presets, "defaults"), bw ? "bw" : "color"), positive ? "positive" : "negative");
     json defaults = json::object();
     for (auto it = all_defaults.begin(); it != all_defaults.end(); ++it)
@@ -102,7 +100,7 @@ void apply_couplers_preset(Params& p, const Profile& film, const json& presets) 
     if (!bw && !positive && film.is_cine()) {
         std::string ref = film.reference_illuminant;
         bool tungsten = !ref.empty() && std::toupper(static_cast<unsigned char>(ref[0])) == 'T';
-        const json& branch = sub(sub(all_defaults, "cine"), tungsten ? "tungsten" : "daylight");
+        json branch = sub(sub(all_defaults, "cine"), tungsten ? "tungsten" : "daylight");
         for (auto it = branch.begin(); it != branch.end(); ++it)
             if (is_coupler_field(it.key())) defaults[it.key()] = it.value();
     }

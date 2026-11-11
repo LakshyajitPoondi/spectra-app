@@ -12,3 +12,7 @@ foreach(cases ${PARITY_SUITES})
   add_test(NAME parity_${suite} COMMAND spectra-cli parity ${cases} --pack ${SPECTRA_PACK})
   set_tests_properties(parity_${suite} PROPERTIES LABELS "parity" TIMEOUT 1800)
 endforeach()
+
+add_executable(test_sanity test_sanity.cpp)
+target_link_libraries(test_sanity PRIVATE spectra_pipeline)
+add_test(NAME sanity COMMAND test_sanity ${SPECTRA_PACK})

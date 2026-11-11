@@ -70,6 +70,14 @@ class PixelRng;
 int sample_poisson(PixelRng& rng, double lambda, bool fast);
 int sample_binomial(PixelRng& rng, int n, double p, bool fast);
 
+// layer_particle_model without the dye-cloud blur: one emulsion sub-layer sampled
+// at the given (floor-inclusive) density field. Compound Poisson-Binomial:
+// N_s ~ Poisson(N / saturation) sensitised grains, each developed with
+// probability D / Dmax. `density` and `out` may alias.
+void sample_grain_layer(const double* density, double* out, int h, int w, double density_max,
+                        double n_particles, double uniformity, uint64_t seed, uint32_t stream,
+                        bool fast);
+
 // ---- Glare ------------------------------------------------------------------
 
 // add_glare: adds a blurred log-normal random amount of the illuminant.
