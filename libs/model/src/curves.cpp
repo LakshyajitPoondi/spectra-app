@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <string>
+#include <vector>
 #include <limits>
 #include <numeric>
 #include <stdexcept>

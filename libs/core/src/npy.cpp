@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <cstring>
+#include <string>
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>

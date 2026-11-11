@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
+#include <algorithm>
+#include <cstddef>
+#include <limits>
+#include <stdexcept>
+#include <string>
 #include <array>
 #include <cmath>
 #include <cstdint>

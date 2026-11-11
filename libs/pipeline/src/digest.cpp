@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <cctype>
+#include <array>
+#include <string>
 
 #include "spectra/pipeline/pipeline.hpp"
 

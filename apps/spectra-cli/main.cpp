@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // spectra-cli: headless tools for the CPU reference pipeline.
 #include <cstdio>
+#include <algorithm>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>

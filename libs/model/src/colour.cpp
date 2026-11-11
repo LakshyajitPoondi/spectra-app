@@ -2,6 +2,7 @@
 #include "spectra/model/colour.hpp"
 
 #include <cmath>
+#include <string>
 #include <stdexcept>
 
 namespace spectra {

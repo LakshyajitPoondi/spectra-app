@@ -3,6 +3,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 #include <stdexcept>
 
 #include "spectra/core/parallel.hpp"

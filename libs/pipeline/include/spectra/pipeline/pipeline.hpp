@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
+#include <vector>
 #include <map>
 #include <memory>
 #include <optional>

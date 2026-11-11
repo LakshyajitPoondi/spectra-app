@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include <cmath>
+#include <string>
+#include <vector>
 #include <stdexcept>
 
 #include "spectra/core/parallel.hpp"

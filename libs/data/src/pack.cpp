@@ -2,6 +2,9 @@
 #include "spectra/data/pack.hpp"
 
 #include <cstring>
+#include <algorithm>
+#include <string>
+#include <vector>
 #include <fstream>
 #include <stdexcept>
 

@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "spectra/pipeline/pipeline.hpp"
+#include <optional>
+#include <stdexcept>
+#include <string>
 
 namespace nlohmann {
 template <typename T>

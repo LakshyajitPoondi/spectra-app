@@ -2,6 +2,10 @@
 // Sanity tests that need no Python goldens: finite output, determinism,
 // thread invariance, resolution independence and whole-image statistic reuse.
 #include <cmath>
+#include <algorithm>
+#include <memory>
+#include <optional>
+#include <tuple>
 #include <cstdio>
 #include <cstdlib>
 

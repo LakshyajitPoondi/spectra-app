@@ -4,6 +4,11 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <map>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>

@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <mutex>
+#include <string>
 #include <stdexcept>
 
 #include "spectra/core/parallel.hpp"

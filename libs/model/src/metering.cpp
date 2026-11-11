@@ -3,6 +3,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <array>
+#include <string>
+#include <vector>
 #include <limits>
 #include <stdexcept>
 
