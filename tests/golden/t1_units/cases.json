@@ -1,0 +1,4495 @@
+{
+ "suite": "t1_units",
+ "reference_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+ "cases": [
+  {
+   "id": "illuminant_D50",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D50",
+   "golden": "golden/illuminant_D50.npy"
+  },
+  {
+   "id": "illuminant_xy_D50",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D50",
+   "golden": "golden/illuminant_xy_D50.npy"
+  },
+  {
+   "id": "illuminant_D55",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D55",
+   "golden": "golden/illuminant_D55.npy"
+  },
+  {
+   "id": "illuminant_xy_D55",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D55",
+   "golden": "golden/illuminant_xy_D55.npy"
+  },
+  {
+   "id": "illuminant_D65",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D65",
+   "golden": "golden/illuminant_D65.npy"
+  },
+  {
+   "id": "illuminant_xy_D65",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "D65",
+   "golden": "golden/illuminant_xy_D65.npy"
+  },
+  {
+   "id": "illuminant_T",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "T",
+   "golden": "golden/illuminant_T.npy"
+  },
+  {
+   "id": "illuminant_xy_T",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "T",
+   "golden": "golden/illuminant_xy_T.npy"
+  },
+  {
+   "id": "illuminant_K75P",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "K75P",
+   "golden": "golden/illuminant_K75P.npy"
+  },
+  {
+   "id": "illuminant_xy_K75P",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "K75P",
+   "golden": "golden/illuminant_xy_K75P.npy"
+  },
+  {
+   "id": "illuminant_TH-KG3",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "TH-KG3",
+   "golden": "golden/illuminant_TH-KG3.npy"
+  },
+  {
+   "id": "illuminant_xy_TH-KG3",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "TH-KG3",
+   "golden": "golden/illuminant_xy_TH-KG3.npy"
+  },
+  {
+   "id": "illuminant_TH-KG3-L",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "TH-KG3-L",
+   "golden": "golden/illuminant_TH-KG3-L.npy"
+  },
+  {
+   "id": "illuminant_xy_TH-KG3-L",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "TH-KG3-L",
+   "golden": "golden/illuminant_xy_TH-KG3-L.npy"
+  },
+  {
+   "id": "illuminant_BB3200",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB3200",
+   "golden": "golden/illuminant_BB3200.npy"
+  },
+  {
+   "id": "illuminant_xy_BB3200",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB3200",
+   "golden": "golden/illuminant_xy_BB3200.npy"
+  },
+  {
+   "id": "illuminant_BB3400",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB3400",
+   "golden": "golden/illuminant_BB3400.npy"
+  },
+  {
+   "id": "illuminant_xy_BB3400",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB3400",
+   "golden": "golden/illuminant_xy_BB3400.npy"
+  },
+  {
+   "id": "illuminant_BB6504",
+   "kind": "unit",
+   "unit": "illuminant",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB6504",
+   "golden": "golden/illuminant_BB6504.npy"
+  },
+  {
+   "id": "illuminant_xy_BB6504",
+   "kind": "unit",
+   "unit": "illuminant_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "name": "BB6504",
+   "golden": "golden/illuminant_xy_BB6504.npy"
+  },
+  {
+   "id": "cctf_decode_sRGB",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "sRGB",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_sRGB.npy"
+  },
+  {
+   "id": "cctf_encode_sRGB",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "sRGB",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_sRGB.npy"
+  },
+  {
+   "id": "rgb_to_xyz_sRGB_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_sRGB_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_sRGB_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_sRGB_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_sRGB_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_sRGB_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_sRGB_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_sRGB_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_sRGB_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_sRGB_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_sRGB_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_sRGB_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_sRGB_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_sRGB_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_sRGB_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "sRGB",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_sRGB_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_DCI-P3",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "DCI-P3",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_DCI-P3.npy"
+  },
+  {
+   "id": "cctf_encode_DCI-P3",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "DCI-P3",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_DCI-P3.npy"
+  },
+  {
+   "id": "rgb_to_xyz_DCI-P3_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_DCI-P3_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_DCI-P3_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_DCI-P3_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_DCI-P3_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_DCI-P3_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_DCI-P3_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_DCI-P3_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_DCI-P3_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_DCI-P3_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_DCI-P3_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_DCI-P3_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_DCI-P3_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_DCI-P3_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_DCI-P3_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "DCI-P3",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_DCI-P3_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_Display_P3",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "Display P3",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_Display_P3.npy"
+  },
+  {
+   "id": "cctf_encode_Display_P3",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "Display P3",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_Display_P3.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Display_P3_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_Display_P3_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Display_P3_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_Display_P3_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Display_P3_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_Display_P3_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Display_P3_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_Display_P3_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Display_P3_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_Display_P3_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Display_P3_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_Display_P3_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Display_P3_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_Display_P3_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Display_P3_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Display P3",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_Display_P3_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_Adobe_RGB_1998",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "Adobe RGB (1998)",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_Adobe_RGB_1998.npy"
+  },
+  {
+   "id": "cctf_encode_Adobe_RGB_1998",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "Adobe RGB (1998)",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_Adobe_RGB_1998.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Adobe_RGB_1998_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_Adobe_RGB_1998_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Adobe_RGB_1998_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_Adobe_RGB_1998_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Adobe_RGB_1998_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_Adobe_RGB_1998_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Adobe_RGB_1998_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_Adobe_RGB_1998_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Adobe_RGB_1998_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_Adobe_RGB_1998_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Adobe_RGB_1998_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_Adobe_RGB_1998_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_Adobe_RGB_1998_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_Adobe_RGB_1998_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_Adobe_RGB_1998_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "Adobe RGB (1998)",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_Adobe_RGB_1998_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_ITU-R_BT.2020",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ITU-R BT.2020",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_ITU-R_BT.2020.npy"
+  },
+  {
+   "id": "cctf_encode_ITU-R_BT.2020",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ITU-R BT.2020",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_ITU-R_BT.2020.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ITU-R_BT.2020_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ITU-R_BT.2020_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ITU-R_BT.2020_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ITU-R_BT.2020_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ITU-R_BT.2020_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ITU-R_BT.2020_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ITU-R_BT.2020_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ITU-R_BT.2020_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ITU-R_BT.2020_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ITU-R_BT.2020_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ITU-R_BT.2020_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ITU-R_BT.2020_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ITU-R_BT.2020_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ITU-R_BT.2020_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ITU-R_BT.2020_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ITU-R BT.2020",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ITU-R_BT.2020_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_ProPhoto_RGB",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ProPhoto RGB",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_ProPhoto_RGB.npy"
+  },
+  {
+   "id": "cctf_encode_ProPhoto_RGB",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ProPhoto RGB",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_ProPhoto_RGB.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ProPhoto_RGB_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ProPhoto_RGB_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ProPhoto_RGB_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ProPhoto_RGB_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ProPhoto_RGB_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ProPhoto_RGB_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ProPhoto_RGB_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ProPhoto_RGB_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ProPhoto_RGB_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ProPhoto_RGB_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ProPhoto_RGB_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ProPhoto_RGB_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ProPhoto_RGB_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ProPhoto_RGB_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ProPhoto_RGB_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ProPhoto RGB",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ProPhoto_RGB_K75P_CAT02.npy"
+  },
+  {
+   "id": "cctf_decode_ACES2065-1",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ACES2065-1",
+   "direction": "decode",
+   "golden": "golden/cctf_decode_ACES2065-1.npy"
+  },
+  {
+   "id": "cctf_encode_ACES2065-1",
+   "kind": "unit",
+   "unit": "cctf",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/cctf_x.npy",
+   "space": "ACES2065-1",
+   "direction": "encode",
+   "golden": "golden/cctf_encode_ACES2065-1.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ACES2065-1_D55_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ACES2065-1_D55_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ACES2065-1_D55_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "D55",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ACES2065-1_D55_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ACES2065-1_T_CAT16",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/rgb_to_xyz_ACES2065-1_T_CAT16.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ACES2065-1_T_CAT16",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "T",
+   "cat": "CAT16",
+   "golden": "golden/xyz_to_rgb_ACES2065-1_T_CAT16.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ACES2065-1_D50_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ACES2065-1_D50_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ACES2065-1_D50_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "D50",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ACES2065-1_D50_CAT02.npy"
+  },
+  {
+   "id": "rgb_to_xyz_ACES2065-1_K75P_CAT02",
+   "kind": "unit",
+   "unit": "rgb_to_xyz_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/rgb_to_xyz_ACES2065-1_K75P_CAT02.npy"
+  },
+  {
+   "id": "xyz_to_rgb_ACES2065-1_K75P_CAT02",
+   "kind": "unit",
+   "unit": "xyz_to_rgb_matrix",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "space": "ACES2065-1",
+   "illuminant": "K75P",
+   "cat": "CAT02",
+   "golden": "golden/xyz_to_rgb_ACES2065-1_K75P_CAT02.npy"
+  },
+  {
+   "id": "gaussian_sigma_0.3",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    0.3
+   ],
+   "golden": "golden/gaussian_sigma_0.3.npy"
+  },
+  {
+   "id": "gaussian_sigma_0.7",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    0.7
+   ],
+   "golden": "golden/gaussian_sigma_0.7.npy"
+  },
+  {
+   "id": "gaussian_sigma_1.0",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    1.0
+   ],
+   "golden": "golden/gaussian_sigma_1.0.npy"
+  },
+  {
+   "id": "gaussian_sigma_2.5",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    2.5
+   ],
+   "golden": "golden/gaussian_sigma_2.5.npy"
+  },
+  {
+   "id": "gaussian_sigma_2.999",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    2.999
+   ],
+   "golden": "golden/gaussian_sigma_2.999.npy"
+  },
+  {
+   "id": "gaussian_sigma_3.0",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    3.0
+   ],
+   "golden": "golden/gaussian_sigma_3.0.npy"
+  },
+  {
+   "id": "gaussian_sigma_5.5",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    5.5
+   ],
+   "golden": "golden/gaussian_sigma_5.5.npy"
+  },
+  {
+   "id": "gaussian_sigma_12.3",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    12.3
+   ],
+   "golden": "golden/gaussian_sigma_12.3.npy"
+  },
+  {
+   "id": "gaussian_sigma_40.0",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    40.0
+   ],
+   "golden": "golden/gaussian_sigma_40.0.npy"
+  },
+  {
+   "id": "gaussian_per_channel",
+   "kind": "unit",
+   "unit": "gaussian_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "sigma": [
+    0.9,
+    3.5,
+    7.25
+   ],
+   "golden": "golden/gaussian_per_channel.npy"
+  },
+  {
+   "id": "exponential_0.4",
+   "kind": "unit",
+   "unit": "exponential_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "decay": [
+    0.4
+   ],
+   "golden": "golden/exponential_0.4.npy"
+  },
+  {
+   "id": "exponential_2.0",
+   "kind": "unit",
+   "unit": "exponential_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "decay": [
+    2.0
+   ],
+   "golden": "golden/exponential_2.0.npy"
+  },
+  {
+   "id": "exponential_6.0",
+   "kind": "unit",
+   "unit": "exponential_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "decay": [
+    6.0
+   ],
+   "golden": "golden/exponential_6.0.npy"
+  },
+  {
+   "id": "exponential_1.5_3.0_9.0",
+   "kind": "unit",
+   "unit": "exponential_filter",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "decay": [
+    1.5,
+    3.0,
+    9.0
+   ],
+   "golden": "golden/exponential_1.5_3.0_9.0.npy"
+  },
+  {
+   "id": "metering_preview_300x451",
+   "kind": "unit",
+   "unit": "metering_preview",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_300x451.npy",
+   "golden": "golden/metering_preview_300x451.npy"
+  },
+  {
+   "id": "metering_preview_517x260",
+   "kind": "unit",
+   "unit": "metering_preview",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_517x260.npy",
+   "golden": "golden/metering_preview_517x260.npy"
+  },
+  {
+   "id": "metering_preview_1030x64",
+   "kind": "unit",
+   "unit": "metering_preview",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_1030x64.npy",
+   "golden": "golden/metering_preview_1030x64.npy"
+  },
+  {
+   "id": "metering_preview_257x256",
+   "kind": "unit",
+   "unit": "metering_preview",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_257x256.npy",
+   "golden": "golden/metering_preview_257x256.npy"
+  },
+  {
+   "id": "metering_preview_200x100",
+   "kind": "unit",
+   "unit": "metering_preview",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_200x100.npy",
+   "golden": "golden/metering_preview_200x100.npy"
+  },
+  {
+   "id": "autoexposure_center_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "center_weighted",
+   "golden": "golden/autoexposure_center_weighted.npy"
+  },
+  {
+   "id": "autoexposure_bw_center_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "center_weighted",
+   "golden": "golden/autoexposure_bw_center_weighted.npy"
+  },
+  {
+   "id": "autoexposure_matrix",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "matrix",
+   "golden": "golden/autoexposure_matrix.npy"
+  },
+  {
+   "id": "autoexposure_bw_matrix",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "matrix",
+   "golden": "golden/autoexposure_bw_matrix.npy"
+  },
+  {
+   "id": "autoexposure_multi_zone",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "multi_zone",
+   "golden": "golden/autoexposure_multi_zone.npy"
+  },
+  {
+   "id": "autoexposure_bw_multi_zone",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "multi_zone",
+   "golden": "golden/autoexposure_bw_multi_zone.npy"
+  },
+  {
+   "id": "autoexposure_partial",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "partial",
+   "golden": "golden/autoexposure_partial.npy"
+  },
+  {
+   "id": "autoexposure_bw_partial",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "partial",
+   "golden": "golden/autoexposure_bw_partial.npy"
+  },
+  {
+   "id": "autoexposure_highlight_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "highlight_weighted",
+   "golden": "golden/autoexposure_highlight_weighted.npy"
+  },
+  {
+   "id": "autoexposure_bw_highlight_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "highlight_weighted",
+   "golden": "golden/autoexposure_bw_highlight_weighted.npy"
+  },
+  {
+   "id": "autoexposure_median",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "median",
+   "golden": "golden/autoexposure_median.npy"
+  },
+  {
+   "id": "autoexposure_bw_median",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "median",
+   "golden": "golden/autoexposure_bw_median.npy"
+  },
+  {
+   "id": "autoexposure_average",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "average",
+   "golden": "golden/autoexposure_average.npy"
+  },
+  {
+   "id": "autoexposure_bw_average",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "average",
+   "golden": "golden/autoexposure_bw_average.npy"
+  },
+  {
+   "id": "autoexposure_bogus",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_64x97.npy",
+   "method": "bogus",
+   "golden": "golden/autoexposure_bogus.npy"
+  },
+  {
+   "id": "autoexposure_bw_bogus",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_41x23x1.npy",
+   "method": "bogus",
+   "golden": "golden/autoexposure_bw_bogus.npy"
+  },
+  {
+   "id": "autoexposure_1x1_center_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "center_weighted",
+   "golden": "golden/autoexposure_1x1_center_weighted.npy"
+  },
+  {
+   "id": "autoexposure_1x1_matrix",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "matrix",
+   "golden": "golden/autoexposure_1x1_matrix.npy"
+  },
+  {
+   "id": "autoexposure_1x1_multi_zone",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "multi_zone",
+   "golden": "golden/autoexposure_1x1_multi_zone.npy"
+  },
+  {
+   "id": "autoexposure_1x1_partial",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "partial",
+   "golden": "golden/autoexposure_1x1_partial.npy"
+  },
+  {
+   "id": "autoexposure_1x1_highlight_weighted",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "highlight_weighted",
+   "golden": "golden/autoexposure_1x1_highlight_weighted.npy"
+  },
+  {
+   "id": "autoexposure_1x1_median",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "median",
+   "golden": "golden/autoexposure_1x1_median.npy"
+  },
+  {
+   "id": "autoexposure_1x1_average",
+   "kind": "unit",
+   "unit": "autoexposure_ev",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/raw_1x1.npy",
+   "method": "average",
+   "golden": "golden/autoexposure_1x1_average.npy"
+  },
+  {
+   "id": "boost_2.0_0.3_4.0",
+   "kind": "unit",
+   "unit": "boost_highlights",
+   "atol": 1e-12,
+   "rtol": 1e-10,
+   "input": "inputs/highlights_40x60.npy",
+   "boost_ev": 2.0,
+   "boost_range": 0.3,
+   "protect_ev": 4.0,
+   "golden": "golden/boost_2.0_0.3_4.0.npy"
+  },
+  {
+   "id": "boost_6.0_0.8_1.0",
+   "kind": "unit",
+   "unit": "boost_highlights",
+   "atol": 1e-12,
+   "rtol": 1e-10,
+   "input": "inputs/highlights_40x60.npy",
+   "boost_ev": 6.0,
+   "boost_range": 0.8,
+   "protect_ev": 1.0,
+   "golden": "golden/boost_6.0_0.8_1.0.npy"
+  },
+  {
+   "id": "boost_10.0_0.0_0.0",
+   "kind": "unit",
+   "unit": "boost_highlights",
+   "atol": 1e-12,
+   "rtol": 1e-10,
+   "input": "inputs/highlights_40x60.npy",
+   "boost_ev": 10.0,
+   "boost_range": 0.0,
+   "protect_ev": 0.0,
+   "golden": "golden/boost_10.0_0.0_0.0.npy"
+  },
+  {
+   "id": "boost_1.0_1.0_3.0",
+   "kind": "unit",
+   "unit": "boost_highlights",
+   "atol": 1e-12,
+   "rtol": 1e-10,
+   "input": "inputs/highlights_40x60.npy",
+   "boost_ev": 1.0,
+   "boost_range": 1.0,
+   "protect_ev": 3.0,
+   "golden": "golden/boost_1.0_1.0_3.0.npy"
+  },
+  {
+   "id": "diffusion_psf_glimmerglass",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "glimmerglass",
+    "strength": 1.0
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_glimmerglass.npy"
+  },
+  {
+   "id": "diffusion_filter_glimmerglass",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "glimmerglass",
+    "strength": 1.0
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_glimmerglass.npy"
+  },
+  {
+   "id": "diffusion_psf_glimmerglass_tuned",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "glimmerglass",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_glimmerglass_tuned.npy"
+  },
+  {
+   "id": "diffusion_filter_glimmerglass_tuned",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "glimmerglass",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_glimmerglass_tuned.npy"
+  },
+  {
+   "id": "diffusion_psf_black_pro_mist",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "black_pro_mist",
+    "strength": 1.0
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_black_pro_mist.npy"
+  },
+  {
+   "id": "diffusion_filter_black_pro_mist",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "black_pro_mist",
+    "strength": 1.0
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_black_pro_mist.npy"
+  },
+  {
+   "id": "diffusion_psf_black_pro_mist_tuned",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "black_pro_mist",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_black_pro_mist_tuned.npy"
+  },
+  {
+   "id": "diffusion_filter_black_pro_mist_tuned",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "black_pro_mist",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_black_pro_mist_tuned.npy"
+  },
+  {
+   "id": "diffusion_psf_pro_mist",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "pro_mist",
+    "strength": 1.0
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_pro_mist.npy"
+  },
+  {
+   "id": "diffusion_filter_pro_mist",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "pro_mist",
+    "strength": 1.0
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_pro_mist.npy"
+  },
+  {
+   "id": "diffusion_psf_pro_mist_tuned",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "pro_mist",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_pro_mist_tuned.npy"
+  },
+  {
+   "id": "diffusion_filter_pro_mist_tuned",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "pro_mist",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_pro_mist_tuned.npy"
+  },
+  {
+   "id": "diffusion_psf_cinebloom",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "cinebloom",
+    "strength": 1.0
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_cinebloom.npy"
+  },
+  {
+   "id": "diffusion_filter_cinebloom",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "cinebloom",
+    "strength": 1.0
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_cinebloom.npy"
+  },
+  {
+   "id": "diffusion_psf_cinebloom_tuned",
+   "kind": "unit",
+   "unit": "diffusion_psf",
+   "atol": 1e-15,
+   "rtol": 1e-09,
+   "diffusion": {
+    "active": true,
+    "filter_family": "cinebloom",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "size": 41,
+   "pixel_size_um": 12.0,
+   "golden": "golden/diffusion_psf_cinebloom_tuned.npy"
+  },
+  {
+   "id": "diffusion_filter_cinebloom_tuned",
+   "kind": "unit",
+   "unit": "diffusion_filter",
+   "atol": 0.0002,
+   "rtol": 2e-05,
+   "diffusion": {
+    "active": true,
+    "filter_family": "cinebloom",
+    "strength": 1.0,
+    "halo_warmth": -0.8,
+    "core_intensity": 1.4,
+    "bloom_size": 0.6,
+    "spatial_scale": 1.7
+   },
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 30.0,
+   "golden": "golden/diffusion_filter_cinebloom_tuned.npy"
+  },
+  {
+   "id": "halation_default",
+   "kind": "unit",
+   "unit": "halation",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 6.0,
+   "golden": "golden/halation_default.npy"
+  },
+  {
+   "id": "halation_tuned",
+   "kind": "unit",
+   "unit": "halation",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/highlights_40x60.npy",
+   "pixel_size_um": 9.0,
+   "halation": {
+    "scatter_amount": 0.6,
+    "scatter_spatial_scale": 2.0,
+    "halation_amount": 1.5,
+    "halation_strength": [
+     0.3,
+     0.1,
+     0.015
+    ],
+    "halation_n_bounces": 5,
+    "halation_bounce_decay": 0.7,
+    "halation_renormalize": false,
+    "halation_first_sigma_um": [
+     65.0,
+     50.0,
+     40.0
+    ]
+   },
+   "golden": "golden/halation_tuned.npy"
+  },
+  {
+   "id": "crop_0.5_0.5_0.1_0.1",
+   "kind": "unit",
+   "unit": "crop",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "io": {
+    "crop_center": [
+     0.5,
+     0.5
+    ],
+    "crop_size": [
+     0.1,
+     0.1
+    ]
+   },
+   "golden": "golden/crop_0.5_0.5_0.1_0.1.npy"
+  },
+  {
+   "id": "crop_0.2_0.8_0.5_0.3",
+   "kind": "unit",
+   "unit": "crop",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "io": {
+    "crop_center": [
+     0.2,
+     0.8
+    ],
+    "crop_size": [
+     0.5,
+     0.3
+    ]
+   },
+   "golden": "golden/crop_0.2_0.8_0.5_0.3.npy"
+  },
+  {
+   "id": "crop_0.95_0.05_0.4_0.4",
+   "kind": "unit",
+   "unit": "crop",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "io": {
+    "crop_center": [
+     0.95,
+     0.05
+    ],
+    "crop_size": [
+     0.4,
+     0.4
+    ]
+   },
+   "golden": "golden/crop_0.95_0.05_0.4_0.4.npy"
+  },
+  {
+   "id": "crop_0.31_0.47_0.33_0.21",
+   "kind": "unit",
+   "unit": "crop",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "io": {
+    "crop_center": [
+     0.31,
+     0.47
+    ],
+    "crop_size": [
+     0.33,
+     0.21
+    ]
+   },
+   "golden": "golden/crop_0.31_0.47_0.33_0.21.npy"
+  },
+  {
+   "id": "tc_lut_portra400",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "golden": "golden/tc_lut_portra400.npy"
+  },
+  {
+   "id": "midgray_portra400",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "golden": "golden/midgray_portra400.npy"
+  },
+  {
+   "id": "tc_lut_vision3_500t",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_vision3_500t",
+   "golden": "golden/tc_lut_vision3_500t.npy"
+  },
+  {
+   "id": "midgray_vision3_500t",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_vision3_500t",
+   "golden": "golden/midgray_vision3_500t.npy"
+  },
+  {
+   "id": "tc_lut_velvia",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "fujifilm_velvia_100",
+   "golden": "golden/tc_lut_velvia.npy"
+  },
+  {
+   "id": "midgray_velvia",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "fujifilm_velvia_100",
+   "golden": "golden/midgray_velvia.npy"
+  },
+  {
+   "id": "tc_lut_doublex",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_doublex",
+   "golden": "golden/tc_lut_doublex.npy"
+  },
+  {
+   "id": "midgray_doublex",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "golden": "golden/midgray_doublex.npy"
+  },
+  {
+   "id": "tc_lut_portra400_no_window",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "apply_hanatos2025_adaptation_window": false
+    }
+   },
+   "golden": "golden/tc_lut_portra400_no_window.npy"
+  },
+  {
+   "id": "midgray_portra400_no_window",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "apply_hanatos2025_adaptation_window": false
+    }
+   },
+   "golden": "golden/midgray_portra400_no_window.npy"
+  },
+  {
+   "id": "tc_lut_portra400_surface",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "apply_hanatos2025_adaptation_surface": true
+    }
+   },
+   "golden": "golden/tc_lut_portra400_surface.npy"
+  },
+  {
+   "id": "midgray_portra400_surface",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "apply_hanatos2025_adaptation_surface": true
+    }
+   },
+   "golden": "golden/midgray_portra400_surface.npy"
+  },
+  {
+   "id": "tc_lut_portra400_blur",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "spectral_gaussian_blur": 2.5
+    }
+   },
+   "golden": "golden/tc_lut_portra400_blur.npy"
+  },
+  {
+   "id": "midgray_portra400_blur",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "settings": {
+     "spectral_gaussian_blur": 2.5
+    }
+   },
+   "golden": "golden/midgray_portra400_blur.npy"
+  },
+  {
+   "id": "tc_lut_portra400_gamut_off",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/tc_lut_portra400_gamut_off.npy"
+  },
+  {
+   "id": "midgray_portra400_gamut_off",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/midgray_portra400_gamut_off.npy"
+  },
+  {
+   "id": "tc_lut_portra400_gamut_oklch",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-06,
+   "rtol": 1e-06,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "algorithm": "oklch"
+     }
+    }
+   },
+   "golden": "golden/tc_lut_portra400_gamut_oklch.npy"
+  },
+  {
+   "id": "midgray_portra400_gamut_oklch",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-06,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "algorithm": "oklch"
+     }
+    }
+   },
+   "golden": "golden/midgray_portra400_gamut_oklch.npy"
+  },
+  {
+   "id": "tc_lut_portra400_gamut_knee",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "knee": [
+       0.6,
+       1.1,
+       2.0
+      ]
+     }
+    }
+   },
+   "golden": "golden/tc_lut_portra400_gamut_knee.npy"
+  },
+  {
+   "id": "midgray_portra400_gamut_knee",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "io": {
+     "input_gamut_compress": {
+      "knee": [
+       0.6,
+       1.1,
+       2.0
+      ]
+     }
+    }
+   },
+   "golden": "golden/midgray_portra400_gamut_knee.npy"
+  },
+  {
+   "id": "tc_lut_doublex_filter_r1",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_doublex",
+   "pre": {
+    "camera": {
+     "color_filter": "hoya_r1"
+    }
+   },
+   "golden": "golden/tc_lut_doublex_filter_r1.npy"
+  },
+  {
+   "id": "midgray_doublex_filter_r1",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "camera": {
+     "color_filter": "hoya_r1"
+    }
+   },
+   "golden": "golden/midgray_doublex_filter_r1.npy"
+  },
+  {
+   "id": "tc_lut_gold200_filter_y2",
+   "kind": "unit",
+   "unit": "tc_lut",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "subsample": 3,
+   "film": "kodak_gold_200",
+   "pre": {
+    "camera": {
+     "color_filter": "hoya_y2"
+    }
+   },
+   "golden": "golden/tc_lut_gold200_filter_y2.npy"
+  },
+  {
+   "id": "midgray_gold200_filter_y2",
+   "kind": "unit",
+   "unit": "density_spectral_midgray",
+   "atol": 1e-10,
+   "rtol": 1e-09,
+   "film": "kodak_gold_200",
+   "pre": {
+    "camera": {
+     "color_filter": "hoya_y2"
+    }
+   },
+   "golden": "golden/midgray_gold200_filter_y2.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_identity",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_identity.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_identity",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_identity.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_inactive",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_inactive.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_inactive",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_inactive.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_gamma",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_gamma.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_gamma",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_gamma.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_rgb",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_rgb.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_rgb",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_rgb.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_kodak_portra_400_all",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_portra_400_all.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_portra_400_all",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_portra_400_all.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_identity",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_identity.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_identity",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_identity.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_inactive",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_inactive.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_inactive",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_inactive.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_gamma",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_gamma.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_gamma",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_gamma.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_rgb",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_rgb.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_rgb",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_rgb.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_fujifilm_provia_100f_all",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_fujifilm_provia_100f_all.npy"
+  },
+  {
+   "id": "film_curves_layers_fujifilm_provia_100f_all",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_fujifilm_provia_100f_all.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_identity",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_identity.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_identity",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_identity.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_inactive",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_inactive.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_inactive",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_inactive.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_gamma",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_gamma.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_gamma",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_gamma.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_kodak_doublex_all",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_doublex_all.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_doublex_all",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_doublex_all.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_identity",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_identity.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_identity",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_identity.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_inactive",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_inactive.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_inactive",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_inactive.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_gamma",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_gamma.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_gamma",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_gamma.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_fast_slow",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_fast_slow.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_exhaustion",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_exhaustion.npy"
+  },
+  {
+   "id": "film_curves_kodak_trix_all",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_kodak_trix_all.npy"
+  },
+  {
+   "id": "film_curves_layers_kodak_trix_all",
+   "kind": "unit",
+   "unit": "film_curves_layers",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_layers_kodak_trix_all.npy"
+  },
+  {
+   "id": "film_curves_doublex_dt4.0",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "development_time": 4.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_doublex_dt4.0.npy"
+  },
+  {
+   "id": "film_curves_doublex_dt5.2",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "development_time": 5.2
+     }
+    }
+   },
+   "golden": "golden/film_curves_doublex_dt5.2.npy"
+  },
+  {
+   "id": "film_curves_doublex_dt9.0",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "development_time": 9.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_doublex_dt9.0.npy"
+  },
+  {
+   "id": "film_curves_doublex_dt30.0",
+   "kind": "unit",
+   "unit": "film_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "pre": {
+    "film_render": {
+     "chemistry": {
+      "development_time": 30.0
+     }
+    }
+   },
+   "golden": "golden/film_curves_doublex_dt30.0.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_identity",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_identity.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_inactive",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_inactive.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_gamma",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_gamma.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_fast_slow",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_fast_slow.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_rgb",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_rgb.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_exhaustion",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_exhaustion.npy"
+  },
+  {
+   "id": "print_curves_kodak_portra_endura_all",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_portra_endura",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_portra_endura_all.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_identity",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_identity.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_inactive",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_inactive.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_gamma",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_gamma.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_fast_slow",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_fast_slow.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_rgb",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor_red": 1.1,
+      "gamma_factor_green": 0.9,
+      "gamma_factor_blue": 1.2
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_rgb.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_exhaustion",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_exhaustion.npy"
+  },
+  {
+   "id": "print_curves_kodak_2383_all",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2383",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2383_all.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_identity",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {}
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_identity.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_inactive",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "active": false
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_inactive.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_gamma",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 1.3
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_gamma.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_fast_slow",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor_fast": 0.8,
+      "gamma_factor_slow": 1.25
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_fast_slow.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_exhaustion",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "developer_exhaustion": 0.6
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_exhaustion.npy"
+  },
+  {
+   "id": "print_curves_kodak_2302_all",
+   "kind": "unit",
+   "unit": "print_curves_morphed",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "print": "kodak_2302",
+   "pre": {
+    "print_render": {
+     "chemistry": {
+      "gamma_factor": 0.85,
+      "gamma_factor_fast": 1.2,
+      "gamma_factor_slow": 0.9,
+      "gamma_factor_red": 1.05,
+      "developer_exhaustion": 1.0
+     }
+    }
+   },
+   "golden": "golden/print_curves_kodak_2302_all.npy"
+  },
+  {
+   "id": "grain_particles_kodak_portra_160",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_portra_160",
+   "golden": "golden/grain_particles_kodak_portra_160.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_portra_160",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_160",
+   "golden": "golden/dir_couplers_curves_kodak_portra_160.npy"
+  },
+  {
+   "id": "grain_particles_kodak_portra_400",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_portra_400",
+   "golden": "golden/grain_particles_kodak_portra_400.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_portra_400",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_400",
+   "golden": "golden/dir_couplers_curves_kodak_portra_400.npy"
+  },
+  {
+   "id": "grain_particles_kodak_portra_800",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_portra_800",
+   "golden": "golden/grain_particles_kodak_portra_800.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_portra_800",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_800",
+   "golden": "golden/dir_couplers_curves_kodak_portra_800.npy"
+  },
+  {
+   "id": "grain_particles_kodak_portra_800_push1",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_portra_800_push1",
+   "golden": "golden/grain_particles_kodak_portra_800_push1.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_portra_800_push1",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_800_push1",
+   "golden": "golden/dir_couplers_curves_kodak_portra_800_push1.npy"
+  },
+  {
+   "id": "grain_particles_kodak_portra_800_push2",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_portra_800_push2",
+   "golden": "golden/grain_particles_kodak_portra_800_push2.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_portra_800_push2",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_portra_800_push2",
+   "golden": "golden/dir_couplers_curves_kodak_portra_800_push2.npy"
+  },
+  {
+   "id": "grain_particles_kodak_gold_200",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_gold_200",
+   "golden": "golden/grain_particles_kodak_gold_200.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_gold_200",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_gold_200",
+   "golden": "golden/dir_couplers_curves_kodak_gold_200.npy"
+  },
+  {
+   "id": "grain_particles_kodak_ultramax_400",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_ultramax_400",
+   "golden": "golden/grain_particles_kodak_ultramax_400.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_ultramax_400",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_ultramax_400",
+   "golden": "golden/dir_couplers_curves_kodak_ultramax_400.npy"
+  },
+  {
+   "id": "grain_particles_kodak_ektar_100",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_ektar_100",
+   "golden": "golden/grain_particles_kodak_ektar_100.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_ektar_100",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_ektar_100",
+   "golden": "golden/dir_couplers_curves_kodak_ektar_100.npy"
+  },
+  {
+   "id": "grain_particles_fujifilm_pro_400h",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "fujifilm_pro_400h",
+   "golden": "golden/grain_particles_fujifilm_pro_400h.npy"
+  },
+  {
+   "id": "dir_couplers_curves_fujifilm_pro_400h",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_pro_400h",
+   "golden": "golden/dir_couplers_curves_fujifilm_pro_400h.npy"
+  },
+  {
+   "id": "grain_particles_fujifilm_c200",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "fujifilm_c200",
+   "golden": "golden/grain_particles_fujifilm_c200.npy"
+  },
+  {
+   "id": "dir_couplers_curves_fujifilm_c200",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_c200",
+   "golden": "golden/dir_couplers_curves_fujifilm_c200.npy"
+  },
+  {
+   "id": "grain_particles_fujifilm_xtra_400",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "fujifilm_xtra_400",
+   "golden": "golden/grain_particles_fujifilm_xtra_400.npy"
+  },
+  {
+   "id": "dir_couplers_curves_fujifilm_xtra_400",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_xtra_400",
+   "golden": "golden/dir_couplers_curves_fujifilm_xtra_400.npy"
+  },
+  {
+   "id": "grain_particles_kodak_vision3_50d",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_vision3_50d",
+   "golden": "golden/grain_particles_kodak_vision3_50d.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_vision3_50d",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_vision3_50d",
+   "golden": "golden/dir_couplers_curves_kodak_vision3_50d.npy"
+  },
+  {
+   "id": "grain_particles_kodak_vision3_250d",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_vision3_250d",
+   "golden": "golden/grain_particles_kodak_vision3_250d.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_vision3_250d",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_vision3_250d",
+   "golden": "golden/dir_couplers_curves_kodak_vision3_250d.npy"
+  },
+  {
+   "id": "grain_particles_kodak_verita_200d",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_verita_200d",
+   "golden": "golden/grain_particles_kodak_verita_200d.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_verita_200d",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_verita_200d",
+   "golden": "golden/dir_couplers_curves_kodak_verita_200d.npy"
+  },
+  {
+   "id": "grain_particles_kodak_vision3_200t",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_vision3_200t",
+   "golden": "golden/grain_particles_kodak_vision3_200t.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_vision3_200t",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_vision3_200t",
+   "golden": "golden/dir_couplers_curves_kodak_vision3_200t.npy"
+  },
+  {
+   "id": "grain_particles_kodak_vision3_500t",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_vision3_500t",
+   "golden": "golden/grain_particles_kodak_vision3_500t.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_vision3_500t",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_vision3_500t",
+   "golden": "golden/dir_couplers_curves_kodak_vision3_500t.npy"
+  },
+  {
+   "id": "grain_particles_kodak_ektachrome_100",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_ektachrome_100",
+   "golden": "golden/grain_particles_kodak_ektachrome_100.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_ektachrome_100",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_ektachrome_100",
+   "golden": "golden/dir_couplers_curves_kodak_ektachrome_100.npy"
+  },
+  {
+   "id": "grain_particles_kodak_kodachrome_64",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_kodachrome_64",
+   "golden": "golden/grain_particles_kodak_kodachrome_64.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_kodachrome_64",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_kodachrome_64",
+   "golden": "golden/dir_couplers_curves_kodak_kodachrome_64.npy"
+  },
+  {
+   "id": "grain_particles_fujifilm_velvia_100",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "fujifilm_velvia_100",
+   "golden": "golden/grain_particles_fujifilm_velvia_100.npy"
+  },
+  {
+   "id": "dir_couplers_curves_fujifilm_velvia_100",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_velvia_100",
+   "golden": "golden/dir_couplers_curves_fujifilm_velvia_100.npy"
+  },
+  {
+   "id": "grain_particles_fujifilm_provia_100f",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "fujifilm_provia_100f",
+   "golden": "golden/grain_particles_fujifilm_provia_100f.npy"
+  },
+  {
+   "id": "dir_couplers_curves_fujifilm_provia_100f",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "fujifilm_provia_100f",
+   "golden": "golden/dir_couplers_curves_fujifilm_provia_100f.npy"
+  },
+  {
+   "id": "grain_particles_kodak_doublex",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_doublex",
+   "golden": "golden/grain_particles_kodak_doublex.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_doublex",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_doublex",
+   "golden": "golden/dir_couplers_curves_kodak_doublex.npy"
+  },
+  {
+   "id": "grain_particles_kodak_trix",
+   "kind": "unit",
+   "unit": "grain_particles",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "pixel_size_um": 6.0,
+   "film": "kodak_trix",
+   "golden": "golden/grain_particles_kodak_trix.npy"
+  },
+  {
+   "id": "dir_couplers_curves_kodak_trix",
+   "kind": "unit",
+   "unit": "dir_couplers_curves",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "film": "kodak_trix",
+   "golden": "golden/dir_couplers_curves_kodak_trix.npy"
+  },
+  {
+   "id": "digest_kodak_portra_160_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_portra_160",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_160_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_portra_160_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_portra_160",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_160_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_portra_160_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_portra_160",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_160_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_portra_400_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_400_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_portra_400_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_portra_400",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_400_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_portra_400_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_400_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_portra_800",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_portra_800",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_portra_800",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push1_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push1_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push1_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push1_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push1_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push1_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push2_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push2_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push2_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push2_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_portra_800_push2_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_portra_800_push2_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_gold_200_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_gold_200",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_gold_200_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_gold_200_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_gold_200",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_gold_200_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_gold_200_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_gold_200",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_gold_200_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_ultramax_400_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ultramax_400_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_ultramax_400_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ultramax_400_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_ultramax_400_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ultramax_400_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_ektar_100_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_ektar_100",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektar_100_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_ektar_100_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_ektar_100",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektar_100_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_ektar_100_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_ektar_100",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektar_100_kodak_2302.json"
+  },
+  {
+   "id": "digest_fujifilm_pro_400h_kodak_portra_endura",
+   "kind": "digest",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_pro_400h_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_fujifilm_pro_400h_kodak_2383",
+   "kind": "digest",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_pro_400h_kodak_2383.json"
+  },
+  {
+   "id": "digest_fujifilm_pro_400h_kodak_2302",
+   "kind": "digest",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_pro_400h_kodak_2302.json"
+  },
+  {
+   "id": "digest_fujifilm_c200_kodak_portra_endura",
+   "kind": "digest",
+   "film": "fujifilm_c200",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_c200_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_fujifilm_c200_kodak_2383",
+   "kind": "digest",
+   "film": "fujifilm_c200",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_c200_kodak_2383.json"
+  },
+  {
+   "id": "digest_fujifilm_c200_kodak_2302",
+   "kind": "digest",
+   "film": "fujifilm_c200",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_c200_kodak_2302.json"
+  },
+  {
+   "id": "digest_fujifilm_xtra_400_kodak_portra_endura",
+   "kind": "digest",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_xtra_400_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_fujifilm_xtra_400_kodak_2383",
+   "kind": "digest",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_xtra_400_kodak_2383.json"
+  },
+  {
+   "id": "digest_fujifilm_xtra_400_kodak_2302",
+   "kind": "digest",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_xtra_400_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_vision3_50d_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_50d_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_vision3_50d_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_50d_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_vision3_50d_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_50d_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_vision3_250d_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_250d_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_vision3_250d_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_250d_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_vision3_250d_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_250d_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_verita_200d_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_verita_200d",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_verita_200d_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_verita_200d_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_verita_200d",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_verita_200d_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_verita_200d_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_verita_200d",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_verita_200d_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_vision3_200t_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_200t_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_vision3_200t_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_200t_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_vision3_200t_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_200t_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_vision3_500t_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_500t_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_vision3_500t_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_500t_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_vision3_500t_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_vision3_500t_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_ektachrome_100_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektachrome_100_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_ektachrome_100_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektachrome_100_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_ektachrome_100_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_ektachrome_100_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_kodachrome_64_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_kodachrome_64_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_kodachrome_64_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_kodachrome_64_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_kodachrome_64_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_kodachrome_64_kodak_2302.json"
+  },
+  {
+   "id": "digest_fujifilm_velvia_100_kodak_portra_endura",
+   "kind": "digest",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_velvia_100_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_fujifilm_velvia_100_kodak_2383",
+   "kind": "digest",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_velvia_100_kodak_2383.json"
+  },
+  {
+   "id": "digest_fujifilm_velvia_100_kodak_2302",
+   "kind": "digest",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_velvia_100_kodak_2302.json"
+  },
+  {
+   "id": "digest_fujifilm_provia_100f_kodak_portra_endura",
+   "kind": "digest",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_provia_100f_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_fujifilm_provia_100f_kodak_2383",
+   "kind": "digest",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_provia_100f_kodak_2383.json"
+  },
+  {
+   "id": "digest_fujifilm_provia_100f_kodak_2302",
+   "kind": "digest",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_fujifilm_provia_100f_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_doublex_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_doublex_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_doublex_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_doublex",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_doublex_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_doublex_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_doublex_kodak_2302.json"
+  },
+  {
+   "id": "digest_kodak_trix_kodak_portra_endura",
+   "kind": "digest",
+   "film": "kodak_trix",
+   "print": "kodak_portra_endura",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_trix_kodak_portra_endura.json"
+  },
+  {
+   "id": "digest_kodak_trix_kodak_2383",
+   "kind": "digest",
+   "film": "kodak_trix",
+   "print": "kodak_2383",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_trix_kodak_2383.json"
+  },
+  {
+   "id": "digest_kodak_trix_kodak_2302",
+   "kind": "digest",
+   "film": "kodak_trix",
+   "print": "kodak_2302",
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_kodak_trix_kodak_2302.json"
+  },
+  {
+   "id": "digest_switch_preview",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "pre": {
+    "settings": {
+     "preview_mode": true
+    }
+   },
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_switch_preview.json"
+  },
+  {
+   "id": "digest_switch_lut_mode",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "pre": {
+    "debug": {
+     "lut_mode": true
+    }
+   },
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_switch_lut_mode.json"
+  },
+  {
+   "id": "digest_switch_no_db",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "pre": {
+    "settings": {
+     "neutral_print_filters_from_database": false
+    }
+   },
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_switch_no_db.json"
+  },
+  {
+   "id": "digest_switch_nonspatial",
+   "kind": "digest",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "atol": 1e-12,
+   "rtol": 1e-12,
+   "golden": "golden/digest_switch_nonspatial.json"
+  }
+ ]
+}
