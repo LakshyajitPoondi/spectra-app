@@ -1,0 +1,2909 @@
+{
+ "arrays": {
+  "cat/CAT02": {
+   "crc32": 3274192614,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "cat/CAT16": {
+   "crc32": 150344602,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ACES2065-1/rgb_to_xyz": {
+   "crc32": 1384533347,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ACES2065-1/whitepoint_xy": {
+   "crc32": 2965797744,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/ACES2065-1/xyz_to_rgb": {
+   "crc32": 187252892,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/Adobe RGB (1998)/rgb_to_xyz": {
+   "crc32": 948449847,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/Adobe RGB (1998)/whitepoint_xy": {
+   "crc32": 1547167358,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/Adobe RGB (1998)/xyz_to_rgb": {
+   "crc32": 2225213331,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/DCI-P3/rgb_to_xyz": {
+   "crc32": 2821461902,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/DCI-P3/whitepoint_xy": {
+   "crc32": 1613704541,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/DCI-P3/xyz_to_rgb": {
+   "crc32": 2917593361,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/Display P3/rgb_to_xyz": {
+   "crc32": 3037109728,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/Display P3/whitepoint_xy": {
+   "crc32": 1547167358,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/Display P3/xyz_to_rgb": {
+   "crc32": 1719277909,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ITU-R BT.2020/rgb_to_xyz": {
+   "crc32": 1694572616,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ITU-R BT.2020/whitepoint_xy": {
+   "crc32": 1547167358,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/ITU-R BT.2020/xyz_to_rgb": {
+   "crc32": 1260980345,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ProPhoto RGB/rgb_to_xyz": {
+   "crc32": 434075520,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/ProPhoto RGB/whitepoint_xy": {
+   "crc32": 511785491,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/ProPhoto RGB/xyz_to_rgb": {
+   "crc32": 1973267850,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/sRGB/rgb_to_xyz": {
+   "crc32": 1084474258,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "colourspaces/sRGB/whitepoint_xy": {
+   "crc32": 1547167358,
+   "dtype": "float64",
+   "shape": [
+    2
+   ]
+  },
+  "colourspaces/sRGB/xyz_to_rgb": {
+   "crc32": 377056838,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "filters/camera/hoya_r1": {
+   "crc32": 1275871405,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/camera/hoya_x0": {
+   "crc32": 2692403216,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/camera/hoya_x1": {
+   "crc32": 3033611311,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/camera/hoya_y2": {
+   "crc32": 3174050734,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/camera/hoya_ya3": {
+   "crc32": 3064511496,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/dichroic/custom": {
+   "crc32": 541625823,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "filters/dichroic/durst_digital_light": {
+   "crc32": 1783539841,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "filters/dichroic/edmund_optics": {
+   "crc32": 2656604418,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "filters/dichroic/thorlabs": {
+   "crc32": 3916196950,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "filters/heat/KG1": {
+   "crc32": 387720262,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/heat/KG3": {
+   "crc32": 2530460259,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/heat/KG5": {
+   "crc32": 3194340899,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "filters/lens/generic": {
+   "crc32": 3968105651,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/A": {
+   "crc32": 131932122,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/D50": {
+   "crc32": 1809224745,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/D55": {
+   "crc32": 966966455,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/D65": {
+   "crc32": 566411079,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/D75": {
+   "crc32": 254300162,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/K75P": {
+   "crc32": 198783753,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/T": {
+   "crc32": 4182147881,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/TH-KG3": {
+   "crc32": 270070100,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "illuminants/TH-KG3-L": {
+   "crc32": 3879881538,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "jzazbz/izazbz_to_lms_p": {
+   "crc32": 1715881027,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "jzazbz/lms_p_to_izazbz": {
+   "crc32": 2122609297,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "jzazbz/lms_to_xyz": {
+   "crc32": 3746458261,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "jzazbz/xyz_to_lms": {
+   "crc32": 631831272,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "oklab/m1_lms_to_xyz": {
+   "crc32": 425535762,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "oklab/m1_xyz_to_lms": {
+   "crc32": 3859347480,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "oklab/m2_lab_to_lms": {
+   "crc32": 3049261847,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "oklab/m2_lms_to_lab": {
+   "crc32": 380383260,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/base_density": {
+   "crc32": 3080970687,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_c200/channel_density": {
+   "crc32": 3210197089,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/hanatos2025_adaptation_surface_params": {
+   "crc32": 2785975884,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/fujifilm_c200/hanatos2025_adaptation_window_params": {
+   "crc32": 1248408106,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/fujifilm_c200/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_c200/log_sensitivity": {
+   "crc32": 1723955844,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/midscale_neutral_density": {
+   "crc32": 3508720421,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_c200/model_amplitudes": {
+   "crc32": 1086892278,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/model_centers": {
+   "crc32": 1449222470,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/model_sigmas": {
+   "crc32": 3666828241,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_c200/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/base_density": {
+   "crc32": 2295883330,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/channel_density": {
+   "crc32": 2281943362,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/log_sensitivity": {
+   "crc32": 2988361413,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/midscale_neutral_density": {
+   "crc32": 3902487569,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/model_amplitudes": {
+   "crc32": 181664078,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/model_centers": {
+   "crc32": 2119077476,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/model_sigmas": {
+   "crc32": 1437846907,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_crystal_archive_typeii/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_pro_400h/base_density": {
+   "crc32": 3397855285,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_pro_400h/channel_density": {
+   "crc32": 663525487,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_pro_400h/hanatos2025_adaptation_surface_params": {
+   "crc32": 1420958816,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/fujifilm_pro_400h/hanatos2025_adaptation_window_params": {
+   "crc32": 747239195,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/fujifilm_pro_400h/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_pro_400h/log_sensitivity": {
+   "crc32": 3451184571,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_pro_400h/midscale_neutral_density": {
+   "crc32": 760183090,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_pro_400h/model_amplitudes": {
+   "crc32": 2040191824,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_pro_400h/model_centers": {
+   "crc32": 1158805824,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_pro_400h/model_sigmas": {
+   "crc32": 1131867550,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_pro_400h/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_provia_100f/base_density": {
+   "crc32": 4006146768,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_provia_100f/channel_density": {
+   "crc32": 1736613901,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_provia_100f/hanatos2025_adaptation_surface_params": {
+   "crc32": 714231063,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/fujifilm_provia_100f/hanatos2025_adaptation_window_params": {
+   "crc32": 2243427503,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/fujifilm_provia_100f/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_provia_100f/log_sensitivity": {
+   "crc32": 3552681949,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_provia_100f/midscale_neutral_density": {
+   "crc32": 2923969306,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_provia_100f/model_amplitudes": {
+   "crc32": 1610739783,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_provia_100f/model_centers": {
+   "crc32": 2345282289,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_provia_100f/model_sigmas": {
+   "crc32": 699563486,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_provia_100f/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_velvia_100/base_density": {
+   "crc32": 3413312544,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_velvia_100/channel_density": {
+   "crc32": 1607792432,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_velvia_100/hanatos2025_adaptation_surface_params": {
+   "crc32": 1513470806,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/fujifilm_velvia_100/hanatos2025_adaptation_window_params": {
+   "crc32": 1204174372,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/fujifilm_velvia_100/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_velvia_100/log_sensitivity": {
+   "crc32": 1788324620,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_velvia_100/midscale_neutral_density": {
+   "crc32": 4215518850,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_velvia_100/model_amplitudes": {
+   "crc32": 1746735519,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_velvia_100/model_centers": {
+   "crc32": 3393312519,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_velvia_100/model_sigmas": {
+   "crc32": 2522243163,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_velvia_100/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_xtra_400/base_density": {
+   "crc32": 4139257030,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_xtra_400/channel_density": {
+   "crc32": 4282886851,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_xtra_400/hanatos2025_adaptation_surface_params": {
+   "crc32": 4159070347,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/fujifilm_xtra_400/hanatos2025_adaptation_window_params": {
+   "crc32": 3207045253,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/fujifilm_xtra_400/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/fujifilm_xtra_400/log_sensitivity": {
+   "crc32": 1500689505,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/fujifilm_xtra_400/midscale_neutral_density": {
+   "crc32": 91016907,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/fujifilm_xtra_400/model_amplitudes": {
+   "crc32": 706189756,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_xtra_400/model_centers": {
+   "crc32": 1380371793,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_xtra_400/model_sigmas": {
+   "crc32": 1280824033,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/fujifilm_xtra_400/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2302/base_density": {
+   "crc32": 571982785,
+   "dtype": "float64",
+   "shape": [
+    81,
+    5
+   ]
+  },
+  "profiles/kodak_2302/channel_density": {
+   "crc32": 1619908522,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_2302/development_time": {
+   "crc32": 3062994011,
+   "dtype": "float64",
+   "shape": [
+    5
+   ]
+  },
+  "profiles/kodak_2302/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_2302/log_sensitivity": {
+   "crc32": 2952328929,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_2302/model_amplitudes": {
+   "crc32": 812888743,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_2302/model_centers": {
+   "crc32": 1581820279,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_2302/model_sigmas": {
+   "crc32": 1018889882,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_2302/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2383/base_density": {
+   "crc32": 1566846125,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2383/channel_density": {
+   "crc32": 2004751289,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_2383/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_2383/log_sensitivity": {
+   "crc32": 2127305081,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_2383/midscale_neutral_density": {
+   "crc32": 2619044671,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2383/model_amplitudes": {
+   "crc32": 4027364606,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2383/model_centers": {
+   "crc32": 1408253639,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2383/model_sigmas": {
+   "crc32": 1407106602,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2383/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2393/base_density": {
+   "crc32": 1149204928,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2393/channel_density": {
+   "crc32": 2071761785,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_2393/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_2393/log_sensitivity": {
+   "crc32": 2168487251,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_2393/midscale_neutral_density": {
+   "crc32": 1757789923,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_2393/model_amplitudes": {
+   "crc32": 1325200723,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2393/model_centers": {
+   "crc32": 1911826045,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2393/model_sigmas": {
+   "crc32": 3514829169,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_2393/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_doublex/base_density": {
+   "crc32": 1831523925,
+   "dtype": "float64",
+   "shape": [
+    81,
+    5
+   ]
+  },
+  "profiles/kodak_doublex/channel_density": {
+   "crc32": 1619908522,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_doublex/development_time": {
+   "crc32": 4188320692,
+   "dtype": "float64",
+   "shape": [
+    5
+   ]
+  },
+  "profiles/kodak_doublex/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_doublex/log_sensitivity": {
+   "crc32": 1398118686,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_doublex/model_amplitudes": {
+   "crc32": 875994632,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_doublex/model_centers": {
+   "crc32": 3419793188,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_doublex/model_sigmas": {
+   "crc32": 1177636458,
+   "dtype": "float64",
+   "shape": [
+    5,
+    3
+   ]
+  },
+  "profiles/kodak_doublex/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektachrome_100/base_density": {
+   "crc32": 1398687025,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektachrome_100/channel_density": {
+   "crc32": 3366596154,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektachrome_100/hanatos2025_adaptation_surface_params": {
+   "crc32": 3162243796,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_ektachrome_100/hanatos2025_adaptation_window_params": {
+   "crc32": 1130727142,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_ektachrome_100/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_ektachrome_100/log_sensitivity": {
+   "crc32": 2598647523,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektachrome_100/midscale_neutral_density": {
+   "crc32": 2534187207,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektachrome_100/model_amplitudes": {
+   "crc32": 1796912622,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektachrome_100/model_centers": {
+   "crc32": 508901003,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektachrome_100/model_sigmas": {
+   "crc32": 2301703979,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektachrome_100/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/base_density": {
+   "crc32": 1233362652,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/channel_density": {
+   "crc32": 1534980282,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/log_sensitivity": {
+   "crc32": 1943258759,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/midscale_neutral_density": {
+   "crc32": 3432980757,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/model_amplitudes": {
+   "crc32": 3649212148,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/model_centers": {
+   "crc32": 1803708939,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/model_sigmas": {
+   "crc32": 3234128525,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektacolor_edge/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektar_100/base_density": {
+   "crc32": 3622118817,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektar_100/channel_density": {
+   "crc32": 4170340748,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektar_100/hanatos2025_adaptation_surface_params": {
+   "crc32": 2756039892,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_ektar_100/hanatos2025_adaptation_window_params": {
+   "crc32": 3207701230,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_ektar_100/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_ektar_100/log_sensitivity": {
+   "crc32": 379677999,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ektar_100/midscale_neutral_density": {
+   "crc32": 3989037912,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ektar_100/model_amplitudes": {
+   "crc32": 2814525661,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektar_100/model_centers": {
+   "crc32": 55607108,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektar_100/model_sigmas": {
+   "crc32": 193810239,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ektar_100/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_endura_premier/base_density": {
+   "crc32": 1306595169,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_endura_premier/channel_density": {
+   "crc32": 963202853,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_endura_premier/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_endura_premier/log_sensitivity": {
+   "crc32": 2983265100,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_endura_premier/midscale_neutral_density": {
+   "crc32": 3795904724,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_endura_premier/model_amplitudes": {
+   "crc32": 658464274,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_endura_premier/model_centers": {
+   "crc32": 2716282581,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_endura_premier/model_sigmas": {
+   "crc32": 3751619049,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_endura_premier/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_gold_200/base_density": {
+   "crc32": 116826098,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_gold_200/channel_density": {
+   "crc32": 1258540977,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_gold_200/hanatos2025_adaptation_surface_params": {
+   "crc32": 2275842828,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_gold_200/hanatos2025_adaptation_window_params": {
+   "crc32": 2740426072,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_gold_200/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_gold_200/log_sensitivity": {
+   "crc32": 120492436,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_gold_200/midscale_neutral_density": {
+   "crc32": 770630580,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_gold_200/model_amplitudes": {
+   "crc32": 1450841950,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_gold_200/model_centers": {
+   "crc32": 3910580350,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_gold_200/model_sigmas": {
+   "crc32": 2106161058,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_gold_200/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_kodachrome_64/base_density": {
+   "crc32": 3932261246,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_kodachrome_64/channel_density": {
+   "crc32": 1831254592,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_kodachrome_64/hanatos2025_adaptation_surface_params": {
+   "crc32": 57429671,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_kodachrome_64/hanatos2025_adaptation_window_params": {
+   "crc32": 3453911899,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_kodachrome_64/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_kodachrome_64/log_sensitivity": {
+   "crc32": 1331932436,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_kodachrome_64/midscale_neutral_density": {
+   "crc32": 1197245115,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_kodachrome_64/model_amplitudes": {
+   "crc32": 3646501584,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_kodachrome_64/model_centers": {
+   "crc32": 1640988943,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_kodachrome_64/model_sigmas": {
+   "crc32": 844538609,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_kodachrome_64/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_160/base_density": {
+   "crc32": 1320791545,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_160/channel_density": {
+   "crc32": 2880862231,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_160/hanatos2025_adaptation_surface_params": {
+   "crc32": 1475771416,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_portra_160/hanatos2025_adaptation_window_params": {
+   "crc32": 1445316015,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_portra_160/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_160/log_sensitivity": {
+   "crc32": 3398545586,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_160/midscale_neutral_density": {
+   "crc32": 3473411181,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_160/model_amplitudes": {
+   "crc32": 3884372381,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_160/model_centers": {
+   "crc32": 3831744174,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_160/model_sigmas": {
+   "crc32": 2582561146,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_160/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_400/base_density": {
+   "crc32": 1845055028,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_400/channel_density": {
+   "crc32": 1928007107,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_400/hanatos2025_adaptation_surface_params": {
+   "crc32": 3250312600,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_portra_400/hanatos2025_adaptation_window_params": {
+   "crc32": 3015388767,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_portra_400/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_400/log_sensitivity": {
+   "crc32": 3667831943,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_400/midscale_neutral_density": {
+   "crc32": 1154466281,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_400/model_amplitudes": {
+   "crc32": 2572367667,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_400/model_centers": {
+   "crc32": 1153424327,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_400/model_sigmas": {
+   "crc32": 2875249582,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_400/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800/base_density": {
+   "crc32": 4123331452,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800/channel_density": {
+   "crc32": 2138445458,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800/hanatos2025_adaptation_surface_params": {
+   "crc32": 502560125,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_portra_800/hanatos2025_adaptation_window_params": {
+   "crc32": 4162853885,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_portra_800/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_800/log_sensitivity": {
+   "crc32": 331380702,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800/midscale_neutral_density": {
+   "crc32": 4188771887,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800/model_amplitudes": {
+   "crc32": 2104243914,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800/model_centers": {
+   "crc32": 2627980745,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800/model_sigmas": {
+   "crc32": 1224976223,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push1/base_density": {
+   "crc32": 4123331452,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push1/channel_density": {
+   "crc32": 2138445458,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push1/hanatos2025_adaptation_surface_params": {
+   "crc32": 502560125,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_portra_800_push1/hanatos2025_adaptation_window_params": {
+   "crc32": 4162853885,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_portra_800_push1/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_800_push1/log_sensitivity": {
+   "crc32": 331380702,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push1/midscale_neutral_density": {
+   "crc32": 4188771887,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push1/model_amplitudes": {
+   "crc32": 3615825967,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push1/model_centers": {
+   "crc32": 3275462790,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push1/model_sigmas": {
+   "crc32": 2419687064,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push1/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push2/base_density": {
+   "crc32": 4123331452,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push2/channel_density": {
+   "crc32": 2138445458,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push2/hanatos2025_adaptation_surface_params": {
+   "crc32": 502560125,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_portra_800_push2/hanatos2025_adaptation_window_params": {
+   "crc32": 4162853885,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_portra_800_push2/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_800_push2/log_sensitivity": {
+   "crc32": 331380702,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push2/midscale_neutral_density": {
+   "crc32": 4188771887,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_800_push2/model_amplitudes": {
+   "crc32": 494812908,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push2/model_centers": {
+   "crc32": 1894820688,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push2/model_sigmas": {
+   "crc32": 1098956178,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_800_push2/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_endura/base_density": {
+   "crc32": 3447538925,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_endura/channel_density": {
+   "crc32": 606579475,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_endura/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_portra_endura/log_sensitivity": {
+   "crc32": 3341538797,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_portra_endura/midscale_neutral_density": {
+   "crc32": 117052359,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_portra_endura/model_amplitudes": {
+   "crc32": 1316636548,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_endura/model_centers": {
+   "crc32": 3935154870,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_endura/model_sigmas": {
+   "crc32": 3977817906,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_portra_endura/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_supra_endura/base_density": {
+   "crc32": 2295883330,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_supra_endura/channel_density": {
+   "crc32": 268521364,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_supra_endura/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_supra_endura/log_sensitivity": {
+   "crc32": 3341538797,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_supra_endura/midscale_neutral_density": {
+   "crc32": 1535355209,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_supra_endura/model_amplitudes": {
+   "crc32": 2484779146,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_supra_endura/model_centers": {
+   "crc32": 3124713192,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_supra_endura/model_sigmas": {
+   "crc32": 1760808257,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_supra_endura/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_trix/base_density": {
+   "crc32": 1197053730,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_trix/channel_density": {
+   "crc32": 1619908522,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_trix/development_time": {
+   "crc32": 3354924009,
+   "dtype": "float64",
+   "shape": [
+    1
+   ]
+  },
+  "profiles/kodak_trix/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_trix/log_sensitivity": {
+   "crc32": 3690444499,
+   "dtype": "float64",
+   "shape": [
+    81,
+    1
+   ]
+  },
+  "profiles/kodak_trix/model_amplitudes": {
+   "crc32": 843620347,
+   "dtype": "float64",
+   "shape": [
+    1,
+    3
+   ]
+  },
+  "profiles/kodak_trix/model_centers": {
+   "crc32": 4114736569,
+   "dtype": "float64",
+   "shape": [
+    1,
+    3
+   ]
+  },
+  "profiles/kodak_trix/model_sigmas": {
+   "crc32": 1341731912,
+   "dtype": "float64",
+   "shape": [
+    1,
+    3
+   ]
+  },
+  "profiles/kodak_trix/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultra_endura/base_density": {
+   "crc32": 2555461652,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultra_endura/channel_density": {
+   "crc32": 1283339229,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ultra_endura/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_ultra_endura/log_sensitivity": {
+   "crc32": 3088102494,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ultra_endura/midscale_neutral_density": {
+   "crc32": 3989497108,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultra_endura/model_amplitudes": {
+   "crc32": 3396462857,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultra_endura/model_centers": {
+   "crc32": 3771845816,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultra_endura/model_sigmas": {
+   "crc32": 1306471795,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultra_endura/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultramax_400/base_density": {
+   "crc32": 699921729,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultramax_400/channel_density": {
+   "crc32": 2832105616,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ultramax_400/hanatos2025_adaptation_surface_params": {
+   "crc32": 2038002189,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_ultramax_400/hanatos2025_adaptation_window_params": {
+   "crc32": 837032200,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_ultramax_400/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_ultramax_400/log_sensitivity": {
+   "crc32": 3533654428,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_ultramax_400/midscale_neutral_density": {
+   "crc32": 18798632,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_ultramax_400/model_amplitudes": {
+   "crc32": 4230350681,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultramax_400/model_centers": {
+   "crc32": 725388569,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultramax_400/model_sigmas": {
+   "crc32": 2868001818,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_ultramax_400/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_verita_200d/base_density": {
+   "crc32": 2904576042,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_verita_200d/channel_density": {
+   "crc32": 3336544370,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_verita_200d/hanatos2025_adaptation_surface_params": {
+   "crc32": 3164021976,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_verita_200d/hanatos2025_adaptation_window_params": {
+   "crc32": 487334094,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_verita_200d/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_verita_200d/log_sensitivity": {
+   "crc32": 1314485241,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_verita_200d/midscale_neutral_density": {
+   "crc32": 3056491299,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_verita_200d/model_amplitudes": {
+   "crc32": 1940389930,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_verita_200d/model_centers": {
+   "crc32": 1491299597,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_verita_200d/model_sigmas": {
+   "crc32": 1663012788,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_verita_200d/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_200t/base_density": {
+   "crc32": 120878809,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_200t/channel_density": {
+   "crc32": 3181497821,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_200t/hanatos2025_adaptation_surface_params": {
+   "crc32": 2668548053,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_vision3_200t/hanatos2025_adaptation_window_params": {
+   "crc32": 2843862528,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_vision3_200t/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_vision3_200t/log_sensitivity": {
+   "crc32": 2694456996,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_200t/midscale_neutral_density": {
+   "crc32": 1528934020,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_200t/model_amplitudes": {
+   "crc32": 849822138,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_200t/model_centers": {
+   "crc32": 103896818,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_200t/model_sigmas": {
+   "crc32": 3302877706,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_200t/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_250d/base_density": {
+   "crc32": 531776884,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_250d/channel_density": {
+   "crc32": 1700802917,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_250d/hanatos2025_adaptation_surface_params": {
+   "crc32": 3808382770,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_vision3_250d/hanatos2025_adaptation_window_params": {
+   "crc32": 1914939371,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_vision3_250d/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_vision3_250d/log_sensitivity": {
+   "crc32": 2589873805,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_250d/midscale_neutral_density": {
+   "crc32": 2236300045,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_250d/model_amplitudes": {
+   "crc32": 215557099,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_250d/model_centers": {
+   "crc32": 3156943426,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_250d/model_sigmas": {
+   "crc32": 4022936241,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_250d/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_500t/base_density": {
+   "crc32": 175913715,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_500t/channel_density": {
+   "crc32": 4288482598,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_500t/hanatos2025_adaptation_surface_params": {
+   "crc32": 3478266456,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_vision3_500t/hanatos2025_adaptation_window_params": {
+   "crc32": 4093270811,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_vision3_500t/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_vision3_500t/log_sensitivity": {
+   "crc32": 2484091786,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_500t/midscale_neutral_density": {
+   "crc32": 288716044,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_500t/model_amplitudes": {
+   "crc32": 2743951161,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_500t/model_centers": {
+   "crc32": 31577046,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_500t/model_sigmas": {
+   "crc32": 159166340,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_500t/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_50d/base_density": {
+   "crc32": 913709895,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_50d/channel_density": {
+   "crc32": 3874906229,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_50d/hanatos2025_adaptation_surface_params": {
+   "crc32": 3374907335,
+   "dtype": "float64",
+   "shape": [
+    3,
+    15
+   ]
+  },
+  "profiles/kodak_vision3_50d/hanatos2025_adaptation_window_params": {
+   "crc32": 1774937885,
+   "dtype": "float64",
+   "shape": [
+    4
+   ]
+  },
+  "profiles/kodak_vision3_50d/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "profiles/kodak_vision3_50d/log_sensitivity": {
+   "crc32": 1260792015,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_50d/midscale_neutral_density": {
+   "crc32": 390870310,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "profiles/kodak_vision3_50d/model_amplitudes": {
+   "crc32": 2596814580,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_50d/model_centers": {
+   "crc32": 717402277,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_50d/model_sigmas": {
+   "crc32": 2464752671,
+   "dtype": "float64",
+   "shape": [
+    3,
+    3
+   ]
+  },
+  "profiles/kodak_vision3_50d/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "spectral/cmfs_xyz": {
+   "crc32": 2927275597,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "spectral/locus_xy": {
+   "crc32": 1086429941,
+   "dtype": "float64",
+   "shape": [
+    66,
+    2
+   ]
+  },
+  "spectral/log_exposure": {
+   "crc32": 2655075768,
+   "dtype": "float64",
+   "shape": [
+    256
+   ]
+  },
+  "spectral/mallett2019_basis": {
+   "crc32": 1104672314,
+   "dtype": "float64",
+   "shape": [
+    81,
+    3
+   ]
+  },
+  "spectral/wavelengths": {
+   "crc32": 2017485611,
+   "dtype": "float64",
+   "shape": [
+    81
+   ]
+  },
+  "upsampling/hanatos2025_spectra_lut": {
+   "crc32": 1264665793,
+   "dtype": "float16",
+   "shape": [
+    192,
+    192,
+    81
+   ]
+  }
+ },
+ "bin_sha256": "6a248d749404dea91f3d4ff9266f41d890a2256ba702a1a2b501e832c5da43c0",
+ "profiles": [
+  "fujifilm_c200",
+  "fujifilm_crystal_archive_typeii",
+  "fujifilm_pro_400h",
+  "fujifilm_provia_100f",
+  "fujifilm_velvia_100",
+  "fujifilm_xtra_400",
+  "kodak_2302",
+  "kodak_2383",
+  "kodak_2393",
+  "kodak_doublex",
+  "kodak_ektachrome_100",
+  "kodak_ektacolor_edge",
+  "kodak_ektar_100",
+  "kodak_endura_premier",
+  "kodak_gold_200",
+  "kodak_kodachrome_64",
+  "kodak_portra_160",
+  "kodak_portra_400",
+  "kodak_portra_800",
+  "kodak_portra_800_push1",
+  "kodak_portra_800_push2",
+  "kodak_portra_endura",
+  "kodak_supra_endura",
+  "kodak_trix",
+  "kodak_ultra_endura",
+  "kodak_ultramax_400",
+  "kodak_verita_200d",
+  "kodak_vision3_200t",
+  "kodak_vision3_250d",
+  "kodak_vision3_500t",
+  "kodak_vision3_50d"
+ ],
+ "provenance": {
+  "attribution": "spektrafilm profiles by Andrea Volpato, https://github.com/andreavolpato/spektrafilm, CC BY-SA 4.0",
+  "colour_science_version": "0.4.7",
+  "exported_utc": "2026-11-11",
+  "exporter_version": 1,
+  "licence": "CC BY-SA 4.0",
+  "numpy_version": "2.5.4",
+  "pack_version": 1,
+  "pinned_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+  "scipy_version": "1.18.1",
+  "spektrafilm_version": "0.3.3",
+  "upstream_branch": "dev",
+  "upstream_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+  "upstream_url": "https://github.com/andreavolpato/spektrafilm"
+ }
+}

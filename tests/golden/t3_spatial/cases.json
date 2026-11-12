@@ -1,0 +1,989 @@
+{
+ "suite": "t3_spatial",
+ "reference_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+ "cases": [
+  {
+   "id": "default_kodak_portra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_kodak_portra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "default_kodak_gold_200__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_supra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_kodak_gold_200__kodak_supra_endura.npy"
+  },
+  {
+   "id": "default_kodak_vision3_500t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_kodak_vision3_500t__kodak_2383.npy"
+  },
+  {
+   "id": "default_kodak_doublex__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_kodak_doublex__kodak_2302.npy"
+  },
+  {
+   "id": "default_fujifilm_c200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_fujifilm_c200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "default_scanfilm_fujifilm_velvia_100",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_scanfilm_fujifilm_velvia_100.npy"
+  },
+  {
+   "id": "default_scanfilm_kodak_kodachrome_64",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_scanfilm_kodak_kodachrome_64.npy"
+  },
+  {
+   "id": "default_scanfilm_kodak_trix",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/default_scanfilm_kodak_trix.npy"
+  },
+  {
+   "id": "taps_portra400_log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "collect": "log_e_film",
+   "subsample": 2,
+   "golden": "golden/taps_portra400_log_e_film.npy"
+  },
+  {
+   "id": "taps_portra400_cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "collect": "cmy_film",
+   "subsample": 2,
+   "golden": "golden/taps_portra400_cmy_film.npy"
+  },
+  {
+   "id": "taps_portra400_log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "collect": "log_e_print",
+   "subsample": 2,
+   "golden": "golden/taps_portra400_log_e_print.npy"
+  },
+  {
+   "id": "taps_portra400_cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "collect": "cmy_print",
+   "subsample": 2,
+   "golden": "golden/taps_portra400_cmy_print.npy"
+  },
+  {
+   "id": "highlights_default",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/highlights_default.npy"
+  },
+  {
+   "id": "highlights_log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "collect": "log_e_film",
+   "subsample": 2,
+   "golden": "golden/highlights_log_e_film.npy"
+  },
+  {
+   "id": "highlights_weak_ah",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/highlights_weak_ah.npy"
+  },
+  {
+   "id": "highlights_boost",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "film_render": {
+     "halation": {
+      "boost_ev": 4.0,
+      "boost_range": 0.5,
+      "protect_ev": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/highlights_boost.npy"
+  },
+  {
+   "id": "halation_off",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "film_render": {
+     "halation": {
+      "active": false
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/halation_off.npy"
+  },
+  {
+   "id": "halation_tuned",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "post": {
+    "film_render": {
+     "halation": {
+      "scatter_amount": 0.5,
+      "scatter_spatial_scale": 3.0,
+      "halation_amount": 2.0,
+      "halation_spatial_scale": 0.5,
+      "halation_strength": [
+       0.3,
+       0.1,
+       0.015
+      ],
+      "halation_n_bounces": 5,
+      "halation_bounce_decay": 0.8,
+      "halation_renormalize": false
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/halation_tuned.npy"
+  },
+  {
+   "id": "camera_lens_blur",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "lens_blur_um": 14.0
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_lens_blur.npy"
+  },
+  {
+   "id": "camera_lens_blur_large",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "lens_blur_um": 30.0
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_lens_blur_large.npy"
+  },
+  {
+   "id": "scanner_blur",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "scanner": {
+     "lens_blur": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scanner_blur.npy"
+  },
+  {
+   "id": "scanner_blur_iir",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "scanner": {
+     "lens_blur": 3.5
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scanner_blur_iir.npy"
+  },
+  {
+   "id": "scanner_usm_strong",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "scanner": {
+     "unsharp_mask": [
+      1.5,
+      2.0
+     ]
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scanner_usm_strong.npy"
+  },
+  {
+   "id": "scanner_usm_off",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "scanner": {
+     "unsharp_mask": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scanner_usm_off.npy"
+  },
+  {
+   "id": "dir_diffusion_tuned",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "post": {
+    "film_render": {
+     "dir_couplers": {
+      "diffusion_size_um": 40.0,
+      "diffusion_tail_um": 120.0,
+      "diffusion_tail_weight": 0.2,
+      "amount": 1.5
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/dir_diffusion_tuned.npy"
+  },
+  {
+   "id": "dir_diffusion_off",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    }
+   },
+   "post": {
+    "film_render": {
+     "dir_couplers": {
+      "diffusion_size_um": 0.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/dir_diffusion_off.npy"
+  },
+  {
+   "id": "dir_diffusion_positive",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/dir_diffusion_positive.npy"
+  },
+  {
+   "id": "format_120",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 2.4
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/format_120.npy"
+  },
+  {
+   "id": "crop",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "io": {
+     "crop": true,
+     "crop_center": [
+      0.4,
+      0.55
+     ],
+     "crop_size": [
+      0.5,
+      0.35
+     ]
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/crop.npy"
+  },
+  {
+   "id": "preview_mode",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "settings": {
+     "preview_mode": true
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/preview_mode.npy"
+  },
+  {
+   "id": "camera_diffusion_glimmerglass_0.25",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "glimmerglass",
+      "strength": 0.25
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_glimmerglass_0.25.npy"
+  },
+  {
+   "id": "camera_diffusion_glimmerglass_2.0",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "glimmerglass",
+      "strength": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_glimmerglass_2.0.npy"
+  },
+  {
+   "id": "camera_diffusion_black_pro_mist_0.25",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "black_pro_mist",
+      "strength": 0.25
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_black_pro_mist_0.25.npy"
+  },
+  {
+   "id": "camera_diffusion_black_pro_mist_2.0",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "black_pro_mist",
+      "strength": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_black_pro_mist_2.0.npy"
+  },
+  {
+   "id": "camera_diffusion_pro_mist_0.25",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "pro_mist",
+      "strength": 0.25
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_pro_mist_0.25.npy"
+  },
+  {
+   "id": "camera_diffusion_pro_mist_2.0",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "pro_mist",
+      "strength": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_pro_mist_2.0.npy"
+  },
+  {
+   "id": "camera_diffusion_cinebloom_0.25",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "cinebloom",
+      "strength": 0.25
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_cinebloom_0.25.npy"
+  },
+  {
+   "id": "camera_diffusion_cinebloom_2.0",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "cinebloom",
+      "strength": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_cinebloom_2.0.npy"
+  },
+  {
+   "id": "camera_diffusion_tuned",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "pro_mist",
+      "strength": 1.0,
+      "spatial_scale": 0.5,
+      "halo_warmth": 0.9,
+      "core_intensity": 0.5,
+      "core_size": 2.0,
+      "halo_intensity": 1.6,
+      "halo_size": 0.7,
+      "bloom_intensity": 0.4,
+      "bloom_size": 1.5
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_tuned.npy"
+  },
+  {
+   "id": "camera_diffusion_bw",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864,
+     "diffusion_filter": {
+      "active": true,
+      "strength": 1.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/camera_diffusion_bw.npy"
+  },
+  {
+   "id": "enlarger_diffusion",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/highlights.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "enlarger": {
+     "diffusion_filter": {
+      "active": true,
+      "filter_family": "cinebloom",
+      "strength": 0.5
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/enlarger_diffusion.npy"
+  },
+  {
+   "id": "all_spatial",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 0.0003,
+   "rtol": 0.0003,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2,
+     "lens_blur_um": 8.0,
+     "diffusion_filter": {
+      "active": true,
+      "strength": 0.5
+     }
+    },
+    "enlarger": {
+     "diffusion_filter": {
+      "active": true,
+      "strength": 0.125
+     }
+    },
+    "scanner": {
+     "lens_blur": 0.6,
+     "unsharp_mask": [
+      0.9,
+      0.5
+     ]
+    },
+    "film_render": {
+     "halation": {
+      "boost_ev": 2.0
+     }
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/all_spatial.npy"
+  }
+ ]
+}

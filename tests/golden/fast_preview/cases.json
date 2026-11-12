@@ -1,0 +1,512 @@
+{
+ "suite": "fast_preview",
+ "reference_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+ "cases": [
+  {
+   "id": "patches_gui_kodak_portra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_portra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "scene_gui_kodak_portra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_portra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "scene_ref_kodak_portra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_portra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "patches_gui_kodak_vision3_500t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_vision3_500t__kodak_2383.npy"
+  },
+  {
+   "id": "scene_gui_kodak_vision3_500t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_vision3_500t__kodak_2383.npy"
+  },
+  {
+   "id": "scene_ref_kodak_vision3_500t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_vision3_500t__kodak_2383.npy"
+  },
+  {
+   "id": "patches_gui_kodak_gold_200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_gold_200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "scene_gui_kodak_gold_200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_gold_200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "scene_ref_kodak_gold_200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_gold_200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "patches_gui_kodak_doublex__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_doublex__kodak_2302.npy"
+  },
+  {
+   "id": "scene_gui_kodak_doublex__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_doublex__kodak_2302.npy"
+  },
+  {
+   "id": "scene_ref_kodak_doublex__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_doublex__kodak_2302.npy"
+  },
+  {
+   "id": "patches_gui_kodak_doublex__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_doublex__kodak_portra_endura.npy"
+  },
+  {
+   "id": "scene_gui_kodak_doublex__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_doublex__kodak_portra_endura.npy"
+  },
+  {
+   "id": "scene_ref_kodak_doublex__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_doublex__kodak_portra_endura.npy"
+  },
+  {
+   "id": "patches_gui_kodak_portra_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    }
+   },
+   "golden": "golden/patches_gui_kodak_portra_400__kodak_2302.npy"
+  },
+  {
+   "id": "scene_gui_kodak_portra_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/scene_gui_kodak_portra_400__kodak_2302.npy"
+  },
+  {
+   "id": "scene_ref_kodak_portra_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    }
+   },
+   "input": "inputs/scene.npy",
+   "atol": 0.015,
+   "rtol": 0.0,
+   "p99_max": 0.006,
+   "rmse_max": 0.003,
+   "subsample": 2,
+   "golden": "golden/scene_ref_kodak_portra_400__kodak_2302.npy"
+  },
+  {
+   "id": "patches_gui_scanfilm_fujifilm_velvia_100",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/patches_gui_scanfilm_fujifilm_velvia_100.npy"
+  },
+  {
+   "id": "patches_gui_scanfilm_kodak_trix",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "settings": {
+     "use_enlarger_lut": true,
+     "use_scanner_lut": true,
+     "lut_resolution": 17,
+     "use_fast_stats": true,
+     "preview_mode": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/patches_gui_scanfilm_kodak_trix.npy"
+  }
+ ]
+}

@@ -1,0 +1,4187 @@
+{
+ "suite": "t2_nonspatial",
+ "reference_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+ "cases": [
+  {
+   "id": "taps_kodak_portra_400__kodak_portra_endura__log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_kodak_portra_400__kodak_portra_endura__log_e_film.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_portra_endura__cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_kodak_portra_400__kodak_portra_endura__cmy_film.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_portra_endura__log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_kodak_portra_400__kodak_portra_endura__log_e_print.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_portra_endura__cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_kodak_portra_400__kodak_portra_endura__cmy_print.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_portra_endura__rgb_out",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_kodak_portra_400__kodak_portra_endura__rgb_out.npy"
+  },
+  {
+   "id": "taps_kodak_vision3_500t__kodak_2383__log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_kodak_vision3_500t__kodak_2383__log_e_film.npy"
+  },
+  {
+   "id": "taps_kodak_vision3_500t__kodak_2383__cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_kodak_vision3_500t__kodak_2383__cmy_film.npy"
+  },
+  {
+   "id": "taps_kodak_vision3_500t__kodak_2383__log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_kodak_vision3_500t__kodak_2383__log_e_print.npy"
+  },
+  {
+   "id": "taps_kodak_vision3_500t__kodak_2383__cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_kodak_vision3_500t__kodak_2383__cmy_print.npy"
+  },
+  {
+   "id": "taps_kodak_vision3_500t__kodak_2383__rgb_out",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_kodak_vision3_500t__kodak_2383__rgb_out.npy"
+  },
+  {
+   "id": "taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__log_e_film",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__log_e_film.npy"
+  },
+  {
+   "id": "taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__cmy_film",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__cmy_film.npy"
+  },
+  {
+   "id": "taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__log_e_print",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__log_e_print.npy"
+  },
+  {
+   "id": "taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__cmy_print",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__cmy_print.npy"
+  },
+  {
+   "id": "taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__rgb_out",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_fujifilm_pro_400h__fujifilm_crystal_archive_typeii__rgb_out.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_2302__log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_kodak_doublex__kodak_2302__log_e_film.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_2302__cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_kodak_doublex__kodak_2302__cmy_film.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_2302__log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_kodak_doublex__kodak_2302__log_e_print.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_2302__cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_kodak_doublex__kodak_2302__cmy_print.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_2302__rgb_out",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_kodak_doublex__kodak_2302__rgb_out.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_portra_endura__log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_kodak_doublex__kodak_portra_endura__log_e_film.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_portra_endura__cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_kodak_doublex__kodak_portra_endura__cmy_film.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_portra_endura__log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_kodak_doublex__kodak_portra_endura__log_e_print.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_portra_endura__cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_kodak_doublex__kodak_portra_endura__cmy_print.npy"
+  },
+  {
+   "id": "taps_kodak_doublex__kodak_portra_endura__rgb_out",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_kodak_doublex__kodak_portra_endura__rgb_out.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_2302__log_e_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_kodak_portra_400__kodak_2302__log_e_film.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_2302__cmy_film",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_kodak_portra_400__kodak_2302__cmy_film.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_2302__log_e_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_kodak_portra_400__kodak_2302__log_e_print.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_2302__cmy_print",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_kodak_portra_400__kodak_2302__cmy_print.npy"
+  },
+  {
+   "id": "taps_kodak_portra_400__kodak_2302__rgb_out",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_kodak_portra_400__kodak_2302__rgb_out.npy"
+  },
+  {
+   "id": "taps_fujifilm_velvia_100__kodak_portra_endura__log_e_film",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_film",
+   "golden": "golden/taps_fujifilm_velvia_100__kodak_portra_endura__log_e_film.npy"
+  },
+  {
+   "id": "taps_fujifilm_velvia_100__kodak_portra_endura__cmy_film",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_film",
+   "golden": "golden/taps_fujifilm_velvia_100__kodak_portra_endura__cmy_film.npy"
+  },
+  {
+   "id": "taps_fujifilm_velvia_100__kodak_portra_endura__log_e_print",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "log_e_print",
+   "golden": "golden/taps_fujifilm_velvia_100__kodak_portra_endura__log_e_print.npy"
+  },
+  {
+   "id": "taps_fujifilm_velvia_100__kodak_portra_endura__cmy_print",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "cmy_print",
+   "golden": "golden/taps_fujifilm_velvia_100__kodak_portra_endura__cmy_print.npy"
+  },
+  {
+   "id": "taps_fujifilm_velvia_100__kodak_portra_endura__rgb_out",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "collect": "rgb_out",
+   "golden": "golden/taps_fujifilm_velvia_100__kodak_portra_endura__rgb_out.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_portra_160__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_160__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_portra_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_400__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push1__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push1__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_portra_800_push2__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_portra_800_push2__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_gold_200__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_gold_200__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_ultramax_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ultramax_400__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_ektar_100__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektar_100__kodak_2302.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_2383",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_2383.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_2393",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_2393.npy"
+  },
+  {
+   "id": "pair_fujifilm_pro_400h__kodak_2302",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_pro_400h__kodak_2302.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_2383",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_2383.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_2393",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_2393.npy"
+  },
+  {
+   "id": "pair_fujifilm_c200__kodak_2302",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_c200__kodak_2302.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_2383",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_2383.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_2393",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_2393.npy"
+  },
+  {
+   "id": "pair_fujifilm_xtra_400__kodak_2302",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_xtra_400__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_50d__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_50d__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_250d__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_250d__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_verita_200d__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_verita_200d__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_200t__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_200t__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_vision3_500t__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_vision3_500t__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_ektachrome_100__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_ektachrome_100__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_kodachrome_64__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_kodachrome_64__kodak_2302.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_2383",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_2383.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_2393",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_2393.npy"
+  },
+  {
+   "id": "pair_fujifilm_velvia_100__kodak_2302",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_velvia_100__kodak_2302.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_2383",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_2383.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_2393",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_2393.npy"
+  },
+  {
+   "id": "pair_fujifilm_provia_100f__kodak_2302",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_fujifilm_provia_100f__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_doublex__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_doublex__kodak_2302.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_ultra_endura",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_ultra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_ultra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_endura_premier",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_endura_premier",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_endura_premier.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_ektacolor_edge",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_ektacolor_edge",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_ektacolor_edge.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_supra_endura",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_supra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_supra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_portra_endura",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_portra_endura.npy"
+  },
+  {
+   "id": "pair_kodak_trix__fujifilm_crystal_archive_typeii",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "fujifilm_crystal_archive_typeii",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__fujifilm_crystal_archive_typeii.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_2383",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_2383.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_2393",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_2393",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_2393.npy"
+  },
+  {
+   "id": "pair_kodak_trix__kodak_2302",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_2302",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    }
+   },
+   "golden": "golden/pair_kodak_trix__kodak_2302.npy"
+  },
+  {
+   "id": "scanfilm_kodak_portra_160",
+   "kind": "pipeline",
+   "film": "kodak_portra_160",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_portra_160.npy"
+  },
+  {
+   "id": "scanfilm_kodak_portra_400",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_portra_400.npy"
+  },
+  {
+   "id": "scanfilm_kodak_portra_800",
+   "kind": "pipeline",
+   "film": "kodak_portra_800",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_portra_800.npy"
+  },
+  {
+   "id": "scanfilm_kodak_portra_800_push1",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push1",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_portra_800_push1.npy"
+  },
+  {
+   "id": "scanfilm_kodak_portra_800_push2",
+   "kind": "pipeline",
+   "film": "kodak_portra_800_push2",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_portra_800_push2.npy"
+  },
+  {
+   "id": "scanfilm_kodak_gold_200",
+   "kind": "pipeline",
+   "film": "kodak_gold_200",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_gold_200.npy"
+  },
+  {
+   "id": "scanfilm_kodak_ultramax_400",
+   "kind": "pipeline",
+   "film": "kodak_ultramax_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_ultramax_400.npy"
+  },
+  {
+   "id": "scanfilm_kodak_ektar_100",
+   "kind": "pipeline",
+   "film": "kodak_ektar_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_ektar_100.npy"
+  },
+  {
+   "id": "scanfilm_fujifilm_pro_400h",
+   "kind": "pipeline",
+   "film": "fujifilm_pro_400h",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_fujifilm_pro_400h.npy"
+  },
+  {
+   "id": "scanfilm_fujifilm_c200",
+   "kind": "pipeline",
+   "film": "fujifilm_c200",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_fujifilm_c200.npy"
+  },
+  {
+   "id": "scanfilm_fujifilm_xtra_400",
+   "kind": "pipeline",
+   "film": "fujifilm_xtra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_fujifilm_xtra_400.npy"
+  },
+  {
+   "id": "scanfilm_kodak_vision3_50d",
+   "kind": "pipeline",
+   "film": "kodak_vision3_50d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_vision3_50d.npy"
+  },
+  {
+   "id": "scanfilm_kodak_vision3_250d",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_vision3_250d.npy"
+  },
+  {
+   "id": "scanfilm_kodak_verita_200d",
+   "kind": "pipeline",
+   "film": "kodak_verita_200d",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_verita_200d.npy"
+  },
+  {
+   "id": "scanfilm_kodak_vision3_200t",
+   "kind": "pipeline",
+   "film": "kodak_vision3_200t",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_vision3_200t.npy"
+  },
+  {
+   "id": "scanfilm_kodak_vision3_500t",
+   "kind": "pipeline",
+   "film": "kodak_vision3_500t",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_vision3_500t.npy"
+  },
+  {
+   "id": "scanfilm_kodak_ektachrome_100",
+   "kind": "pipeline",
+   "film": "kodak_ektachrome_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_ektachrome_100.npy"
+  },
+  {
+   "id": "scanfilm_kodak_kodachrome_64",
+   "kind": "pipeline",
+   "film": "kodak_kodachrome_64",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_kodachrome_64.npy"
+  },
+  {
+   "id": "scanfilm_fujifilm_velvia_100",
+   "kind": "pipeline",
+   "film": "fujifilm_velvia_100",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_fujifilm_velvia_100.npy"
+  },
+  {
+   "id": "scanfilm_fujifilm_provia_100f",
+   "kind": "pipeline",
+   "film": "fujifilm_provia_100f",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_fujifilm_provia_100f.npy"
+  },
+  {
+   "id": "scanfilm_kodak_doublex",
+   "kind": "pipeline",
+   "film": "kodak_doublex",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_doublex.npy"
+  },
+  {
+   "id": "scanfilm_kodak_trix",
+   "kind": "pipeline",
+   "film": "kodak_trix",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "scan_film": true
+    }
+   },
+   "golden": "golden/scanfilm_kodak_trix.npy"
+  }
+ ]
+}
