@@ -21,6 +21,10 @@ Image metering_preview(const Image& img, int max_size = 256);
 Image crop_image(const Image& img, const std::array<double, 2>& center,
                  const std::array<double, 2>& size);
 
+// Area-average (box) reduction so the long edge is at most `long_edge` pixels.
+// Used to build previews; returns the input when it is already small enough.
+Image downsample_area(const Image& img, int long_edge);
+
 // 3-D LUT acceleration of a per-pixel spectral function (utils/lut.py).
 // fn maps n_in input values to n_out output values.
 using PixelFn = std::function<void(const double* in, double* out)>;

@@ -184,3 +184,44 @@ Vec3 oklab_to_xyz(const ColourData& cd, const Vec3& lab) {
 }
 
 }  // namespace spectra
+
+namespace spectra {
+
+Xy cct_to_xy(double T) {
+    double x, y;
+    if (T >= 4000.0) {
+        // CIE Illuminant D Series
+        if (T <= 7000.0)
+            x = -4.607e9 / (T * T * T) + 2.9678e6 / (T * T) + 0.09911e3 / T + 0.244063;
+        else
+            x = -2.0064e9 / (T * T * T) + 1.9018e6 / (T * T) + 0.24748e3 / T + 0.23704;
+        y = -3.0 * x * x + 2.87 * x - 0.275;
+    } else {
+        // Kang et al. 2002 (Planckian locus)
+        x = -0.2661239e9 / (T * T * T) - 0.2343589e6 / (T * T) + 0.8776956e3 / T + 0.179910;
+        double x2 = x * x, x3 = x2 * x;
+        if (T <= 2222.0)
+            y = -1.1063814 * x3 - 1.34811020 * x2 + 2.18555832 * x - 0.20219683;
+        else
+            y = -0.9549476 * x3 - 1.37418593 * x2 + 2.09137015 * x - 0.16748867;
+    }
+    return {x, y};
+}
+
+Mat3 raw_white_balance_matrix(const ColourData& cd, double scene_temperature, double tint) {
+    const ColourSpace& aces = cd.space("ACES2065-1");
+    Vec3 ref = xy_to_XYZ(cct_to_xy(6504.0)), scene = xy_to_XYZ(cct_to_xy(scene_temperature));
+    Mat3 m = mat3_identity();
+    bool same = true;
+    for (int i = 0; i < 3; ++i)
+        if (std::fabs(ref[i] - scene[i]) > 1e-8 + 1e-5 * std::fabs(scene[i])) same = false;
+    if (!same) {
+        Mat3 cat = von_kries_matrix(scene, ref, cd.cat("CAT02"));
+        m = mat3_mul(aces.xyz_to_rgb, mat3_mul(cat, aces.rgb_to_xyz));
+    }
+    Mat3 t = mat3_identity();
+    t[4] = tint;
+    return mat3_mul(t, m);
+}
+
+}  // namespace spectra

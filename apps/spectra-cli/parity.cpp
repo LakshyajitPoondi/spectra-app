@@ -264,6 +264,18 @@ void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::pat
             data.push_back(patch_stats(plane, 6.0, stat)[0]);
         }
         shape = {data.size()};
+    } else if (name == "cct_to_xy") {
+        Xy xy = cct_to_xy(c.at("temperature").get<double>());
+        data = {xy[0], xy[1]};
+        shape = {2};
+    } else if (name == "raw_white_balance") {
+        Image img = input_image();
+        Mat3 m = raw_white_balance_matrix(*cd, c.at("temperature").get<double>(), c.value("tint", 1.0));
+        for (size_t i = 0; i < img.pixels(); ++i) {
+            Vec3 o = mat3_apply(m, {img.v[i * 3], img.v[i * 3 + 1], img.v[i * 3 + 2]});
+            for (int k = 0; k < 3; ++k) img.v[i * 3 + k] = o[k];
+        }
+        from_image(img);
     } else if (name == "crop") {
         Params tmp;
         apply_params_patch(tmp, json{{"io", c.at("io")}});

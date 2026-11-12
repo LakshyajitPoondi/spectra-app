@@ -1834,6 +1834,140 @@
    "golden": "golden/crop_0.31_0.47_0.33_0.21.npy"
   },
   {
+   "id": "cct_to_xy_1800.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 1800.0,
+   "golden": "golden/cct_to_xy_1800.0.npy"
+  },
+  {
+   "id": "cct_to_xy_2222.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 2222.0,
+   "golden": "golden/cct_to_xy_2222.0.npy"
+  },
+  {
+   "id": "cct_to_xy_2850.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 2850.0,
+   "golden": "golden/cct_to_xy_2850.0.npy"
+  },
+  {
+   "id": "cct_to_xy_3999.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 3999.0,
+   "golden": "golden/cct_to_xy_3999.0.npy"
+  },
+  {
+   "id": "cct_to_xy_4000.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 4000.0,
+   "golden": "golden/cct_to_xy_4000.0.npy"
+  },
+  {
+   "id": "cct_to_xy_5003.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 5003.0,
+   "golden": "golden/cct_to_xy_5003.0.npy"
+  },
+  {
+   "id": "cct_to_xy_6504.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 6504.0,
+   "golden": "golden/cct_to_xy_6504.0.npy"
+  },
+  {
+   "id": "cct_to_xy_7000.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 7000.0,
+   "golden": "golden/cct_to_xy_7000.0.npy"
+  },
+  {
+   "id": "cct_to_xy_7001.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 7001.0,
+   "golden": "golden/cct_to_xy_7001.0.npy"
+  },
+  {
+   "id": "cct_to_xy_12000.0",
+   "kind": "unit",
+   "unit": "cct_to_xy",
+   "atol": 1e-12,
+   "rtol": 1e-09,
+   "temperature": 12000.0,
+   "golden": "golden/cct_to_xy_12000.0.npy"
+  },
+  {
+   "id": "raw_white_balance_2850.0_1.0",
+   "kind": "unit",
+   "unit": "raw_white_balance",
+   "atol": 3e-07,
+   "rtol": 3e-07,
+   "input": "inputs/aces_9x11.npy",
+   "temperature": 2850.0,
+   "tint": 1.0,
+   "golden": "golden/raw_white_balance_2850.0_1.0.npy"
+  },
+  {
+   "id": "raw_white_balance_4300.0_1.08",
+   "kind": "unit",
+   "unit": "raw_white_balance",
+   "atol": 3e-07,
+   "rtol": 3e-07,
+   "input": "inputs/aces_9x11.npy",
+   "temperature": 4300.0,
+   "tint": 1.08,
+   "golden": "golden/raw_white_balance_4300.0_1.08.npy"
+  },
+  {
+   "id": "raw_white_balance_9000.0_0.9",
+   "kind": "unit",
+   "unit": "raw_white_balance",
+   "atol": 3e-07,
+   "rtol": 3e-07,
+   "input": "inputs/aces_9x11.npy",
+   "temperature": 9000.0,
+   "tint": 0.9,
+   "golden": "golden/raw_white_balance_9000.0_0.9.npy"
+  },
+  {
+   "id": "raw_white_balance_6504.0_1.2",
+   "kind": "unit",
+   "unit": "raw_white_balance",
+   "atol": 3e-07,
+   "rtol": 3e-07,
+   "input": "inputs/aces_9x11.npy",
+   "temperature": 6504.0,
+   "tint": 1.2,
+   "golden": "golden/raw_white_balance_6504.0_1.2.npy"
+  },
+  {
    "id": "tc_lut_portra400",
    "kind": "unit",
    "unit": "tc_lut",

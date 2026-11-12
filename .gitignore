@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+test_data/raw/
+test_data/out/
+reports/

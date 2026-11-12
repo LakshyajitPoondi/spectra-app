@@ -363,6 +363,23 @@ def suite_t1_units():
         s.unit(f"crop_{center[0]}_{center[1]}_{size[0]}_{size[1]}", "crop", crop_image(img, center, size), input=iin,
                io={"crop_center": list(center), "crop_size": list(size)})
 
+    # --- RAW white balance (the float32 rounding of the reference limits the accuracy)
+    import colour as _colour
+    from spektrafilm.utils import raw_file_processor as rfp
+    for T in [1800.0, 2222.0, 2850.0, 3999.0, 4000.0, 5003.0, 6504.0, 7000.0, 7001.0, 12000.0]:
+        method = 'CIE Illuminant D Series' if T >= 4000.0 else 'Kang 2002'
+        s.unit(f"cct_to_xy_{T}", "cct_to_xy", _colour.CCT_to_xy(np.float64(T), method=method), temperature=T)
+    aces = f32(rng.uniform(0, 1.2, (9, 11, 3)))
+    ain = s.input("aces_9x11", aces)
+    for T, tint in [(2850.0, 1.0), (4300.0, 1.08), (9000.0, 0.9), (6504.0, 1.2)]:
+        _, adapt, tint_mult = rfp._postprocess_params('custom', T, tint)
+        out = aces.astype(np.float32)
+        if adapt is not None:
+            out = rfp._apply_white_balance_adaptation(out, *adapt)
+        out = rfp._apply_tint_adjustment(out, tint_mult)
+        s.unit(f"raw_white_balance_{T}_{tint}", "raw_white_balance", out, input=ain, temperature=T, tint=tint,
+               atol=3e-7, rtol=3e-7)
+
     # --- quantities that need a built pipeline
     def built(case):
         params = build_params(case)

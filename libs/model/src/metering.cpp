@@ -209,6 +209,41 @@ Image crop_image(const Image& img, const std::array<double, 2>& center,
     return out;
 }
 
+Image downsample_area(const Image& img, int long_edge) {
+    int mx = std::max(img.h, img.w);
+    if (long_edge <= 0 || mx <= long_edge) return img;
+    double scale = static_cast<double>(mx) / long_edge;
+    int oh = std::max(1, static_cast<int>(std::lround(img.h / scale)));
+    int ow = std::max(1, static_cast<int>(std::lround(img.w / scale)));
+    double sy = static_cast<double>(img.h) / oh, sx = static_cast<double>(img.w) / ow;
+    Image out(oh, ow, img.c);
+    parallel_for(oh, [&](long a, long b) {
+        Vec acc(img.c);
+        for (long y = a; y < b; ++y) {
+            double y0 = y * sy, y1 = (y + 1) * sy;
+            int iy0 = static_cast<int>(std::floor(y0)), iy1 = std::min(img.h, static_cast<int>(std::ceil(y1)));
+            for (int x = 0; x < ow; ++x) {
+                double x0 = x * sx, x1 = (x + 1) * sx;
+                int ix0 = static_cast<int>(std::floor(x0)), ix1 = std::min(img.w, static_cast<int>(std::ceil(x1)));
+                std::fill(acc.begin(), acc.end(), 0.0);
+                double wsum = 0;
+                for (int iy = iy0; iy < iy1; ++iy) {
+                    double wy = std::min<double>(iy + 1, y1) - std::max<double>(iy, y0);
+                    for (int ix = ix0; ix < ix1; ++ix) {
+                        double w = wy * (std::min<double>(ix + 1, x1) - std::max<double>(ix, x0));
+                        const double* p = img.px(iy, ix);
+                        for (int k = 0; k < img.c; ++k) acc[k] += w * p[k];
+                        wsum += w;
+                    }
+                }
+                double* o = out.px(static_cast<int>(y), x);
+                for (int k = 0; k < img.c; ++k) o[k] = acc[k] / wsum;
+            }
+        }
+    });
+    return out;
+}
+
 Lut3D create_lut_3d(const PixelFn& fn, int n_out, const Vec& xmin, const Vec& xmax, int steps) {
     Lut3D lut;
     lut.steps = steps;

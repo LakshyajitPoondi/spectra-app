@@ -1,0 +1,11 @@
+{
+  "name": "spectra-app",
+  "version-string": "0.3.0",
+  "dependencies": [
+    "libraw",
+    "tiff",
+    "libpng",
+    "libjpeg-turbo",
+    "openexr"
+  ]
+}

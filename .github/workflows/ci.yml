@@ -3,16 +3,36 @@ on:
   push:
   pull_request:
 jobs:
-  build-test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, windows-2022]
-    runs-on: ${{ matrix.os }}
+  linux:
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libraw-dev libtiff-dev libpng-dev libjpeg-turbo8-dev libopenexr-dev \
+            libvulkan-dev mesa-vulkan-drivers glslang-tools glslc vulkan-tools
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+  windows:
+    runs-on: windows-2022
+    env:
+      VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}\\vcpkg-cache,readwrite"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: vcpkg-cache
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          -DVCPKG_TARGET_TRIPLET=x64-windows
       - name: Build
         run: cmake --build build --config Release --parallel
       - name: Test
