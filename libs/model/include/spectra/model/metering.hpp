@@ -17,6 +17,11 @@ double measure_raw_autoexposure_ev(const Image& raw, const std::string& method, 
 // long edge of max_size (Gaussian anti-aliasing + nearest sampling).
 Image metering_preview(const Image& img, int max_size = 256);
 
+// skimage.transform.rescale(image, factor, order=3): cubic B-spline resampling
+// with mirror boundaries (Gaussian anti-aliasing first when reducing), clipped
+// to the input range. Used for io.upscale_factor.
+Image rescale_cubic(const Image& img, double factor);
+
 // spektrafilm.utils.crop_resize.crop_image
 Image crop_image(const Image& img, const std::array<double, 2>& center,
                  const std::array<double, 2>& size);

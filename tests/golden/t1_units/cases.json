@@ -1834,6 +1834,56 @@
    "golden": "golden/crop_0.31_0.47_0.33_0.21.npy"
   },
   {
+   "id": "rescale_1.5",
+   "kind": "unit",
+   "unit": "rescale",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "factor": 1.5,
+   "golden": "golden/rescale_1.5.npy"
+  },
+  {
+   "id": "rescale_2.0",
+   "kind": "unit",
+   "unit": "rescale",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "factor": 2.0,
+   "golden": "golden/rescale_2.0.npy"
+  },
+  {
+   "id": "rescale_1.37",
+   "kind": "unit",
+   "unit": "rescale",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "factor": 1.37,
+   "golden": "golden/rescale_1.37.npy"
+  },
+  {
+   "id": "rescale_0.5",
+   "kind": "unit",
+   "unit": "rescale",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "factor": 0.5,
+   "golden": "golden/rescale_0.5.npy"
+  },
+  {
+   "id": "rescale_0.73",
+   "kind": "unit",
+   "unit": "rescale",
+   "atol": 1e-11,
+   "rtol": 1e-09,
+   "input": "inputs/noise_37x53.npy",
+   "factor": 0.73,
+   "golden": "golden/rescale_0.73.npy"
+  },
+  {
    "id": "cct_to_xy_1800.0",
    "kind": "unit",
    "unit": "cct_to_xy",

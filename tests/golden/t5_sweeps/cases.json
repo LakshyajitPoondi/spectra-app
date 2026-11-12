@@ -1105,6 +1105,77 @@
    "golden": "golden/portra_400_gamut_knee.npy"
   },
   {
+   "id": "portra_400_gamut_cam16ucs",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs"
+     }
+    }
+   },
+   "golden": "golden/portra_400_gamut_cam16ucs.npy"
+  },
+  {
+   "id": "portra_400_gamut_cam16_p3_nolight",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_color_space": "Display P3",
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs",
+      "lightness_compression": null
+     }
+    }
+   },
+   "golden": "golden/portra_400_gamut_cam16_p3_nolight.npy"
+  },
+  {
+   "id": "portra_400_gamut_cam16_prophoto",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_color_space": "ProPhoto RGB",
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs",
+      "knee": [
+       0.4,
+       1.0,
+       3.0
+      ]
+     }
+    }
+   },
+   "golden": "golden/portra_400_gamut_cam16_prophoto.npy"
+  },
+  {
    "id": "portra_400_gamut_no_lightness",
    "kind": "pipeline",
    "film": "kodak_portra_400",
@@ -2857,6 +2928,77 @@
     }
    },
    "golden": "golden/vision3_250d_gamut_knee.npy"
+  },
+  {
+   "id": "vision3_250d_gamut_cam16ucs",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs"
+     }
+    }
+   },
+   "golden": "golden/vision3_250d_gamut_cam16ucs.npy"
+  },
+  {
+   "id": "vision3_250d_gamut_cam16_p3_nolight",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_color_space": "Display P3",
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs",
+      "lightness_compression": null
+     }
+    }
+   },
+   "golden": "golden/vision3_250d_gamut_cam16_p3_nolight.npy"
+  },
+  {
+   "id": "vision3_250d_gamut_cam16_prophoto",
+   "kind": "pipeline",
+   "film": "kodak_vision3_250d",
+   "print": "kodak_2383",
+   "input": "inputs/patches.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_spatial_effects": true,
+     "deactivate_stochastic_effects": true
+    },
+    "io": {
+     "output_color_space": "ProPhoto RGB",
+     "output_gamut_compress": {
+      "algorithm": "cam16ucs",
+      "knee": [
+       0.4,
+       1.0,
+       3.0
+      ]
+     }
+    }
+   },
+   "golden": "golden/vision3_250d_gamut_cam16_prophoto.npy"
   },
   {
    "id": "vision3_250d_gamut_no_lightness",

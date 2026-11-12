@@ -401,8 +401,10 @@ Image Pipeline::preprocess(const Image& image, State& st) const {
     st.full_frame_preview = metering_preview(img);
     st.have_preview = true;
     if (p_.io.crop) img = crop_image(img, p_.io.crop_center, p_.io.crop_size);
-    if (p_.io.upscale_factor != 1.0)
-        throw std::runtime_error("io.upscale_factor != 1 is not implemented in the CPU reference yet");
+    if (p_.io.upscale_factor != 1.0) {
+        st.pixel_size_um /= p_.io.upscale_factor;
+        img = rescale_cubic(img, p_.io.upscale_factor);
+    }
     return img;
 }
 

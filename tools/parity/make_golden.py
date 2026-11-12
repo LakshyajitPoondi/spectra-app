@@ -363,6 +363,12 @@ def suite_t1_units():
         s.unit(f"crop_{center[0]}_{center[1]}_{size[0]}_{size[1]}", "crop", crop_image(img, center, size), input=iin,
                io={"crop_center": list(center), "crop_size": list(size)})
 
+    # --- io.upscale_factor resampling (skimage rescale, order 3)
+    from skimage.transform import rescale as _rescale
+    for factor in [1.5, 2.0, 1.37, 0.5, 0.73]:
+        s.unit(f"rescale_{factor}", "rescale", _rescale(img, factor, channel_axis=2, order=3), input=iin,
+               factor=factor, atol=1e-11)
+
     # --- RAW white balance (the float32 rounding of the reference limits the accuracy)
     import colour as _colour
     from spektrafilm.utils import raw_file_processor as rfp
@@ -576,6 +582,10 @@ def suite_t3_spatial():
     s.pipeline("format_120", "scene", scene, pre=merge(NO_STOCHASTIC, {"camera": {"film_format_mm": 2.4}}))
     s.pipeline("crop", "scene", scene,
                pre=merge(base_scene, {"io": {"crop": True, "crop_center": [0.4, 0.55], "crop_size": [0.5, 0.35]}}))
+    s.pipeline("upscale_1.5", "detail", detail, pre=merge(base_detail, {"io": {"upscale_factor": 1.5}}))
+    s.pipeline("upscale_0.6_crop", "scene", scene,
+               pre=merge(base_scene, {"io": {"upscale_factor": 0.6, "crop": True, "crop_center": [0.5, 0.5],
+                                             "crop_size": [0.5, 0.35]}}))
     s.pipeline("preview_mode", "scene", scene, pre=merge(base_scene, {"settings": {"preview_mode": True}}))
     for fam in ["glimmerglass", "black_pro_mist", "pro_mist", "cinebloom"]:
         for strength in [0.25, 2.0]:
@@ -651,6 +661,11 @@ def suite_t5_sweeps():
         "out_linear": {"io": {"output_cctf_encoding": False}},
         **{f"gamut_{a}": {"io": {"output_gamut_compress": {"algorithm": a}}} for a in ["off", "aces_rgc", "oklrab", "jzazbz"]},
         "gamut_knee": {"io": {"output_gamut_compress": {"knee": [0.5, 1.2, 1.5]}}},
+        "gamut_cam16ucs": {"io": {"output_gamut_compress": {"algorithm": "cam16ucs"}}},
+        "gamut_cam16_p3_nolight": {"io": {"output_color_space": "Display P3",
+                                          "output_gamut_compress": {"algorithm": "cam16ucs", "lightness_compression": None}}},
+        "gamut_cam16_prophoto": {"io": {"output_color_space": "ProPhoto RGB",
+                                        "output_gamut_compress": {"algorithm": "cam16ucs", "knee": [0.4, 1.0, 3.0]}}},
         "gamut_no_lightness": {"io": {"output_gamut_compress": {"lightness_compression": None}}},
         "gamut_lightness": {"io": {"output_gamut_compress": {"lightness_compression": [0.3, 0.9, 4.0]}}},
         "gamut_jz_p3": {"io": {"output_color_space": "Display P3", "output_gamut_compress": {"algorithm": "jzazbz"}}},

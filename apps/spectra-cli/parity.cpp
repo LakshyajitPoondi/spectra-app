@@ -264,6 +264,8 @@ void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::pat
             data.push_back(patch_stats(plane, 6.0, stat)[0]);
         }
         shape = {data.size()};
+    } else if (name == "rescale") {
+        from_image(rescale_cubic(input_image(), c.at("factor").get<double>()));
     } else if (name == "cct_to_xy") {
         Xy xy = cct_to_xy(c.at("temperature").get<double>());
         data = {xy[0], xy[1]};
