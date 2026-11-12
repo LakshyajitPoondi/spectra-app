@@ -32,7 +32,8 @@ DirCouplersTables build_dir_couplers_tables(const DirCouplersParams& p, const Ve
 // apply_density_correction_dir_couplers.
 Image apply_dir_couplers(const Image& density_cmy, const Image& log_raw, double pixel_size_um,
                          const Vec& log_exposure, const Vec& normalized_curves,
-                         const DirCouplersParams& p, const std::string& profile_type);
+                         const DirCouplersParams& p, const std::string& profile_type,
+                         double exposure_axis_gamma = 1.0);
 
 // ---- Grain ------------------------------------------------------------------
 

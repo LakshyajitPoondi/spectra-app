@@ -45,7 +45,8 @@ add_library(spectra_model STATIC
   libs/model/src/grain.cpp
   libs/model/src/gamut.cpp
   libs/model/src/upsampling.cpp
-  libs/model/src/metering.cpp)
+  libs/model/src/metering.cpp
+  libs/model/src/extended.cpp)
 target_include_directories(spectra_model PUBLIC libs/model/include)
 target_link_libraries(spectra_model PUBLIC spectra_data)
 

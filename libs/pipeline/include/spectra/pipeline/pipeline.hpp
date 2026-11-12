@@ -93,7 +93,12 @@ private:
     void correction_function(const State& st, double& m, double& q, bool& active) const;
     double bw_filming_exposure_correction(State& st) const;
     double bw_printing_exposure_correction(State& st) const;
-    Vec density_spectral_for(const Image& raw_1x1) const;
+    Vec density_spectral_for(const Image& raw_1x1, bool with_extended) const;
+    // Extended features
+    bool experimental_push() const;
+    void film_stage_dyes(const double* cmy, double* dye, double& silver) const;
+    Vec film_dmax_norm_, print_dmax_, midgray_extended_, retime_;
+    double film_axis_gamma_ = 1.0;
 
     std::shared_ptr<const ColourData> cd_;
     Params p_;

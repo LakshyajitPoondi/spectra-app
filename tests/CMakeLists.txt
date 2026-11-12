@@ -22,3 +22,7 @@ if(SPECTRA_HAVE_IO)
   target_link_libraries(test_io PRIVATE spectra_io)
   add_test(NAME io_roundtrip COMMAND test_io)
 endif()
+
+add_executable(test_extended test_extended.cpp)
+target_link_libraries(test_extended PRIVATE spectra_pipeline)
+add_test(NAME extended_sanity COMMAND test_extended ${SPECTRA_PACK})

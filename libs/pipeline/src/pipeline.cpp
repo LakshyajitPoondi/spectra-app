@@ -12,6 +12,7 @@
 #include "spectra/core/parallel.hpp"
 #include "spectra/model/diffusion.hpp"
 #include "spectra/model/emulsion.hpp"
+#include "spectra/model/extended.hpp"
 #include "spectra/model/filters.hpp"
 
 namespace spectra {
@@ -134,8 +135,34 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
     : cd_(std::move(colour)), p_(digested), opt_(options) {
     const Pack& pack = cd_->pack();
     const Vec& le = cd_->log_exposure();
-    film_ = make_runtime_profile(pack, p_.film, p_.film_render.chemistry, le, true);
-    print_ = make_runtime_profile(pack, p_.print, p_.print_render.chemistry, le, false);
+    // Extended push / pull: development changes act through the chemistry morph.
+    auto with_gamma = [](ChemistryParams chem, double gamma) {
+        if (!chem.active) {
+            ChemistryParams identity;
+            identity.development_time = chem.development_time;
+            chem = identity;
+        }
+        chem.gamma_factor *= gamma;
+        return chem;
+    };
+    ChemistryParams film_chem = p_.film_render.chemistry, print_chem = p_.print_render.chemistry;
+    const PushPullParams& pp = p_.extended.push_pull;
+    if (pp.active) {
+        if (pp.mode == "standard") {
+            if (pp.film_stops != 0.0) film_axis_gamma_ = extended::film_gamma(pp.film_stops);
+        } else if (pp.mode != "experimental") {
+            throw std::runtime_error("unknown push/pull mode '" + pp.mode + "'");
+        }
+        if (pp.print_stops != 0.0) print_chem = with_gamma(print_chem, extended::print_gamma(pp.print_stops));
+    }
+    film_ = make_runtime_profile(pack, p_.film, film_chem, le, true);
+    print_ = make_runtime_profile(pack, p_.print, print_chem, le, false);
+    {
+        Vec mx = film_.curves.column_max(), mn = film_.curves.column_min();
+        film_dmax_norm_.resize(mx.size());
+        for (size_t k = 0; k < mx.size(); ++k) film_dmax_norm_[k] = mx[k] - mn[k];
+        print_dmax_ = print_.curves.column_max();
+    }
 
     // Black / white reference levels are given as sRGB-encoded values.
     {
@@ -179,12 +206,13 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
             scale = std::pow(2.0, measure_raw_autoexposure_ev(raw_mid, p_.camera.auto_exposure_method));
         Image scaled = raw_mid;
         for (auto& v : scaled.v) v *= scale;
-        midgray_ = density_spectral_for(scaled);
+        midgray_ = density_spectral_for(scaled, false);
+        midgray_extended_ = density_spectral_for(scaled, true);
         if (p_.enlarger.print_exposure_compensation) {
             Image mid_c(1, 1, 3, 0.184 * std::pow(2.0, p_.camera.exposure_compensation_ev));
             Image raw_c = rgb_to_film_raw(mid_c, "sRGB", false);
             for (auto& v : raw_c.v) v *= scale;
-            midgray_comp_ = density_spectral_for(raw_c);
+            midgray_comp_ = density_spectral_for(raw_c, false);
         }
     }
 
@@ -205,6 +233,18 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
             }
             return 1.0 / std::exp(log_sum / pc);
         };
+        // Extended: per-channel print re-timing so mid-grey prints as with the normal process.
+        retime_.assign(pc, 1.0);
+        if (p_.extended.retime_print_to_midgray && midgray_extended_ != midgray_) {
+            for (int m = 0; m < pc; ++m) {
+                double base = 0, ext = 0;
+                for (int l = 0; l < NL; ++l) {
+                    base += transmitted(midgray_[l], print_illuminant_[l]) * print_.sensitivity[l * pc + m];
+                    ext += transmitted(midgray_extended_[l], print_illuminant_[l]) * print_.sensitivity[l * pc + m];
+                }
+                if (ext > 1e-12 && base > 1e-12) retime_[m] = base / ext;
+            }
+        }
         double f_mid = exposure_factor(midgray_);
         double f_comp = midgray_comp_.empty() ? 1.0 : exposure_factor(midgray_comp_);
         if (e.print_exposure_compensation && !e.normalize_print_exposure) exposure_factor_ = f_comp / f_mid;
@@ -222,7 +262,7 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
                 preflash_raw_[m] = raw * e.preflash_exposure;
             }
         }
-        print_curves_morphed_ = apply_curves_morph(le, print_.model, p_.print_render.chemistry, print_.info.type).total;
+        print_curves_morphed_ = apply_curves_morph(le, print_.model, print_chem, print_.info.type).total;
     }
 
     // Scanning tables.
@@ -256,46 +296,92 @@ Image Pipeline::rgb_to_film_raw(const Image& rgb, const std::string& color_space
                                   film_.info.reference_illuminant);
 }
 
-Vec Pipeline::density_spectral_for(const Image& raw) const {
+Vec Pipeline::density_spectral_for(const Image& raw, bool with_extended) const {
     const Vec& le = cd_->log_exposure();
     int n = static_cast<int>(le.size()), c = film_.n_ch;
     Vec out(NL, 0.0);
-    Vec cmy(c);
-    for (int k = 0; k < c; ++k)
-        cmy[k] = fast_interp1(std::log10(raw.v[k] + 1e-10), le.data(), film_.curves.total.data() + k, n, 1, c);
+    double cmy[3], lr[3], lookup[3];
+    for (int k = 0; k < c; ++k) lr[k] = lookup[k] = std::log10(raw.v[k] + 1e-10);
+    bool experimental = with_extended && experimental_push();
+    if (experimental) extended::experimental_log_raw(lr, c, p_.extended.push_pull.film_stops, lookup);
+    double axis_gamma = with_extended ? film_axis_gamma_ : 1.0;
+    for (int k = 0; k < c; ++k) {
+        cmy[k] = fast_interp1(lookup[k] * axis_gamma, le.data(), film_.curves.total.data() + k, n, 1, c);
+        if (experimental)
+            cmy[k] *= extended::experimental_density_gain(lookup[k], c == 3 ? k : 1, p_.extended.push_pull.film_stops);
+    }
+    double dye[3], silver = 0.0;
+    if (with_extended) {
+        film_stage_dyes(cmy, dye, silver);
+    } else {
+        for (int k = 0; k < c; ++k) dye[k] = cmy[k];
+    }
     for (int l = 0; l < NL; ++l) {
         double d = 0;
-        for (int k = 0; k < c; ++k) d += cmy[k] * film_.info.channel_density[l * c + k];
-        out[l] = d + film_.base_density[l];
+        for (int k = 0; k < c; ++k) d += dye[k] * film_.info.channel_density[l * c + k];
+        out[l] = d + film_.base_density[l] + silver;
     }
     return out;
 }
 
-void Pipeline::film_cmy_to_print_log_raw(const double* cmy, double* out) const {
+bool Pipeline::experimental_push() const {
+    const PushPullParams& pp = p_.extended.push_pull;
+    return pp.active && pp.mode == "experimental" && pp.film_stops != 0.0;
+}
+
+void Pipeline::film_stage_dyes(const double* cmy, double* dye, double& silver) const {
+    const BleachBypassParams& bb = p_.extended.bleach_bypass;
+    int c = film_.n_ch;
+    if (bb.active && bb.film_amount > 0.0) {
+        extended::BleachResult r = extended::bleach_bypass(cmy, c, bb.film_amount, false, film_.info.is_positive(),
+                                                           film_dmax_norm_.data(), bb.leuco_cyan_coupling);
+        for (int k = 0; k < c; ++k) dye[k] = r.dye[k];
+        silver = r.silver;
+    } else {
+        for (int k = 0; k < c; ++k) dye[k] = cmy[k];
+        silver = 0.0;
+    }
+}
+
+void Pipeline::film_cmy_to_print_log_raw(const double* cmy_in, double* out) const {
     int fc = film_.n_ch, pc = print_.n_ch;
     double raw[3] = {0, 0, 0};
     const Vec& cdn = film_.info.channel_density;
+    double cmy[3], silver = 0.0;
+    film_stage_dyes(cmy_in, cmy, silver);
     for (int l = 0; l < NL; ++l) {
         double d = 0;
         for (int k = 0; k < fc; ++k) d += cmy[k] * cdn[l * fc + k];
-        d += film_.base_density[l];
+        d += film_.base_density[l] + silver;
         double t = transmitted(d, print_illuminant_[l]);
         for (int m = 0; m < pc; ++m) raw[m] += t * print_.sensitivity[l * pc + m];
     }
     for (int m = 0; m < pc; ++m) {
-        double r = raw[m] * exposure_factor_ + preflash_raw_[m];
+        double r = raw[m] * retime_[m] * exposure_factor_ + preflash_raw_[m];
         out[m] = std::log10(std::fmax(r, 0.0) + 1e-10);
     }
 }
 
-void Pipeline::cmy_to_log_xyz(const double* cmy, double* out) const {
+void Pipeline::cmy_to_log_xyz(const double* cmy_in, double* out) const {
     int c = scan_n_ch_;
     const Vec& cmf = cd_->cmfs();
     double xyz[3] = {0, 0, 0};
+    double cmy[3], silver = 0.0;
+    const BleachBypassParams& bb = p_.extended.bleach_bypass;
+    if (p_.io.scan_film) {
+        film_stage_dyes(cmy_in, cmy, silver);
+    } else if (bb.active && bb.print_amount > 0.0) {
+        extended::BleachResult r =
+            extended::bleach_bypass(cmy_in, c, bb.print_amount, true, false, print_dmax_.data(), 1.0);
+        for (int k = 0; k < c; ++k) cmy[k] = r.dye[k];
+        silver = r.silver;
+    } else {
+        for (int k = 0; k < c; ++k) cmy[k] = cmy_in[k];
+    }
     for (int l = 0; l < NL; ++l) {
         double d = 0;
         for (int k = 0; k < c; ++k) d += cmy[k] * scan_channel_density_[l * c + k];
-        d += scan_base_[l];
+        d += scan_base_[l] + silver;
         double t = transmitted(d, scan_illuminant_[l]);
         xyz[0] += t * cmf[l * 3];
         xyz[1] += t * cmf[l * 3 + 1];
@@ -480,9 +566,39 @@ Image Pipeline::filming_develop(const Image& log_raw, State& st) const {
     Vec mins = norm.column_min();
     for (int i = 0; i < norm.n_le; ++i)
         for (int k = 0; k < norm.n_ch; ++k) norm.total[static_cast<size_t>(i) * norm.n_ch + k] -= mins[k];
-    Image cmy = interpolate_exposure_to_density(log_raw, norm.total, le);
-    cmy = apply_dir_couplers(cmy, log_raw, st.pixel_size_um, le, norm.total, p_.film_render.dir_couplers,
+    const Image* lookup = &log_raw;
+    Image warped;
+    bool experimental = experimental_push();
+    double stops = p_.extended.push_pull.film_stops;
+    int c = log_raw.c;
+    if (experimental) {
+        warped = Image(log_raw.h, log_raw.w, c);
+        parallel_for(static_cast<long>(log_raw.pixels()), [&](long a, long b) {
+            for (long i = a; i < b; ++i)
+                extended::experimental_log_raw(&log_raw.v[static_cast<size_t>(i) * c], c, stops,
+                                               &warped.v[static_cast<size_t>(i) * c]);
+        }, 1024);
+        lookup = &warped;
+    }
+    // Extended standard push / pull: the exposure axis of the whole development
+    // (curves and DIR couplers alike) is scaled about mid-grey, so a grey ramp
+    // follows curve(le * gamma) in every channel.
+    Image scaled;
+    if (film_axis_gamma_ != 1.0) {
+        scaled = *lookup;
+        for (auto& v : scaled.v) v *= film_axis_gamma_;
+        lookup = &scaled;
+    }
+    Image cmy = interpolate_exposure_to_density(*lookup, norm.total, le);
+    cmy = apply_dir_couplers(cmy, *lookup, st.pixel_size_um, le, norm.total, p_.film_render.dir_couplers,
                              film_.info.type);
+    if (experimental)
+        parallel_for(static_cast<long>(cmy.pixels()), [&](long a, long b) {
+            for (long i = a; i < b; ++i)
+                for (int k = 0; k < c; ++k)
+                    cmy.v[static_cast<size_t>(i) * c + k] *= extended::experimental_density_gain(
+                        warped.v[static_cast<size_t>(i) * c + k], c == 3 ? k : 1, stops);
+        }, 1024);
     GrainOptions go;
     go.seed = opt_.seed;
     go.use_fast_stats = p_.settings.use_fast_stats;
@@ -579,10 +695,26 @@ Image Pipeline::scan(const Image& density, State& st) const {
     if (!scan_film) add_glare(xyz, scan_illuminant_xyz_, p_.print_render.glare, opt_.seed, st.pixel_param_scale);
 
     Image rgb(xyz.h, xyz.w, 3);
+    const HdrOutputParams& hdr = p_.extended.hdr_output;
+    const double hdr_peak = std::max(hdr.peak_nits, std::max(hdr.reference_white_nits, 1.0) + 1.0);
+    if (hdr.active && hdr.transfer != "pq" && hdr.transfer != "hlg")
+        throw std::runtime_error("unknown HDR transfer '" + hdr.transfer + "'");
     parallel_for(static_cast<long>(xyz.pixels()), [&](long a, long b) {
         for (long i = a; i < b; ++i) {
             const double* x = &xyz.v[static_cast<size_t>(i) * 3];
-            Vec3 o = compressor_->apply(mat3_apply(xyz_to_rgb_, {x[0], x[1], x[2]}));
+            Vec3 o = mat3_apply(xyz_to_rgb_, {x[0], x[1], x[2]});
+            if (hdr.active) {
+                // Extended HDR output: display light in nits, gamut-compressed relative to the peak.
+                o = extended::hdr_tone_map(o, hdr);
+                bool compress = p_.io.output_gamut_compress.algorithm != "off";
+                if (compress) o = compressor_->apply(Vec3{o[0] / hdr_peak, o[1] / hdr_peak, o[2] / hdr_peak});
+                for (auto& v : o) {
+                    if (compress) v *= hdr_peak;
+                    v = std::isnan(v) ? 0.0 : std::clamp(v, 0.0, hdr_peak);
+                }
+            } else {
+                o = compressor_->apply(o);
+            }
             double* r = &rgb.v[static_cast<size_t>(i) * 3];
             r[0] = o[0];
             r[1] = o[1];
@@ -595,7 +727,16 @@ Image Pipeline::scan(const Image& density, State& st) const {
     double usm_sigma = p_.scanner.unsharp_mask[0] * s, usm_amount = p_.scanner.unsharp_mask[1];
     if (usm_sigma > 0 && usm_amount > 0) rgb = unsharp_mask(rgb, usm_sigma, usm_amount);
 
-    if (p_.io.output_cctf_encoding) {
+    if (hdr.active) {
+        // The HDR signal replaces the SDR transfer function.
+        bool pq = hdr.transfer == "pq";
+        parallel_for(static_cast<long>(rgb.v.size()), [&](long a, long b) {
+            for (long i = a; i < b; ++i) {
+                double nits = std::clamp(rgb.v[i], 0.0, hdr_peak);
+                rgb.v[i] = pq ? extended::encode_pq(nits) : extended::encode_hlg_display(nits, hdr_peak);
+            }
+        }, 4096);
+    } else if (p_.io.output_cctf_encoding) {
         const ColourSpace& cs = cd_->space(p_.io.output_color_space);
         Mat3 M = cd_->rgb_to_rgb(cs, cs);
         parallel_for(static_cast<long>(rgb.pixels()), [&](long a, long b) {

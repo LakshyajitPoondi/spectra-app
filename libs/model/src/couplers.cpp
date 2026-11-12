@@ -102,7 +102,7 @@ DirCouplersTables build_dir_couplers_tables(const DirCouplersParams& p, const Ve
 
 Image apply_dir_couplers(const Image& density_cmy, const Image& log_raw, double pixel_size_um,
                          const Vec& le, const Vec& curves, const DirCouplersParams& p,
-                         const std::string& profile_type) {
+                         const std::string& profile_type, double gamma) {
     if (!p.active) return density_cmy;
     int n_ch = density_cmy.c;
     DirCouplersTables t = build_dir_couplers_tables(p, le, curves, n_ch, profile_type);
@@ -139,7 +139,8 @@ Image apply_dir_couplers(const Image& density_cmy, const Image& log_raw, double 
             size_t j = i * n_ch + m;
             double c = corr.v[j];
             if (t.has_receiver) c = langmuir(c, t.receiver_kr[m], t.receiver_c_ref[m]);
-            log_raw0.v[j] = log_raw.v[j] - c;
+            // gamma scales the exposure axis of the lookup (curve(le * gamma)).
+            log_raw0.v[j] = (log_raw.v[j] - c) * gamma;
         }
     return interpolate_exposure_to_density(log_raw0, t.curves_before, le);
 }
