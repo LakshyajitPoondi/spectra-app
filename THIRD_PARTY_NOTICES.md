@@ -17,7 +17,9 @@ This project is licensed under GPL-3.0-or-later (see `LICENSE`).
   tables in the data pack (CIE 1931 observer, illuminants, colour-space and adaptation
   matrices) were exported from colour-science 0.4.7. The library itself is not shipped.
 - **spektrafilm-ofx** by Aedan Diez, https://github.com/chaert-s/spektrafilm-ofx (GPL-3.0):
-  studied as a performance reference. No code from it is included in this phase.
+  performance reference. The Extended features (push / pull, bleach bypass, HDR output) in
+  `libs/model/src/extended.cpp` and the matching shader code are adapted from its sources;
+  the files carry the attribution.
 
 ## Bundled source
 
@@ -26,6 +28,13 @@ This project is licensed under GPL-3.0-or-later (see `LICENSE`).
 - **pocketfft** (`third_party/pocketfft/pocketfft_hdronly.h`), BSD-3-Clause,
   Copyright (C) 2010-2024 Max-Planck-Society, Peter Bell and contributors.
   The licence text is at the top of the header.
+
+## Libraries linked at build time (not bundled)
+
+- **LibRaw** (LGPL-2.1 / CDDL-1.0; used under LGPL-2.1), **libtiff** (libtiff licence), **libpng**
+  (PNG Reference Library License), **libjpeg-turbo** (IJG / BSD-3-Clause), **OpenEXR** (BSD-3-Clause),
+  **Vulkan headers and loader** (Apache-2.0 / MIT).
+- RAW test samples from https://raw.pixls.us are CC0; they are downloaded, not redistributed.
 
 ## Sampling algorithms
 

@@ -17,14 +17,55 @@ disagree. Rule: **follow the code**, and write the choice down here.
 | D-07 | Injecting past `rgb_in` | `pixel_size_um` is undefined (spatial effects crash) | Pixel size is derived from the injected image, or from `full_long_edge_px` | None for valid reference runs. |
 | D-08 | Positive print stock with black/white correction | `black_white_printing_exposure_correction` returns `None` and the pipeline raises | Returns 1.0 | No positive print profile exists. |
 | D-09 | B&W grain preset padding | Missing channels are `None` | Missing channels keep their previous value (never read for one channel) | None. |
+| D-10 | Crop larger than the image | A negative slice start returns a sliver of the far edge | The crop is clamped to the image | Only for invalid crops. |
+| D-11 | X-Trans RAW decode | rawpy bundles LibRaw 0.22.0 | System / vcpkg LibRaw (0.21.x here) | Bayer files decode identically (99.9 % of pixels bit-equal). The Fujifilm X-T3 sample differs by about 2 % mean. Not yet confirmed to be the LibRaw version; see PROGRESS open issues. |
 
-## B. Not ported yet (the call fails with a clear error)
+## B. GPU backend: approximations and CPU fallbacks
+
+Decision 4 requires every GPU approximation to be documented and shown to stay inside the
+parity thresholds. The GPU works in 32-bit floats throughout.
+
+| # | What | Reference / CPU | GPU | Evidence |
+|---|---|---|---|---|
+| G-01 | Arithmetic precision | float64 | float32 | All deterministic parity suites pass at 2e-3 (typical error 1e-6 to 1e-5). |
+| G-02 | Gaussian, sigma < 3 px | FIR truncated at 3 sigma, reflect boundary | Same filter | Exact port. |
+| G-03 | Gaussian, 3 ≤ sigma ≤ 24 px | Young - van Vliet recursive filter, replicated boundary | Same recursion in fp32, one line per invocation | Exact port; spatial suite passes at 2e-3. |
+| G-04 | Gaussian, sigma > 24 px (halation and DIR tails at high resolution) | Recursive filter at full resolution | The plane is reduced 2^k times with box filters, filtered with the recursive filter, and enlarged bilinearly. The low-resolution sigma accounts for the variance the box and bilinear steps add. Reason: the fp32 recursion loses accuracy for very wide kernels. | Reported separately by the parity runner ("approximate-path thresholds": RMSE ≤ 0.003, p99 ≤ 0.01). One case in the spatial suite takes this path: RMSE 0.0017, on a 96-px image where the kernel is over half the image. |
+| G-05 | Grain counts with variance > 400 | Exact Poisson / binomial sampling | Rounded normal with the same mean and variance. Reason: fp32 cannot evaluate the rejection tests for large counts. | Skewness of the exact distribution is below 0.05 there. All 361 statistical cases pass on the GPU, including the sampler distribution tests. |
+| G-06 | Grain random numbers | Philox4x32-10, 24-bit uniforms | Identical generator and uniforms | CPU and GPU grain agree statistically; single counts can differ where fp32 rounding flips a rejection test (RMS 0.012 between backends, mean bias 5e-5). |
+| G-07 | Fast preview | 17³ LUTs for the spectral stages | Direct 81-wavelength evaluation (more accurate and cheap on a GPU) | Compared at the fast-preview threshold (0.015): worst 0.0042. |
+| G-08 | Tiled rendering: grain unsharp-mask renormalisation | Per-channel sums over the whole image | Sums over each padded tile | Tiled vs untiled: 6e-6 without grain, RMS 1e-4 with grain. |
+| G-09 | Tiled rendering: border | — | Every tile is padded by 4 sigma of each active spatial effect | Same test. |
+
+Stages that still run on the CPU when used (the render reports them):
+
+| # | Stage | Note |
+|---|---|---|
+| F-01 | Camera and enlarger **diffusion filters** | CPU FFT, as the reference. Off by default. Cannot be combined with tiled rendering yet. |
+| F-02 | Output gamut algorithms `jzazbz` and `cam16ucs` | `off`, `aces_rgc`, `oklch` (default) and `oklrab` run on the GPU. |
+| F-03 | `mallett2019` spectral upsampling | `hanatos2025` (default) runs on the GPU. |
+| F-04 | Auto-exposure metering, crop, upscale | Small or one-off work on the input image. |
+
+## B2. Not ported
 
 | # | What | Note |
 |---|---|---|
-| N-01 | Output gamut algorithm `cam16ucs` | `off`, `aces_rgc`, `oklch` (default), `oklrab` and `jzazbz` are ported and tested. |
-| N-02 | `io.upscale_factor != 1` | Needs scikit-image's order-3 spline resampling. |
-| N-03 | `logiflex8` adaptation window | No shipped profile uses it (all use `erf4`). |
+| N-01 | Lens correction (lensfun) | Optional in the reference, off by default. |
+| N-02 | `logiflex8` adaptation window | No shipped profile uses it (all use `erf4`). |
+| N-03 | EXIF copy and ICC embedding on save | Phase 5. |
+
+## B3. Extended features (no reference)
+
+Push / pull, bleach bypass and HDR output are adapted from spektrafilm-ofx and have no Python
+counterpart. Differences from the OFX models, made so they fit this pipeline:
+
+- **Standard push / pull** scales the exposure axis of the whole film development (curves and
+  DIR couplers) about mid-grey. The reference's own `gamma_factor` could not be used: combined
+  with the DIR-coupler inversion it becomes non-monotonic at push-level gammas (measurable from
+  `gamma_factor` 1.22 on Provia; see RISKS R-07).
+- **Print re-timing** (`extended.retime_print_to_midgray`, on by default): when a film-side
+  Extended feature is active, each print channel is re-timed so mid-grey prints as with the
+  normal process. Without it bleach bypass shifts the grey balance by up to 0.14.
 
 ## C. Where the reference's code and documentation disagree (we follow the code)
 

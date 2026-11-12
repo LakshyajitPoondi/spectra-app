@@ -26,6 +26,10 @@
 #endif
 
 using namespace spectra;
+
+namespace spectra {
+int run_bench(std::shared_ptr<const ColourData> cd, std::map<std::string, std::string>& opt);
+}
 using nlohmann::json;
 
 namespace {
@@ -58,6 +62,8 @@ int usage() {
         "  bench-open --in RAW [--preview 1600] [--out FILE]   time RAW open to first preview\n"
         "  parity  cases.json [--filter s] [--report r.json] [--dump dir] [-v]\n"
         "  gpu-info [--gpu NAME|INDEX]         list Vulkan devices\n"
+        "  bench [--backend gpu|cpu] [--mp 20,30] [--preview 1600] [--in a.cr3,b.cr3] [--report FILE]\n"
+        "        [--limit-gb 10]               timings, memory; exit code 1 above the memory limit\n"
         "GPU: add --backend gpu to render / parity; [--gpu NAME|INDEX] [--tile N] [--budget-mb N]\n"
         "common options: --pack path/to/spektrafilm.sfpk   --threads N");
     return 2;
@@ -170,6 +176,7 @@ int main(int argc, char** argv) {
             return 0;
         }
         auto colour = std::make_shared<const ColourData>(pack);
+        if (cmd == "bench") return run_bench(colour, opt);
         if (cmd == "convert") {
             // Decode a file (RAW or raster) and write it unprocessed: linear data as loaded.
             if (!opt.count("in") || !opt.count("out")) return usage();

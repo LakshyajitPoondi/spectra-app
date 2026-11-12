@@ -17,7 +17,8 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        # GPU suites run on Mesa lavapipe (software Vulkan). The 60 MP memory test is left to local runs.
+        run: ctest --test-dir build -LE memory --output-on-failure
   windows:
     runs-on: windows-2022
     env:
@@ -36,4 +37,5 @@ jobs:
       - name: Build
         run: cmake --build build --config Release --parallel
       - name: Test
-        run: ctest --test-dir build -C Release --output-on-failure
+        # The Windows runner has no Vulkan device; the GPU suites run on Linux (lavapipe).
+        run: ctest --test-dir build -C Release -LE "gpu|memory" --output-on-failure

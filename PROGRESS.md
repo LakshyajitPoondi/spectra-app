@@ -3,8 +3,8 @@
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Research and plan | Done, approved |
-| 2 | CPU reference pipeline in C++ + parity harness against Python | **Done, awaiting approval** |
-| 3 | Vulkan compute port + parity + benchmarks | Not started |
+| 2 | CPU reference pipeline in C++ + parity harness against Python | Done, approved |
+| 3 | RAW / image I/O, Extended features, reference gaps, Vulkan compute port, parity, benchmarks | **Done on software Vulkan; awaiting your GPU run and approval** |
 | 4 | UI + preview / final render system | Not started |
 | 5 | Presets, batch, LUT export, polish | Not started |
 | 6 | Windows installer + README with build steps | Not started |
@@ -13,7 +13,159 @@ Reference baseline: `andreavolpato/spektrafilm`, branch `dev`, commit
 `6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507`. The hash is recorded in the data pack
 (`spectra-cli info`) and in every `cases.json`.
 
-## Phase 2 results
+## Phase 3 results
+
+### 3a. RAW and image file I/O
+
+- `libs/io`: LibRaw decode to linear ACES2065-1 (a port of the reference's raw processor:
+  as-shot, daylight, tungsten and custom temperature / tint white balance; colour matrix, black /
+  white level and orientation from LibRaw's per-camera metadata), a half-size decode for fast
+  previews, and TIFF (8 / 16 / 32-bit float), PNG (8 / 16), JPEG and EXR (half / float) read and
+  write.
+- `scripts/fetch_test_raws.py` downloads seven CC0 samples from raw.pixls.us with checksum
+  verification; sources and licences are in `test_data/SOURCES.md`. Nothing large is committed.
+- RAW decode compared with the Python reference (`tools/parity/check_raw.py`, full resolution):
+
+  | File | Size | Pixels bit-equal | Mean relative difference |
+  |---|---|---|---|
+  | Canon EOS R6 (CR3) | 5496×3670 | > 99.9 % | 6e-7 |
+  | Canon EOS R6 (C-RAW) | 5496×3670 | > 99.9 % | 4e-7 |
+  | Sony ILCE-7M2 | 6024×4024 | > 99.9 % | 5e-7 |
+  | Nikon D750 | 6032×4032 | > 99.9 % | 6e-7 |
+  | Nikon Df, portrait orientation | 3292×4940 | > 99.9 % | 6e-7 |
+  | Panasonic LX100, square | 3104×3104 | > 99.9 % | 1e-6 |
+  | Fujifilm X-T3 (X-Trans) | 6246×4170 | **no** | **2e-2** (open issue 1) |
+
+  The R6 file was also checked with daylight, tungsten and custom white balance (same result).
+  The white-balance maths has its own goldens in `t1_units`.
+
+### 3b. Extended features (CPU and GPU)
+
+Push / pull (standard and experimental, film and print), bleach bypass (film and print, with
+leuco-cyan loss) and HDR output (PQ and HLG, shoulder or clip tone map). Adapted from
+spektrafilm-ofx; each has its own switch and is off by default. Sanity tests
+(`tests/test_extended.cpp`) on four routes (colour negative, cine, slide scan, B&W), 22
+settings each:
+
+| Feature | Finite, in [0, 1] | Monotonic (worst drop) | Grey cast added (worst) | Exact no-op when off |
+|---|---|---|---|---|
+| Push / pull, standard | yes | 2e-8 | 0.020 | yes |
+| Push / pull, experimental | yes | 1.4e-4 | 0.024 | yes |
+| Print push / pull | yes | 3e-10 | 0.018 | yes |
+| Bleach bypass, film | yes | 1e-7 | 0.029 | yes |
+| Bleach bypass, print | yes | 0 | 0.038 | yes |
+| HDR PQ / HLG | yes | 0 | 0.004 | yes |
+
+"Grey cast" is the increase of max − min channel on a 13-stop grey ramp over the same render
+without the feature. Two design points are explained in `DEVIATIONS.md` (B3): standard push
+scales the exposure axis instead of using the reference's `gamma_factor`, and the print is
+re-timed for mid-grey.
+
+### 3c. Reference gaps closed
+
+`cam16ucs` output gamut compression and `io.upscale_factor` (cubic B-spline resampling) are
+ported and verified against Python. All six gamut algorithms now match.
+
+### 3d. Vulkan compute backend
+
+- `libs/gpu`: a vendor-neutral Vulkan 1.1 context (no vendor extensions; device chosen at run
+  time; unified-memory devices map buffers directly, discrete ones go through a staging buffer)
+  and eleven compute kernels in `shaders/`. Compiled SPIR-V is committed, so a build needs no
+  Vulkan SDK.
+- `GpuPipeline` shares every baked table with the CPU reference (one source of truth).
+- Grain on the GPU is the reference model: per channel and sub-layer compound Poisson-Binomial
+  counts from the same Philox generator as the CPU, dye-cloud blur, blur, mass-conserving
+  unsharp mask. No noise overlay.
+- Tiling: automatic from the memory budget (60 % of the device budget, at most 4 GiB), manual
+  override (`--tile`, `--budget-mb`). Tiles are padded by the support of every active effect.
+  Random streams are keyed by absolute pixel position, so grain does not change with tiling.
+- Approximations and CPU fallbacks are listed with their evidence in `DEVIATIONS.md` (section B).
+
+### Parity status
+
+CPU reference vs Python (float64), all passing:
+
+| Suite | Cases | Worst max abs | Threshold |
+|---|---|---|---|
+| `t1_units` | 391 | 1.5e-10 (2.5e-6 float32 FFT cases, 7e-8 float32 white balance) | 1e-9 (3e-4 / 3e-7) |
+| `t2_nonspatial` | 255 | 1.5e-14 | 1e-9 |
+| `t3_spatial` | 44 | 1.7e-13 (1.3e-6 FFT cases) | 1e-9 (3e-4) |
+| `t5_sweeps` | 199 | 7.8e-13 | 1e-9 |
+| `fast_preview` | 20 | 1.5e-14 vs GUI settings; 0.0034 vs reference | 1e-9; 0.015 |
+| `t4_stochastic` | 361 | all inside the statistical limits (worst margin 0.32) | see phase 2 table below |
+
+GPU backend vs Python (float32), on Mesa lavapipe (software Vulkan). **Your Arc 140T has not
+run these yet.**
+
+| Suite | Cases | Result | Worst max abs | Threshold |
+|---|---|---|---|---|
+| `t2_nonspatial` (every film × every print) | 255 | all pass | 9e-6 | 2e-3 |
+| `t3_spatial` | 44 | 43 exact + 1 on the wide-Gaussian approximation (RMSE 0.0017) | 1.8e-3 on an intermediate density tap; 1.4e-4 on final images | 2e-3; approx: RMSE 0.003, p99 0.01 |
+| `t5_sweeps` | 199 | all pass | 1.1e-5 | 2e-3 |
+| `fast_preview` | 20 | all pass | 0.0042 | 0.015 |
+| `t4_stochastic` (grain, glare, samplers) | 361 | all pass | worst margin 0.49 | as CPU |
+
+Other GPU checks (`tests/test_gpu.cpp`): GPU vs CPU with deterministic effects 1.4e-4; the
+Extended features on the GPU against their CPU implementation, at most 8.6e-4; tiled vs
+untiled 6e-6 without grain, RMS 1e-4 with grain; a small budget switches to tiles and the peak
+stays inside it; a crop rendered with its origin reproduces the full render's grain exactly.
+
+### Benchmarks
+
+Measured here on **Mesa lavapipe: the Vulkan code running on 4 CPU cores**. These numbers say
+nothing about the Arc 140T; they are here for the memory figures and as a baseline. The
+targets (preview < 50 ms, RAW open to preview < 1.5 s) can only be checked on your machine.
+
+| Image | Full-resolution render | Tiles | Peak GPU working set | Peak process memory | Preview (1600 px, complete pipeline) |
+|---|---|---|---|---|---|
+| 20 MP (5472×3648) | 22.4 s | 1 | 1.34 GiB | 1.90 GiB | 1.78 s |
+| 30 MP (6704×4464) | 36.0 s | 1 | 2.01 GiB | 2.82 GiB | 1.60 s |
+| 60 MP (9488×6320) | 101 s | 4 | 2.25 GiB | 5.38 GiB | 1.71 s |
+
+On this software renderer "GPU memory" is ordinary RAM, so the process figure already includes
+it. 20 to 30 MP stays untiled and well under the 4 GiB target; 60 MP tiles automatically and
+stays under the 10 GB limit (`ctest -L memory` and the local-check script fail above it). The
+working set is about 74 bytes per pixel.
+
+RAW open to first preview on this container (Canon EOS R6, 1600-px preview): half-size decode
+about 200 ms warm (950 ms cold cache), reduce 12 ms, tables + render on software Vulkan 550 ms
+at 800 px. On a real GPU the render term is the part that should shrink.
+
+### What I need from you
+
+1. **Run `scripts\run_local_checks.ps1`** on the 285H / Arc 140T and paste the report
+   (`docs/WINDOWS_SETUP.md` lists what to install: Visual Studio 2022 with the C++ workload,
+   Git, a current Intel driver, optionally Python). No Vulkan SDK and no Qt are needed yet.
+2. **Your R6 files** in `test_data\raw\canon_r6\` before that run, if you have them ready
+   (8 scenes listed in `test_data/SOURCES.md`). Two public R6 samples are already in the set.
+
+## Open issues
+
+1. **Fujifilm X-Trans decode differs from the reference by about 2 %** (other brands match
+   exactly). The reference's rawpy bundles LibRaw 0.22.0; this build links LibRaw 0.21.2. I
+   could not build 0.22 here to confirm that is the cause. To check on Windows with whatever
+   LibRaw vcpkg provides, and pin 0.22 if it resolves it.
+2. **The GPU backend has only run on a software renderer.** Driver-specific problems on the
+   Arc (shader compiler, long dispatches) are unknown until the local run. One known risk: the
+   recursive Gaussian kernel runs a whole image line per invocation; if a single dispatch takes
+   longer than Windows' 2-second GPU watchdog at 20 to 30 MP, it has to be split.
+3. **Interactive preview is not built yet.** The benchmark reports the complete pipeline at
+   preview size and derives per-slider costs from the stage timings. Stage caching (re-running
+   only the stages after the changed parameter), batching dispatches into one submission, and
+   the half-float storage options from the architecture are phase 4 work, and are what the
+   50 ms target depends on.
+4. **CPU fallbacks inside the GPU path**: diffusion filters, `jzazbz` / `cam16ucs` gamut
+   compression, `mallett2019` upsampling. All are off by default. Diffusion filters cannot be
+   tiled yet (the render stops with a clear error).
+5. **Tiled grain unsharp mask** uses per-tile sums instead of whole-image sums (measured
+   effect: RMS 1e-4).
+6. Not ported: lens correction (lensfun), EXIF copy and ICC embedding on save.
+7. Windows CI now needs vcpkg to build LibRaw, OpenEXR and the Vulkan loader; the first run
+   after this push will show whether that works.
+8. CPU fp32 / SIMD fallback backend: still deferred.
+
+## Phase 2 results (CPU reference; unchanged)
+
 
 ### What exists
 
@@ -86,38 +238,22 @@ statistics equals the full render to 1e-12.
   the auto-exposure EV and boost maximum from a full render into previews and crops.
 - Decision 9 (camera-agnostic): nothing in the pipeline depends on image size or aspect.
 
-## Open issues
-
-1. **Not ported yet** (calls fail with a clear error): `cam16ucs` output gamut algorithm,
-   `io.upscale_factor`. See `DEVIATIONS.md` section B.
-2. **RAW and image file I/O is not started.** LibRaw decode, the Canon R6 CR3 / Sony / Nikon /
-   Fujifilm X-Trans test set, white balance, lens correction, TIFF / EXR / JPEG. The CLI reads
-   and writes `.npy` only. Planned for the start of phase 3, because the "RAW open to first
-   preview" benchmark needs it. **I need real RAW files from you** (or permission to download
-   openly licensed samples) for the R6 and the other brands.
-3. **Extended features** (push / pull, bleach bypass, HDR output) are not implemented. They
-   need a study of the OFX models first. Proposed for phase 3 on the CPU side so the GPU port
-   has an oracle.
-4. **Windows / MSVC: verified by CI.** The build and the full test suite (all parity suites at
-   the same tolerances) pass on `windows-2022` with MSVC 19.44 and on `ubuntu-24.04` (CI run 2,
-   commit `c10f341`). Not yet run on the target Arc 140T machine itself.
-5. **Grain is not yet invariant to cropping or tiling**: the random stream is keyed by pixel
-   position in the rendered image. A tile origin offset is needed with tiling in phase 3.
-6. The CPU backend is the float64 reference only. The float32 / SIMD CPU fallback from
-   `ARCHITECTURE.md` §4 is deferred until after the GPU port.
-7. Memory budget enforcement, benchmark mode and the 10 GB test belong to phase 3.
-
 ## Differences from the phase 1 architecture
 
 - The pack stores CRC32 per array instead of xxh3, and is read into memory instead of mmapped.
-- Dependencies are vendored headers (nlohmann/json, pocketfft) instead of vcpkg. vcpkg comes
-  back when Qt, Vulkan and LibRaw are added.
+- nlohmann/json and pocketfft are vendored headers; LibRaw, the image libraries and Vulkan come
+  from vcpkg on Windows and from distribution packages on Linux.
+- GPU planes are storage buffers of floats rather than `VkImage`s, and there is no VMA: one
+  allocation per buffer is enough at this stage.
+- Wide Gaussians use the reference's recursive filter on the GPU instead of the FIR pyramid
+  the architecture proposed; the diffusion filter still runs on the CPU.
 - `libs/bake` is folded into `libs/model` and `libs/pipeline` for now.
 - Colour-space coverage is the Python GUI list (7 spaces). The larger OFX list is a phase 5 item.
 
 ## Product name
 
-The name must not contain "spektrafilm". Placeholder in use: **Spectra (working title)**.
+The name must not contain "spektrafilm". **Spectra (working title)** stays until you decide
+(before phase 5).
 Proposals (none checked against trademarks yet):
 
 1. **Emulsa**

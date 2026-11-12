@@ -1108,8 +1108,10 @@ Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info)
             // Largest square core whose padded tile fits the budget.
             double bytes_per_px = static_cast<double>(estimate_bytes(1024, 1024)) / (1024.0 * 1024.0);
             double side = std::sqrt(static_cast<double>(budget) / bytes_per_px);
-            T = std::max(256, static_cast<int>(side) - 2 * A);
-            T = std::min(T, 8192);
+            T = std::min(static_cast<int>(side) - 2 * A, 8192);
+            if (T < 64)
+                throw std::runtime_error("the GPU memory budget is too small for the active effects (they need a " +
+                                         std::to_string(A) + " px border around every tile); raise the budget");
         }
         info->tiled = true;
         info->tile_size = T;
@@ -1140,8 +1142,10 @@ Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info)
         for (int y0 = 0; y0 < src->h; y0 += T)
             for (int x0 = 0; x0 < src->w; x0 += T) {
                 int x1 = std::min(src->w, x0 + T), y1 = std::min(src->h, y0 + T);
-                int ax0 = std::max(0, x0 - A), ay0 = std::max(0, y0 - A), ax1 = std::min(src->w, x1 + A),
-                    ay1 = std::min(src->h, y1 + A);
+                // The padded tile starts on a multiple of 32 so that reduced-resolution
+                // planes (wide Gaussians) sample the same pixel groups in every tile.
+                int ax0 = std::max(0, x0 - A) / 32 * 32, ay0 = std::max(0, y0 - A) / 32 * 32,
+                    ax1 = std::min(src->w, x1 + A), ay1 = std::min(src->h, y1 + A);
                 Region tr = region;
                 tr.opt.origin_x = opt_.origin_x + static_cast<uint32_t>(ax0);
                 tr.opt.origin_y = opt_.origin_y + static_cast<uint32_t>(ay0);

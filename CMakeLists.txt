@@ -31,6 +31,9 @@ target_compile_definitions(spectra_third_party INTERFACE POCKETFFT_NO_MULTITHREA
 add_library(spectra_core STATIC libs/core/src/math.cpp libs/core/src/npy.cpp)
 target_include_directories(spectra_core PUBLIC libs/core/include)
 target_link_libraries(spectra_core PUBLIC Threads::Threads)
+if(WIN32)
+  target_link_libraries(spectra_core PUBLIC psapi)
+endif()
 
 add_library(spectra_data STATIC libs/data/src/pack.cpp)
 target_include_directories(spectra_data PUBLIC libs/data/include)
@@ -130,7 +133,7 @@ if(SPECTRA_WITH_GPU)
   endif()
 endif()
 
-add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp)
+add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp apps/spectra-cli/bench.cpp)
 if(SPECTRA_HAVE_GPU)
   target_link_libraries(spectra-cli PRIVATE spectra_gpu)
   target_compile_definitions(spectra-cli PRIVATE SPECTRA_HAVE_GPU=1)
