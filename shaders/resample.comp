@@ -1,0 +1,35 @@
+#version 450
+// mode 0: 2x2 box reduction; mode 1: bilinear enlargement to (w, h).
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 1) buffer B1 { float d[]; } O;
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2];
+    int sw = int(pc.u[3]), sh = int(pc.u[4]);
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint o = (g.y * w + g.x) * c;
+    if (pc.u[5] == 0u) {
+        int x0 = min(int(g.x) * 2, sw - 1), x1 = min(x0 + 1, sw - 1);
+        int y0 = min(int(g.y) * 2, sh - 1), y1 = min(y0 + 1, sh - 1);
+        for (uint k = 0u; k < c; ++k)
+            O.d[o + k] = 0.25 * (S.d[uint(y0 * sw + x0) * c + k] + S.d[uint(y0 * sw + x1) * c + k] +
+                                 S.d[uint(y1 * sw + x0) * c + k] + S.d[uint(y1 * sw + x1) * c + k]);
+    } else {
+        // pc.f[0] = reduction factor of the source grid (exact, also for odd sizes)
+        float fx = (float(g.x) + 0.5) / pc.f[0] - 0.5;
+        float fy = (float(g.y) + 0.5) / pc.f[0] - 0.5;
+        fx = clamp(fx, 0.0, float(sw - 1));
+        fy = clamp(fy, 0.0, float(sh - 1));
+        int x0 = int(floor(fx)), y0 = int(floor(fy));
+        int x1 = min(x0 + 1, sw - 1), y1 = min(y0 + 1, sh - 1);
+        float tx = fx - float(x0), ty = fy - float(y0);
+        for (uint k = 0u; k < c; ++k) {
+            float a = mix(S.d[uint(y0 * sw + x0) * c + k], S.d[uint(y0 * sw + x1) * c + k], tx);
+            float b = mix(S.d[uint(y1 * sw + x0) * c + k], S.d[uint(y1 * sw + x1) * c + k], tx);
+            O.d[o + k] = mix(a, b, ty);
+        }
+    }
+}

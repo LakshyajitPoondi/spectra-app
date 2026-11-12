@@ -1,0 +1,40 @@
+#version 450
+// Young - van Vliet recursive Gaussian (the reference's filter for sigma >= 3):
+// forward and backward third-order recursion along one row or column, with
+// sample-replication boundaries. One invocation owns one whole line, so the
+// recursion is sequential inside it and lines run in parallel.
+// Coefficients per channel in P: [B, B1, B2, B3] * channels, then coef[c] @16.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 1) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 1) buffer B1 { float d[]; } O;
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2];
+    bool vertical = pc.u[4] != 0u;
+    uint line = gl_GlobalInvocationID.x;
+    uint n = vertical ? h : w, lines = vertical ? w : h;
+    if (gl_GlobalInvocationID.y != 0u || line >= lines) return;
+    uint stride = vertical ? w * c : c;
+    uint start = vertical ? line * c : line * w * c;
+    for (uint k = 0u; k < c; ++k) {
+        float B = P.p[k * 4u], B1 = P.p[k * 4u + 1u], B2 = P.p[k * 4u + 2u], B3 = P.p[k * 4u + 3u];
+        float scale = P.p[16u + k];
+        uint base = start + k;
+        float x0 = S.d[base];
+        float w1 = x0, w2 = x0, w3 = x0;
+        for (uint j = 0u; j < n; ++j) {
+            float v = B * S.d[base + j * stride] + B1 * w1 + B2 * w2 + B3 * w3;
+            O.d[base + j * stride] = v;
+            w3 = w2; w2 = w1; w1 = v;
+        }
+        float xn = O.d[base + (n - 1u) * stride];
+        float y1 = xn, y2 = xn, y3 = xn;
+        for (int j = int(n) - 1; j >= 0; --j) {
+            float v = B * O.d[base + uint(j) * stride] + B1 * y1 + B2 * y2 + B3 * y3;
+            O.d[base + uint(j) * stride] = v * scale;
+            y3 = y2; y2 = y1; y1 = v;
+        }
+    }
+}

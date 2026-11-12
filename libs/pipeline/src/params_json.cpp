@@ -76,10 +76,15 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SettingsParams, rgb_to_raw_method,
                                    use_enlarger_lut, use_scanner_lut, lut_resolution, use_fast_stats,
                                    preview_max_size, preview_mode,
                                    neutral_print_filters_from_database)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PushPullParams, active, mode, film_stops, print_stops)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(BleachBypassParams, active, film_amount, print_amount, leuco_cyan_coupling)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(HdrOutputParams, active, transfer, reference_white_nits, peak_nits, exposure_ev,
+                                   tone_mapping)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExtendedParams, retime_print_to_midgray, push_pull, bleach_bypass, hdr_output)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Params, film, print, film_render, print_render, camera, enlarger,
-                                   scanner, io, debug, settings)
+                                   scanner, io, debug, settings, extended)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RenderOptions, match_python, seed, reference_pixel_um,
-                                   autoexposure_ev, boost_max_raw, full_long_edge_px)
+                                   autoexposure_ev, boost_max_raw, full_long_edge_px, origin_x, origin_y)
 
 namespace {
 void deep_update(json& target, const json& patch, const std::string& path) {

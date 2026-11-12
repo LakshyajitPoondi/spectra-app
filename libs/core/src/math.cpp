@@ -8,7 +8,39 @@
 #include "spectra/core/image.hpp"
 #include "spectra/core/parallel.hpp"
 
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#include <psapi.h>
+#else
+#include <cstdio>
+#include <cstring>
+#endif
+
 namespace spectra {
+
+uint64_t peak_process_memory_bytes() {
+#ifdef _WIN32
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) return static_cast<uint64_t>(pmc.PeakWorkingSetSize);
+    return 0;
+#else
+    std::FILE* f = std::fopen("/proc/self/status", "r");
+    if (!f) return 0;
+    char line[256];
+    uint64_t kb = 0;
+    while (std::fgets(line, sizeof line, f))
+        if (std::strncmp(line, "VmHWM:", 6) == 0) {
+            unsigned long long v = 0;
+            std::sscanf(line + 6, "%llu", &v);
+            kb = v;
+        }
+    std::fclose(f);
+    return kb * 1024;
+#endif
+}
 
 int& thread_count() {
     static int n = static_cast<int>(std::max(1u, std::thread::hardware_concurrency()));

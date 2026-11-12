@@ -1,0 +1,83 @@
+#version 450
+// RGB -> film raw exposure (hanatos2025): CCTF decode, RGB -> XYZ adapted to
+// the film reference illuminant, xy -> LUT coordinates, Mitchell-Netravali
+// bicubic sample of the baked tc_lut, times X+Y+Z, times the exposure scale.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;   // rgb, 3 channels
+layout(set = 0, binding = 1) readonly buffer B1 { float d[]; } L;   // tc_lut [size][size][n_ch]
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;            // raw, n_ch channels
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;   // 3x3 matrix, row-major
+
+float decode(float v) {
+    uint id = pc.u[3];
+    if (id == 1u) return (0.0031308 * 12.92) >= v ? v / 12.92 : spow((v + 0.055) / 1.055, 2.4);
+    if (id == 2u) {
+        float et = pow(16.0, 1.8 / (1.0 - 1.8));
+        float xp = v * 255.0;
+        return xp < 16.0 * et * 255.0 ? xp / (16.0 * 255.0) : spow(xp / 255.0, 1.8);
+    }
+    if (id == 3u) {
+        const float a = 1.099, b = 0.018;
+        float thr = a * pow(b, 0.45) - (a - 1.0);
+        return v < thr ? v / 4.5 : spow((v + (a - 1.0)) / a, 1.0 / 0.45);
+    }
+    if (id == 4u) return pow(v, pc.f[0]);
+    return v;
+}
+
+float mitchell(float t) {
+    const float B = 1.0 / 3.0, C = 1.0 / 3.0;
+    float x = abs(t);
+    if (x < 1.0) return (1.0 / 6.0) * ((12.0 - 9.0 * B - 6.0 * C) * x * x * x + (-18.0 + 12.0 * B + 6.0 * C) * x * x + (6.0 - 2.0 * B));
+    if (x < 2.0) return (1.0 / 6.0) * ((-B - 6.0 * C) * x * x * x + (6.0 * B + 30.0 * C) * x * x + (-12.0 * B - 48.0 * C) * x + (8.0 * B + 24.0 * C));
+    return 0.0;
+}
+
+int safeIndex(int i, int n) { return i < 0 ? -i : (i >= n ? 2 * (n - 1) - i : i); }
+
+void baseFrac(float coord, int n, out int base, out float frac) {
+    coord = max(coord, 0.0);
+    if (coord >= float(n - 1)) { base = n - 2; frac = 1.0; return; }
+    base = int(floor(coord));
+    frac = coord - float(base);
+}
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1];
+    int n = int(pc.u[4]);
+    uint nch = pc.u[5];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint i = (g.y * w + g.x) * 3u;
+    vec3 rgb = vec3(decode(S.d[i]), decode(S.d[i + 1u]), decode(S.d[i + 2u]));
+    vec3 xyz = vec3(P.p[0] * rgb.r + P.p[1] * rgb.g + P.p[2] * rgb.b,
+                    P.p[3] * rgb.r + P.p[4] * rgb.g + P.p[5] * rgb.b,
+                    P.p[6] * rgb.r + P.p[7] * rgb.g + P.p[8] * rgb.b);
+    float b = xyz.x + xyz.y + xyz.z;
+    float den = max(b, 1e-10);
+    float tx = xyz.x / den, ty = xyz.y / den;
+    float qy = clamp(ty / max(1.0 - tx, 1e-10), 0.0, 1.0);
+    float qx = clamp((1.0 - tx) * (1.0 - tx), 0.0, 1.0);
+    if (isnan(b)) b = 0.0;
+    int xb, yb;
+    float xf, yf;
+    baseFrac(qx * float(n - 1), n, xb, xf);
+    baseFrac(qy * float(n - 1), n, yb, yf);
+    float wx[4] = float[4](mitchell(xf + 1.0), mitchell(xf), mitchell(xf - 1.0), mitchell(xf - 2.0));
+    float wy[4] = float[4](mitchell(yf + 1.0), mitchell(yf), mitchell(yf - 1.0), mitchell(yf - 2.0));
+    vec3 acc = vec3(0.0);
+    float wsum = 0.0;
+    for (int a = 0; a < 4; ++a) {
+        int xi = safeIndex(xb - 1 + a, n);
+        for (int c = 0; c < 4; ++c) {
+            int yj = safeIndex(yb - 1 + c, n);
+            float wt = wx[a] * wy[c];
+            wsum += wt;
+            uint li = uint(xi * n + yj) * nch;
+            for (uint k = 0u; k < nch; ++k) acc[k] += wt * L.d[li + k];
+        }
+    }
+    uint o = (g.y * w + g.x) * nch;
+    for (uint k = 0u; k < nch; ++k) O.d[o + k] = (wsum != 0.0 ? acc[k] / wsum : acc[k]) * b * pc.f[1];
+}

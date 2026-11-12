@@ -1,0 +1,240 @@
+#version 450
+// Stochastic kernels, driven by the same Philox4x32-10 counter-based generator
+// as the CPU reference (keyed by seed, stream, absolute pixel position).
+//   mode 0: one emulsion sub-layer of one channel: compound Poisson-Binomial
+//           sample of the developed grain count -> density plane
+//   mode 1: log-normal field exp(mu + sigma * z) for every channel
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;   // density, c channels
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;
+layout(set = 0, binding = 3) readonly buffer B3 { float d[]; } XA;  // channel curve (x axis)
+layout(set = 0, binding = 4) readonly buffer B4 { float d[]; } YA;  // sub-layer curve
+layout(set = 0, binding = 6) readonly buffer B6 { uint q[]; } Q;    // seed lo, seed hi, origin x, origin y
+
+uvec4 gCtr;
+uvec2 gKey;
+uvec4 gBuf;
+int gHave;
+
+uvec4 philox(uvec4 ctr, uvec2 key) {
+    const uint M0 = 0xD2511F53u, M1 = 0xCD9E8D57u, W0 = 0x9E3779B9u, W1 = 0xBB67AE85u;
+    for (int r = 0; r < 10; ++r) {
+        uint hi0, lo0, hi1, lo1;
+        umulExtended(M0, ctr.x, hi0, lo0);
+        umulExtended(M1, ctr.z, hi1, lo1);
+        ctr = uvec4(hi1 ^ ctr.y ^ key.x, lo1, hi0 ^ ctr.w ^ key.y, lo0);
+        key += uvec2(W0, W1);
+    }
+    return ctr;
+}
+
+void rngInit(uint stream, uint x, uint y) {
+    gKey = uvec2(Q.q[0], Q.q[1] ^ (stream * 0x9E3779B9u));
+    gCtr = uvec4(x, y, 0u, stream);
+    gHave = 0;
+}
+
+uint nextU32() {
+    if (gHave == 0) {
+        gBuf = philox(gCtr, gKey);
+        gCtr.z += 1u;
+        gHave = 4;
+    }
+    uint v = gBuf[4 - gHave];
+    gHave -= 1;
+    return v;
+}
+
+// Uniform in (0, 1) with 24 bits of resolution.
+float uniform01() { return (float(nextU32() >> 8) + 0.5) * (1.0 / 16777216.0); }
+
+float normal01() {
+    float u1 = uniform01(), u2 = uniform01();
+    return sqrt(-2.0 * log(u1)) * cos(6.283185307179586 * u2);
+}
+
+float stirlingTail(float k) {
+    if (k <= 9.0) {
+        const float t[10] = float[10](0.0810614667953272, 0.0413406959554092, 0.0276779256849983, 0.02079067210376509,
+                                      0.0166446911898211, 0.0138761288230707, 0.0118967099458917, 0.0104112652619720,
+                                      0.00925546218271273, 0.00833056343336287);
+        return t[int(k)];
+    }
+    float kp = (k + 1.0) * (k + 1.0);
+    return (1.0 / 12.0 - (1.0 / 360.0 - 1.0 / 1260.0 / kp) / kp) / (k + 1.0);
+}
+
+// log(1 - p) without the fp32 cancellation of 1 - p for small p.
+float log1mp(float p) { return p < 0.01 ? -p * (1.0 + p * (0.5 + p * (1.0 / 3.0 + 0.25 * p))) : log(1.0 - p); }
+
+float logFactorial(float k) { return (k + 0.5) * log(k + 1.0) - (k + 1.0) + 0.9189385332046727 + stirlingTail(k); }
+
+// Above this variance the count distribution is replaced by a rounded normal:
+// fp32 cannot evaluate the rejection tests accurately there, and the
+// difference from the exact distribution is far below the test thresholds.
+const float NORMAL_VARIANCE = 400.0;
+
+float poissonExact(float lam) {
+    if (!(lam > 0.0)) return 0.0;
+    if (lam < 10.0) {
+        float u = uniform01();
+        float p = exp(-lam), s = p;
+        float k = 0.0;
+        for (int it = 0; it < 200 && u > s; ++it) {
+            k += 1.0;
+            p *= lam / k;
+            s += p;
+        }
+        return k;
+    }
+    if (lam > NORMAL_VARIANCE) return max(roundEven(lam + sqrt(lam) * normal01()), 0.0);
+    float slam = sqrt(lam), loglam = log(lam);
+    float b = 0.931 + 2.53 * slam;
+    float a = -0.059 + 0.02483 * b;
+    float invalpha = 1.1239 + 1.1328 / (b - 3.4);
+    float vr = 0.9277 - 3.6224 / (b - 2.0);
+    for (int it = 0; it < 64; ++it) {
+        float U = uniform01() - 0.5, V = uniform01();
+        float us = 0.5 - abs(U);
+        float k = floor((2.0 * a / us + b) * U + lam + 0.43);
+        if (us >= 0.07 && V <= vr) return k;
+        if (k < 0.0 || (us < 0.013 && V > us)) continue;
+        if (log(V) + log(invalpha) - log(a / (us * us) + b) <= -lam + k * loglam - logFactorial(k)) return k;
+    }
+    return floor(lam);
+}
+
+float binomialExact(float n, float p) {
+    if (n <= 0.0 || p <= 0.0) return 0.0;
+    if (p >= 1.0) return n;
+    bool flip = p > 0.5;
+    if (flip) p = 1.0 - p;
+    float q = 1.0 - p;
+    float k;
+    if (n * p < 10.0) {
+        float s = p / q, a = (n + 1.0) * s;
+        float r = exp(n * log1mp(p)), u = uniform01();
+        float x = 0.0;
+        for (int it = 0; it < 200 && u > r && x <= n; ++it) {
+            u -= r;
+            x += 1.0;
+            r *= (a / x - s);
+        }
+        k = min(x, n);
+    } else if (n * p * q > NORMAL_VARIANCE) {
+        k = clamp(roundEven(n * p + sqrt(n * p * q) * normal01()), 0.0, n);
+    } else {
+        float sd = sqrt(n * p * q);
+        float b = 1.15 + 2.53 * sd;
+        float a = -0.0873 + 0.0248 * b + 0.01 * p;
+        float c = n * p + 0.5;
+        float vr = 0.92 - 4.2 / b;
+        float r = p / q;
+        float alpha = (2.83 + 5.1 / b) * sd;
+        float m = floor((n + 1.0) * p);
+        k = floor(n * p);
+        for (int it = 0; it < 64; ++it) {
+            float u = uniform01() - 0.5, v = uniform01();
+            float us = 0.5 - abs(u);
+            float kk = floor((2.0 * a / us + b) * u + c);
+            if (us >= 0.07 && v <= vr) { k = kk; break; }
+            if (kk < 0.0 || kk > n) continue;
+            v = log(v * alpha / (a / (us * us) + b));
+            float upper = (m + 0.5) * log((m + 1.0) / (r * (n - m + 1.0))) + (n + 1.0) * log((n - m + 1.0) / (n - kk + 1.0)) +
+                          (kk + 0.5) * log(r * (n - kk + 1.0) / (kk + 1.0)) + stirlingTail(m) + stirlingTail(n - m) -
+                          stirlingTail(kk) - stirlingTail(n - kk);
+            if (v <= upper) { k = kk; break; }
+        }
+    }
+    return flip ? n - k : k;
+}
+
+// spektrafilm.utils.fast_stats approximations
+float poissonFast(float lam) {
+    if (lam <= 0.0) return 0.0;
+    if (lam < 30.0) {
+        float L = exp(-lam), p = 1.0;
+        float k = 0.0;
+        for (int it = 0; it < 400 && p > L; ++it) {
+            k += 1.0;
+            p *= uniform01();
+        }
+        return k - 1.0;
+    }
+    return max(roundEven(lam + sqrt(lam) * normal01()), 0.0);
+}
+
+float binomialFast(float n, float p) {
+    if (p <= 0.0) return 0.0;
+    if (p >= 1.0) return n;
+    if (n < 25.0) {
+        float count = 0.0;
+        for (int k = 0; k < int(n); ++k)
+            if (uniform01() < p) count += 1.0;
+        return count;
+    }
+    float mean = n * p, var = n * p * (1.0 - p);
+    if (var > 10.0) return clamp(roundEven(mean + sqrt(var) * normal01()), 0.0, n);
+    // Inversion from zero, as the reference. In fp32 (1 - p)^n underflows for p
+    // near 1, so the count of failures is sampled instead (same distribution).
+    bool flip = p > 0.5;
+    if (flip) p = 1.0 - p;
+    float u = uniform01(), cdf = 0.0, prob = exp(n * log1mp(p));
+    float k = 0.0;
+    for (int it = 0; it < 400 && cdf < u && k <= n; ++it) {
+        cdf += prob;
+        if (k < n) prob = prob * ((n - k) / (k + 1.0)) * (p / (1.0 - p));
+        k += 1.0;
+    }
+    return flip ? n - (k - 1.0) : k - 1.0;
+}
+
+// fast_interp along a non-uniform axis (binary search, side = 'right').
+float interpAxis(float x, int n) {
+    if (x <= XA.d[0]) return YA.d[0];
+    if (x >= XA.d[n - 1]) return YA.d[n - 1];
+    int lo = 0, hi = n;
+    while (lo < hi) {
+        int mid = lo + ((hi - lo) >> 1);
+        if (x < XA.d[mid]) hi = mid; else lo = mid + 1;
+    }
+    int low = clamp(lo - 1, 0, n - 2);
+    float x0 = XA.d[low], dx = XA.d[low + 1] - x0;
+    float t = dx != 0.0 ? (x - x0) / dx : 0.0;
+    return YA.d[low] + t * (YA.d[low + 1] - YA.d[low]);
+}
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2], mode = pc.u[3];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint px = g.x + Q.q[2], py = g.y + Q.q[3];
+    if (mode == 0u) {
+        uint ch = pc.u[4];
+        bool positive = (pc.u[7] & 1u) != 0u, fast = (pc.u[7] & 2u) != 0u;
+        float dminLayer = pc.f[0], dmax = pc.f[1], npp = pc.f[2], unif = pc.f[3];
+        float d = S.d[(g.y * w + g.x) * c + ch];
+        float dl = interpAxis(positive ? -d : d, int(pc.u[5])) + dminLayer;
+        float p = clamp(dl / dmax, 1e-6, 1.0 - 1e-6);
+        float saturation = 1.0 - p * unif * (1.0 - 1e-6);
+        rngInit(pc.u[6], px, py);
+        float seeds = fast ? poissonFast(npp / saturation) : poissonExact(npp / saturation);
+        float developed = fast ? binomialFast(seeds, p) : binomialExact(seeds, p);
+        O.d[g.y * w + g.x] = developed * (dmax / npp) * saturation;
+    } else if (mode == 2u) {
+        // Sampler test: u[4] = 0 Poisson(f0), 1 Binomial(n = f0, p = f1); u[7] bit 1 = fast.
+        bool fast = (pc.u[7] & 2u) != 0u;
+        rngInit(pc.u[6], px, py);
+        float v;
+        if (pc.u[4] == 0u) v = fast ? poissonFast(pc.f[0]) : poissonExact(pc.f[0]);
+        else v = fast ? binomialFast(pc.f[0], pc.f[1]) : binomialExact(pc.f[0], pc.f[1]);
+        O.d[g.y * w + g.x] = v;
+    } else {
+        float sigma = pc.f[0], mu = pc.f[1];
+        for (uint k = 0u; k < c; ++k) {
+            rngInit(pc.u[6] + k, px, py);
+            O.d[(g.y * w + g.x) * c + k] = sigma < 1e-6 ? exp(mu) : exp(mu + sigma * normal01());
+        }
+    }
+}

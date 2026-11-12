@@ -1,0 +1,45 @@
+#version 450
+// Per-value operations on one or two planes.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } X;
+layout(set = 0, binding = 1) readonly buffer B1 { float d[]; } Y;
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2], mode = pc.u[3];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint base = (g.y * w + g.x) * c;
+    for (uint k = 0u; k < c; ++k) {
+        uint i = base + k;
+        float x = X.d[i];
+        float r = x;
+        if (mode == 0u) {
+            // a[k] * x + b[k] * y + add[k], then / div[k]
+            r = (P.p[k] * x + P.p[4u + k] * Y.d[i] + P.p[8u + k]) / P.p[12u + k];
+        } else if (mode == 1u) {
+            // highlight boost
+            float x0 = pc.f[0];
+            if (x > x0) {
+                float dx = (x - x0) * pc.f[1];
+                r = x + pc.f[3] * (exp(pc.f[2] * dx) - pc.f[2] * dx - 1.0);
+            }
+        } else if (mode == 2u) {
+            r = log10f(max(x * pc.f[0], 0.0) + 1e-10);
+        } else if (mode == 3u) {
+            r = pow10(x) * pc.f[0];
+        } else if (mode == 4u) {
+            // multiplicative unsharp mask: D^(1+a) / blur^a
+            float D = max(x, 0.0);
+            float bl = max(Y.d[i], 1e-6);
+            r = D <= 0.0 ? 0.0 : pow(max(D, 1e-6), 1.0 + pc.f[0]) / pow(bl, pc.f[0]);
+        } else if (mode == 6u) {
+            r = x * Y.d[i];
+        } else if (mode == 7u) {
+            r = max(x, 0.0);
+        }
+        O.d[i] = r;
+    }
+}

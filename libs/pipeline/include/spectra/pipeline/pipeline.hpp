@@ -19,6 +19,10 @@
 
 namespace spectra {
 
+namespace gpu {
+class GpuPipeline;
+}
+
 // ---- Parameters <-> JSON ------------------------------------------------------
 nlohmann::json params_to_json(const Params& p);
 Params params_from_json(const nlohmann::json& j);
@@ -80,7 +84,18 @@ public:
     void film_cmy_to_print_log_raw(const double* cmy, double* out) const;
     void cmy_to_log_xyz(const double* cmy, double* out) const;
 
+    // Image-independent exposure corrections of the black / white correction
+    // (they depend on parameters only), for backends that do not walk the
+    // CPU stages.
+    struct StaticCorrections {
+        double filming = 1.0, printing = 1.0;  // exposure factors
+        bool xyz_active = false;               // apply Y' = clip(m Y + q, 0, 1)
+        double m = 1.0, q = 0.0;
+    };
+    StaticCorrections static_corrections() const;
+
 private:
+    friend class gpu::GpuPipeline;
     struct State;
     Image rgb_to_film_raw(const Image& rgb, const std::string& color_space, bool decode) const;
     Image preprocess(const Image& image, State& st) const;
@@ -93,7 +108,12 @@ private:
     void correction_function(const State& st, double& m, double& q, bool& active) const;
     double bw_filming_exposure_correction(State& st) const;
     double bw_printing_exposure_correction(State& st) const;
-    Vec density_spectral_for(const Image& raw_1x1) const;
+    Vec density_spectral_for(const Image& raw_1x1, bool with_extended) const;
+    // Extended features
+    bool experimental_push() const;
+    void film_stage_dyes(const double* cmy, double* dye, double& silver) const;
+    Vec film_dmax_norm_, print_dmax_, midgray_extended_, retime_;
+    double film_axis_gamma_ = 1.0;
 
     std::shared_ptr<const ColourData> cd_;
     Params p_;

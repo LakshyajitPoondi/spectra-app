@@ -13,6 +13,13 @@ struct ParityOptions {
     std::string report_path;  // optional JSON report
     std::string dump_dir;     // optional: write our outputs as .npy
     bool verbose = false;
+    // "cpu" (reference) or "gpu" (Vulkan). The GPU backend works in fp32 and
+    // is compared with the tolerances below instead of the per-case ones.
+    std::string backend = "cpu";
+    std::string gpu_device;
+    double gpu_atol = 2e-3, gpu_rtol = 2e-3;
+    int gpu_tile_size = 0;
+    double gpu_approx_rmse = 0.003, gpu_approx_p99 = 0.01;
 };
 
 // Runs every case of a cases.json file and compares with the stored Python

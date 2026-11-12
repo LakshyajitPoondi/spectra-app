@@ -649,6 +649,59 @@
    "golden": "golden/crop.npy"
   },
   {
+   "id": "upscale_1.5",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/detail.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 0.864
+    },
+    "io": {
+     "upscale_factor": 1.5
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/upscale_1.5.npy"
+  },
+  {
+   "id": "upscale_0.6_crop",
+   "kind": "pipeline",
+   "film": "kodak_portra_400",
+   "print": "kodak_portra_endura",
+   "input": "inputs/scene.npy",
+   "atol": 1e-09,
+   "rtol": 1e-09,
+   "pre": {
+    "debug": {
+     "deactivate_stochastic_effects": true
+    },
+    "camera": {
+     "film_format_mm": 1.2
+    },
+    "io": {
+     "upscale_factor": 0.6,
+     "crop": true,
+     "crop_center": [
+      0.5,
+      0.5
+     ],
+     "crop_size": [
+      0.5,
+      0.35
+     ]
+    }
+   },
+   "subsample": 2,
+   "golden": "golden/upscale_0.6_crop.npy"
+  },
+  {
    "id": "preview_mode",
    "kind": "pipeline",
    "film": "kodak_portra_400",

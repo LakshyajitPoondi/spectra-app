@@ -5,7 +5,12 @@
 #include <thread>
 #include <vector>
 
+#include <cstdint>
+
 namespace spectra {
+
+// Peak resident memory of this process in bytes (0 when unavailable).
+uint64_t peak_process_memory_bytes();
 
 // Number of worker threads used by parallel_for. Set to 1 for deterministic
 // single-threaded runs.

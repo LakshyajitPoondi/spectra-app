@@ -16,3 +16,46 @@ endforeach()
 add_executable(test_sanity test_sanity.cpp)
 target_link_libraries(test_sanity PRIVATE spectra_pipeline)
 add_test(NAME sanity COMMAND test_sanity ${SPECTRA_PACK})
+
+if(SPECTRA_HAVE_IO)
+  add_executable(test_io test_io.cpp)
+  target_link_libraries(test_io PRIVATE spectra_io)
+  add_test(NAME io_roundtrip COMMAND test_io)
+endif()
+
+add_executable(test_extended test_extended.cpp)
+target_link_libraries(test_extended PRIVATE spectra_pipeline)
+add_test(NAME extended_sanity COMMAND test_extended ${SPECTRA_PACK})
+
+# GPU backend parity. Runs on whatever Vulkan device is selected (SPECTRA_GPU
+# overrides); in CI that is Mesa lavapipe, a software renderer.
+if(SPECTRA_HAVE_GPU)
+  add_test(NAME gpu_info COMMAND spectra-cli gpu-info)
+  set_tests_properties(gpu_info PROPERTIES LABELS "gpu")
+  foreach(suite t2_nonspatial t3_spatial t4_stochastic t5_sweeps)
+    add_test(NAME gpu_parity_${suite} COMMAND spectra-cli parity
+             ${CMAKE_CURRENT_SOURCE_DIR}/golden/${suite}/cases.json --backend gpu --pack ${SPECTRA_PACK})
+    set_tests_properties(gpu_parity_${suite} PROPERTIES LABELS "gpu" TIMEOUT 3600)
+  endforeach()
+  # Fast preview: the GPU evaluates the spectral stages directly instead of the
+  # reference's 17^3 LUTs, so it is held to the looser fast-preview threshold.
+  add_test(NAME gpu_parity_fast_preview COMMAND spectra-cli parity
+           ${CMAKE_CURRENT_SOURCE_DIR}/golden/fast_preview/cases.json --backend gpu --atol 0.015 --pack ${SPECTRA_PACK})
+  set_tests_properties(gpu_parity_fast_preview PROPERTIES LABELS "gpu" TIMEOUT 3600)
+endif()
+
+if(SPECTRA_HAVE_GPU)
+  add_executable(test_gpu test_gpu.cpp)
+  target_link_libraries(test_gpu PRIVATE spectra_gpu)
+  add_test(NAME gpu_tiling COMMAND test_gpu ${SPECTRA_PACK})
+  set_tests_properties(gpu_tiling PROPERTIES LABELS "gpu" TIMEOUT 1800)
+endif()
+
+# Memory budget: a 60 MP render (tiled when it exceeds the GPU budget) must
+# keep the whole process under 10 GB. Slow on a software renderer, so it has
+# its own label: ctest -L memory.
+if(SPECTRA_HAVE_GPU)
+  add_test(NAME memory_limit_60mp COMMAND spectra-cli bench --backend gpu --mp 60 --repeats 1 --limit-gb 10
+           --pack ${SPECTRA_PACK})
+  set_tests_properties(memory_limit_60mp PROPERTIES LABELS "memory" TIMEOUT 7200)
+endif()

@@ -76,3 +76,15 @@ Vec3 xyz_to_oklab(const ColourData& cd, const Vec3& xyz);
 Vec3 oklab_to_xyz(const ColourData& cd, const Vec3& lab);
 
 }  // namespace spectra
+
+namespace spectra {
+
+// RAW white balance (port of spektrafilm.utils.raw_file_processor).
+// colour.CCT_to_xy: CIE D-series locus for T >= 4000 K, Kang 2002 below.
+Xy cct_to_xy(double temperature);
+// Von Kries (CAT02) adaptation of linear ACES2065-1 RGB from the white of
+// `scene_temperature` to the 6504 K reference, followed by the green "tint"
+// multiplier. Returns the 3x3 matrix to apply to RGB (tint included).
+Mat3 raw_white_balance_matrix(const ColourData& cd, double scene_temperature, double tint);
+
+}  // namespace spectra

@@ -1,0 +1,34 @@
+#version 450
+// One direction of a separable FIR filter with per-channel weights and
+// scipy 'reflect' boundaries. Optionally accumulates into the destination and
+// can write a single-channel source into one channel of a wider destination.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 1) buffer B1 { float d[]; } O;
+layout(set = 0, binding = 2) readonly buffer B2 { float d[]; } W;  // [channel][2 R + 1]
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2];
+    int R = int(pc.u[3]);
+    bool vertical = pc.u[4] != 0u;
+    bool accumulate = pc.u[5] != 0u;
+    uint cd = pc.u[6];       // destination channel count
+    uint coff = pc.u[7];     // destination channel offset (when c == 1 and cd > 1)
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint taps = uint(2 * R + 1);
+    for (uint k = 0u; k < c; ++k) {
+        float s = 0.0;
+        for (int j = -R; j <= R; ++j) {
+            float wt = W.d[k * taps + uint(j + R)];
+            if (wt == 0.0) continue;
+            uint idx;
+            if (vertical) idx = (uint(reflectIndex(int(g.y) + j, int(h))) * w + g.x) * c + k;
+            else idx = (g.y * w + uint(reflectIndex(int(g.x) + j, int(w)))) * c + k;
+            s += S.d[idx] * wt;
+        }
+        uint o = (g.y * w + g.x) * cd + (c == cd ? k : coff);
+        O.d[o] = accumulate ? O.d[o] + s : s;
+    }
+}

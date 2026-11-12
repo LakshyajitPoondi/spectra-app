@@ -184,6 +184,134 @@ Image metering_preview(const Image& img, int max_size) {
     return out;
 }
 
+namespace {
+
+// scipy.ndimage cubic spline prefilter along one strided line, mirror boundary.
+void spline_prefilter_mirror(double* c, int n, size_t stride) {
+    if (n < 2) return;
+    const double z = std::sqrt(3.0) - 2.0;
+    auto at = [&](int i) -> double& { return c[static_cast<size_t>(i) * stride]; };
+    const double gain = (1.0 - z) * (1.0 - 1.0 / z);
+    for (int i = 0; i < n; ++i) at(i) *= gain;
+    double z_i = z;
+    const double z_n_1 = std::pow(z, n - 1);
+    at(0) = at(0) + z_n_1 * at(n - 1);
+    for (int i = 1; i < n - 1; ++i) {
+        at(0) += z_i * (at(i) + z_n_1 * at(n - 1 - i));
+        z_i *= z;
+    }
+    at(0) /= 1 - z_n_1 * z_n_1;
+    for (int i = 1; i < n; ++i) at(i) += z * at(i - 1);
+    at(n - 1) = (z * at(n - 2) + at(n - 1)) * z / (z * z - 1);
+    for (int i = n - 2; i >= 0; --i) at(i) = z * (at(i + 1) - at(i));
+}
+
+inline int mirror_idx(int i, int n) {
+    if (n == 1) return 0;
+    int period = 2 * (n - 1);
+    i %= period;
+    if (i < 0) i += period;
+    return i >= n ? period - i : i;
+}
+
+// Sample positions and cubic B-spline weights of ndimage.zoom(grid_mode=True, mode='mirror').
+void zoom_taps(int n_in, int n_out, std::vector<int>& idx, Vec& w) {
+    idx.resize(static_cast<size_t>(n_out) * 4);
+    w.resize(static_cast<size_t>(n_out) * 4);
+    double zoom = static_cast<double>(n_in) / n_out;
+    for (int o = 0; o < n_out; ++o) {
+        double cc = (o + 0.5) * zoom - 0.5;
+        if (n_in > 1) {
+            double period = 2.0 * (n_in - 1);
+            if (cc < 0) cc = -cc;
+            if (cc > n_in - 1) {
+                cc = std::fmod(cc, period);
+                if (cc > n_in - 1) cc = period - cc;
+            }
+        } else {
+            cc = 0;
+        }
+        int start = static_cast<int>(std::floor(cc)) - 1;
+        double t = cc - std::floor(cc);
+        double ws[4] = {(1 - t) * (1 - t) * (1 - t) / 6.0, (3 * t * t * t - 6 * t * t + 4) / 6.0,
+                        (-3 * t * t * t + 3 * t * t + 3 * t + 1) / 6.0, t * t * t / 6.0};
+        for (int k = 0; k < 4; ++k) {
+            idx[static_cast<size_t>(o) * 4 + k] = mirror_idx(start + k, n_in);
+            w[static_cast<size_t>(o) * 4 + k] = ws[k];
+        }
+    }
+}
+
+}  // namespace
+
+Image rescale_cubic(const Image& img, double factor) {
+    int oh = static_cast<int>(std::max(round_half_even(factor * img.h), 1.0));
+    int ow = static_cast<int>(std::max(round_half_even(factor * img.w), 1.0));
+    int c = img.c;
+    double lo = INFINITY, hi = -INFINITY;
+    for (double v : img.v) {
+        lo = std::min(lo, v);
+        hi = std::max(hi, v);
+    }
+    Image f = img;
+    // Anti-aliasing when reducing (skimage: sigma = (in/out - 1) / 2, mirror, truncate 4).
+    if (oh < img.h || ow < img.w) {
+        double sh = std::max(0.0, (static_cast<double>(img.h) / oh - 1) / 2);
+        double sw = std::max(0.0, (static_cast<double>(img.w) / ow - 1) / 2);
+        if (sh > 1e-15) {
+            Image tmp(img.h, img.w, c);
+            parallel_for(img.w, [&](long a, long b) {
+                for (long x = a; x < b; ++x)
+                    for (int k = 0; k < c; ++k)
+                        scipy_gaussian_filter1d(&f.v[static_cast<size_t>(x) * c + k], &tmp.v[static_cast<size_t>(x) * c + k],
+                                                img.h, img.w * c, sh, 1);
+            });
+            f = std::move(tmp);
+        }
+        if (sw > 1e-15) {
+            Image tmp(img.h, img.w, c);
+            parallel_for(img.h, [&](long a, long b) {
+                for (long y = a; y < b; ++y)
+                    for (int k = 0; k < c; ++k)
+                        scipy_gaussian_filter1d(&f.v[(static_cast<size_t>(y) * img.w) * c + k],
+                                                &tmp.v[(static_cast<size_t>(y) * img.w) * c + k], img.w, c, sw, 1);
+            });
+            f = std::move(tmp);
+        }
+    }
+    // Spline prefilter along both image axes.
+    parallel_for(img.w, [&](long a, long b) {
+        for (long x = a; x < b; ++x)
+            for (int k = 0; k < c; ++k)
+                spline_prefilter_mirror(&f.v[static_cast<size_t>(x) * c + k], img.h, static_cast<size_t>(img.w) * c);
+    });
+    parallel_for(img.h, [&](long a, long b) {
+        for (long y = a; y < b; ++y)
+            for (int k = 0; k < c; ++k)
+                spline_prefilter_mirror(&f.v[(static_cast<size_t>(y) * img.w) * c + k], img.w, static_cast<size_t>(c));
+    });
+    std::vector<int> iy, ix;
+    Vec wy, wx;
+    zoom_taps(img.h, oh, iy, wy);
+    zoom_taps(img.w, ow, ix, wx);
+    Image out(oh, ow, c);
+    parallel_for(oh, [&](long a, long b) {
+        for (long y = a; y < b; ++y)
+            for (int x = 0; x < ow; ++x)
+                for (int k = 0; k < c; ++k) {
+                    double s = 0;
+                    for (int j = 0; j < 4; ++j) {
+                        double row = 0;
+                        const double* src = &f.v[(static_cast<size_t>(iy[y * 4 + j]) * img.w) * c + k];
+                        for (int i = 0; i < 4; ++i) row += wx[static_cast<size_t>(x) * 4 + i] * src[static_cast<size_t>(ix[static_cast<size_t>(x) * 4 + i]) * c];
+                        s += wy[static_cast<size_t>(y) * 4 + j] * row;
+                    }
+                    out.at(static_cast<int>(y), x, k) = std::clamp(s, lo, hi);
+                }
+    });
+    return out;
+}
+
 Image crop_image(const Image& img, const std::array<double, 2>& center,
                  const std::array<double, 2>& size) {
     double shape[2] = {static_cast<double>(img.h), static_cast<double>(img.w)};
@@ -206,6 +334,41 @@ Image crop_image(const Image& img, const std::array<double, 2>& center,
         std::copy(img.px(static_cast<int>(x0[0]) + y, static_cast<int>(x0[1])),
                   img.px(static_cast<int>(x0[0]) + y, static_cast<int>(x0[1])) + static_cast<size_t>(out.w) * img.c,
                   out.px(y, 0));
+    return out;
+}
+
+Image downsample_area(const Image& img, int long_edge) {
+    int mx = std::max(img.h, img.w);
+    if (long_edge <= 0 || mx <= long_edge) return img;
+    double scale = static_cast<double>(mx) / long_edge;
+    int oh = std::max(1, static_cast<int>(std::lround(img.h / scale)));
+    int ow = std::max(1, static_cast<int>(std::lround(img.w / scale)));
+    double sy = static_cast<double>(img.h) / oh, sx = static_cast<double>(img.w) / ow;
+    Image out(oh, ow, img.c);
+    parallel_for(oh, [&](long a, long b) {
+        Vec acc(img.c);
+        for (long y = a; y < b; ++y) {
+            double y0 = y * sy, y1 = (y + 1) * sy;
+            int iy0 = static_cast<int>(std::floor(y0)), iy1 = std::min(img.h, static_cast<int>(std::ceil(y1)));
+            for (int x = 0; x < ow; ++x) {
+                double x0 = x * sx, x1 = (x + 1) * sx;
+                int ix0 = static_cast<int>(std::floor(x0)), ix1 = std::min(img.w, static_cast<int>(std::ceil(x1)));
+                std::fill(acc.begin(), acc.end(), 0.0);
+                double wsum = 0;
+                for (int iy = iy0; iy < iy1; ++iy) {
+                    double wy = std::min<double>(iy + 1, y1) - std::max<double>(iy, y0);
+                    for (int ix = ix0; ix < ix1; ++ix) {
+                        double w = wy * (std::min<double>(ix + 1, x1) - std::max<double>(ix, x0));
+                        const double* p = img.px(iy, ix);
+                        for (int k = 0; k < img.c; ++k) acc[k] += w * p[k];
+                        wsum += w;
+                    }
+                }
+                double* o = out.px(static_cast<int>(y), x);
+                for (int k = 0; k < img.c; ++k) o[k] = acc[k] / wsum;
+            }
+        }
+    });
     return out;
 }
 

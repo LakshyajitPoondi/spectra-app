@@ -189,6 +189,46 @@ struct SettingsParams {
     bool neutral_print_filters_from_database = true;
 };
 
+// "Extended" features. They are NOT part of the spektrafilm reference: the
+// models are adapted from the spektrafilm-ofx port (Aedan Diez, GPL-3.0).
+// Each is separately switchable and off by default, and none is covered by the
+// parity tests against Python (they have sanity tests instead).
+struct PushPullParams {
+    bool active = false;
+    // "standard": development time changes the curve gamma (the exposure axis
+    // of the film curves is scaled about mid-grey, after the DIR-coupler tables
+    // are built). "experimental": per-layer, per-tone-region warp.
+    std::string mode = "standard";
+    double film_stops = 0.0;   // + push, - pull; clamped to [-2, 2]
+    double print_stops = 0.0;  // print / paper development, gamma only
+};
+
+struct BleachBypassParams {
+    bool active = false;
+    double film_amount = 0.0;   // 0..1 fraction of the silver image retained in the film
+    double print_amount = 0.0;  // 0..1 fraction retained in the print
+    double leuco_cyan_coupling = 1.0;  // negative film only: cyan dye loss multiplier (0..2)
+};
+
+struct HdrOutputParams {
+    bool active = false;
+    std::string transfer = "pq";         // "pq" (SMPTE ST 2084) | "hlg" (ARIB STD-B67)
+    double reference_white_nits = 203.0; // luminance of output value 1.0
+    double peak_nits = 1000.0;
+    double exposure_ev = 0.0;
+    std::string tone_mapping = "shoulder";  // "shoulder" (soft roll-off to peak) | "clip"
+};
+
+struct ExtendedParams {
+    // Re-time the print for mid-grey when a film-side Extended feature is on,
+    // as a lab does when printing a pushed or bleach-bypassed negative: mid-grey
+    // prints at the same density and colour as with the normal process.
+    bool retime_print_to_midgray = true;
+    PushPullParams push_pull;
+    BleachBypassParams bleach_bypass;
+    HdrOutputParams hdr_output;
+};
+
 // Options of this app that have no Python counterpart.
 struct RenderOptions {
     // true: reproduce the Python reference exactly, including its
@@ -203,6 +243,9 @@ struct RenderOptions {
     std::optional<double> autoexposure_ev;   // overrides the metered EV
     std::optional<double> boost_max_raw;     // overrides max(raw) in the highlight boost
     std::optional<double> full_long_edge_px; // long edge of the full image (for pixel size)
+    // Position of this image inside the full image. Random streams are keyed by
+    // absolute pixel position, so a crop or tile reproduces the full render's grain.
+    uint32_t origin_x = 0, origin_y = 0;
 };
 
 struct Params {
@@ -216,6 +259,7 @@ struct Params {
     IOParams io;
     DebugParams debug;
     SettingsParams settings;
+    ExtendedParams extended;
 };
 
 }  // namespace spectra

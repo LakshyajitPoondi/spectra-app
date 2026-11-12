@@ -1,0 +1,107 @@
+#version 450
+// Characteristic-curve development and DIR couplers.
+//   mode 0: density = curves(x * gamma)                      (in: log exposure)
+//   mode 1: DIR correction = langmuir(silver(density)) . M    (in: density)
+//   mode 2: density = curves_before(aux - receiver(in))       (in: blurred correction, aux: log exposure)
+//   mode 3: Extended experimental push: warp log exposure     (in: log exposure)
+//   mode 4: Extended experimental push: density * gain(aux)   (in: density, aux: warped log exposure)
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 1) readonly buffer B1 { float d[]; } A;
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;
+layout(set = 0, binding = 3) readonly buffer B3 { float d[]; } C;  // curves [n_le][c]
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;
+// P: M[9] donor row / receiver column, dmax[3] @9, donor_k[3] @12, d_ref[3] @15, kr[3] @18, c_ref[3] @21
+
+float interpCurve(float x, uint k, uint c) {
+    int n = int(pc.u[4]);
+    float le0 = pc.f[0], inv = pc.f[1];
+    float t = (x - le0) * inv;
+    if (!(t > 0.0)) return C.d[k];
+    if (t >= float(n - 1)) return C.d[uint(n - 1) * c + k];
+    int i = min(int(floor(t)), n - 2);
+    float fr = t - float(i);
+    float y0 = C.d[uint(i) * c + k], y1 = C.d[uint(i + 1) * c + k];
+    return y0 + fr * (y1 - y0);
+}
+
+float langmuir(float d, float k, float ref) { return k > 1e30 ? d : d * (k + ref) / (k + d); }
+
+float sigmoid(float u) { return 1.0 / (1.0 + exp(-u)); }
+
+float activity(float stops) {
+    float s = clamp(stops, -2.0, 2.0);
+    float sec = s < 0.0 ? mix(180.0, 150.0, min(-s, 1.0)) : (s <= 1.0 ? mix(180.0, 220.0, s) : mix(220.0, 280.0, s - 1.0));
+    return log(sec / 180.0);
+}
+
+float speedGain(float stops) {
+    if (stops > 0.0) return stops <= 1.0 ? mix(0.0, 0.33, min(stops, 1.0)) : mix(0.33, 0.5, min(stops - 1.0, 1.0));
+    if (stops < 0.0) return mix(0.0, -0.2, min(-stops, 1.0));
+    return 0.0;
+}
+
+float warp(float lr, int ch, float stops) {
+    const vec3 midLin = vec3(0.25, 0.28, 0.31), shLin = vec3(0.32, 0.38, 0.45);
+    const vec3 midQuad = vec3(0.04, 0.06, 0.08), shQuad = vec3(0.08, 0.12, 0.16);
+    float a = activity(stops), a2 = a * abs(a);
+    float toe = 1.0 - sigmoid((lr + 2.0) / 0.5);
+    float sh = sigmoid(lr / 0.5);
+    float mid = max(1.0 - toe - sh, 0.0);
+    return lr + (midLin[ch] * a + midQuad[ch] * a2) * mid + (shLin[ch] * a + shQuad[ch] * a2) * sh;
+}
+
+float gain(float lookup, int ch, float stops) {
+    const vec3 bl = vec3(1.05, 0.95, 1.00), bq = vec3(-0.90, -0.82, -0.86);
+    float a = activity(stops), a2 = a * abs(a);
+    float toe = 1.0 - sigmoid((lookup + 2.0) / 0.5);
+    float sh = sigmoid(lookup / 0.5);
+    float mid = max(1.0 - toe - sh, 0.0);
+    return clamp(1.0 + (bl[ch] * a + bq[ch] * a2) * (0.12 * toe + mid + sh), 0.35, 2.0);
+}
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2], mode = pc.u[3];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint base = (g.y * w + g.x) * c;
+    float stops = pc.f[3];
+    if (mode == 0u) {
+        for (uint k = 0u; k < c; ++k) O.d[base + k] = interpCurve(S.d[base + k] * pc.f[2], k, c);
+    } else if (mode == 1u) {
+        bool positive = pc.u[5] != 0u, hasDonor = pc.u[6] != 0u;
+        float donor[3];
+        for (uint k = 0u; k < c; ++k) {
+            float d = S.d[base + k];
+            float silver = positive ? P.p[9u + k] - d : d;
+            donor[k] = hasDonor ? langmuir(silver, P.p[12u + k], P.p[15u + k]) : silver;
+        }
+        for (uint m = 0u; m < c; ++m) {
+            float s = 0.0;
+            for (uint k = 0u; k < c; ++k) s += donor[k] * P.p[k * c + m];
+            O.d[base + m] = s;
+        }
+    } else if (mode == 2u) {
+        bool hasReceiver = pc.u[7] != 0u;
+        for (uint k = 0u; k < c; ++k) {
+            float corr = S.d[base + k];
+            if (hasReceiver) corr = langmuir(corr, P.p[18u + k], P.p[21u + k]);
+            O.d[base + k] = interpCurve(A.d[base + k] - corr, k, c);
+        }
+    } else if (mode == 3u) {
+        stops = clamp(stops, -2.0, 2.0);
+        float shift = (stops - speedGain(stops)) * 0.3010299956639812;
+        vec3 v = vec3(0.0);
+        for (uint k = 0u; k < c; ++k) v[k] = S.d[base + k] - shift;
+        if (c == 3u) {
+            float a = activity(stops);
+            vec3 dv = v - vec3((v.x + v.y + v.z) / 3.0);
+            const float cc = 0.015;
+            v += a * vec3(cc * dv.y - cc * dv.z, -cc * dv.x + cc * dv.z, cc * dv.x - cc * dv.y);
+        }
+        for (uint k = 0u; k < c; ++k) O.d[base + k] = warp(v[k], c == 3u ? int(k) : 1, stops);
+    } else {
+        for (uint k = 0u; k < c; ++k) O.d[base + k] = S.d[base + k] * gain(A.d[base + k], c == 3u ? int(k) : 1, stops);
+    }
+}

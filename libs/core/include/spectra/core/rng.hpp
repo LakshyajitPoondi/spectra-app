@@ -40,8 +40,9 @@ public:
         }
         return buf_[4 - have_--];
     }
-    // Uniform in (0, 1), 32 bits of resolution, never exactly 0 or 1.
-    double uniform() { return (static_cast<double>(next_u32()) + 0.5) * (1.0 / 4294967296.0); }
+    // Uniform in (0, 1), never exactly 0 or 1. 24 bits of resolution, so the
+    // value is exact in fp32 and the GPU kernels draw the very same numbers.
+    double uniform() { return (static_cast<double>(next_u32() >> 8) + 0.5) * (1.0 / 16777216.0); }
     // Standard normal (Box-Muller; uses two uniforms, returns one value).
     double normal() {
         double u1 = uniform(), u2 = uniform();

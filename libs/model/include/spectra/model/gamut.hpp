@@ -22,6 +22,8 @@ struct CMaxTable {
     double lookup(double L, double h) const;
 };
 
+struct Cam16View;
+
 // Prepared output compressor for one (spec, output colour space) pair.
 class OutputGamutCompressor {
 public:
@@ -37,6 +39,7 @@ private:
     Mat3 rgb_to_xyz_{}, xyz_to_rgb_{};
     CMaxTable table_;
     double l_white_ = 1.0;
+    std::shared_ptr<const Cam16View> cam16_;
     Mat3 jz_xyz_to_lms_{}, jz_lms_to_xyz_{}, jz_lmsp_to_iab_{}, jz_iab_to_lmsp_{};
     Vec3 to_polar_space(const Vec3& xyz) const;
     Vec3 from_polar_space(const Vec3& lab) const;
