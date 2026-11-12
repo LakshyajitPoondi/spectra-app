@@ -520,6 +520,30 @@ double Pipeline::bw_printing_exposure_correction(State& st) const {
     return 1.0;  // upstream has no positive-print branch
 }
 
+Pipeline::StaticCorrections Pipeline::static_corrections() const {
+    StaticCorrections c;
+    State st;
+    if (!p_.io.scan_film) {
+        int fc = film_.n_ch, pc = print_.n_ch;
+        Vec dmin = match_channels(p_.film_render.grain.density_min, fc);
+        Vec data_min(fc), data_max = film_.curves.column_max();
+        for (int k = 0; k < fc; ++k) data_min[k] = -dmin[k];
+        st.log_raw_print_black.assign(pc, 0.0);
+        st.log_raw_print_white.assign(pc, 0.0);
+        film_cmy_to_print_log_raw(data_min.data(), st.log_raw_print_black.data());
+        film_cmy_to_print_log_raw(data_max.data(), st.log_raw_print_white.data());
+    }
+    c.filming = bw_filming_exposure_correction(st);
+    if (!p_.io.scan_film) c.printing = bw_printing_exposure_correction(st);
+    bool bc = p_.scanner.black_correction, wc = p_.scanner.white_correction;
+    if ((bc || wc) && !(p_.io.scan_film && film_.info.type == "negative") && st.have_bw_refs) {
+        bool active;
+        correction_function(st, c.m, c.q, active);
+        c.xyz_active = active;
+    }
+    return c;
+}
+
 Image Pipeline::filming_expose(const Image& rgb, State& st) const {
     Image raw = rgb_to_film_raw(rgb, p_.io.input_color_space, p_.io.input_cctf_decoding);
     if (p_.camera.auto_exposure) {
@@ -605,6 +629,8 @@ Image Pipeline::filming_develop(const Image& log_raw, State& st) const {
     go.seed = opt_.seed;
     go.use_fast_stats = p_.settings.use_fast_stats;
     go.pixel_param_scale = st.pixel_param_scale;
+    go.origin_x = opt_.origin_x;
+    go.origin_y = opt_.origin_y;
     return apply_grain(cmy, st.pixel_size_um, p_.film_render.grain, norm, film_.info.type, go);
 }
 
@@ -694,7 +720,8 @@ Image Pipeline::scan(const Image& density, State& st) const {
             for (int k = 0; k < 3; ++k) xyz.v[i * 3 + k] *= s;
         }
     }
-    if (!scan_film) add_glare(xyz, scan_illuminant_xyz_, p_.print_render.glare, opt_.seed, st.pixel_param_scale);
+    if (!scan_film) add_glare(xyz, scan_illuminant_xyz_, p_.print_render.glare, opt_.seed, st.pixel_param_scale,
+                                 opt_.origin_x, opt_.origin_y);
 
     Image rgb(xyz.h, xyz.w, 3);
     const HdrOutputParams& hdr = p_.extended.hdr_output;

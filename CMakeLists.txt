@@ -91,7 +91,50 @@ if(SPECTRA_WITH_IO)
   endif()
 endif()
 
+# Vulkan compute backend. The SPIR-V is committed (shaders/generated/spirv.cpp)
+# so building needs only the Vulkan headers and loader; when glslc is available
+# the file is regenerated from shaders/*.comp as part of the build.
+option(SPECTRA_WITH_GPU "Build the Vulkan compute backend" ON)
+set(SPECTRA_HAVE_GPU OFF)
+if(SPECTRA_WITH_GPU)
+  find_package(Vulkan)
+  if(Vulkan_FOUND)
+    set(SPECTRA_HAVE_GPU ON)
+    set(SPECTRA_KERNELS pointwise blur iir resample reduce expose develop grain spectral color encode)
+    set(SPIRV_CPP ${CMAKE_CURRENT_SOURCE_DIR}/shaders/generated/spirv.cpp)
+    find_program(GLSLC glslc HINTS ENV VULKAN_SDK PATH_SUFFIXES Bin bin)
+    if(GLSLC)
+      set(spv_files)
+      foreach(k ${SPECTRA_KERNELS})
+        set(spv ${CMAKE_CURRENT_BINARY_DIR}/spv/${k}.spv)
+        add_custom_command(OUTPUT ${spv}
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/spv
+          COMMAND ${GLSLC} -O --target-env=vulkan1.1 -I ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+                  ${CMAKE_CURRENT_SOURCE_DIR}/shaders/${k}.comp -o ${spv}
+          DEPENDS shaders/${k}.comp shaders/common.glsl VERBATIM)
+        list(APPEND spv_files ${spv})
+      endforeach()
+      add_custom_command(OUTPUT ${SPIRV_CPP}
+        COMMAND ${CMAKE_COMMAND} -DOUT=${SPIRV_CPP} -DSPV_DIR=${CMAKE_CURRENT_BINARY_DIR}/spv
+                "-DNAMES=${SPECTRA_KERNELS}" -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/embed_spirv.cmake
+        DEPENDS ${spv_files} cmake/embed_spirv.cmake VERBATIM)
+    endif()
+    add_library(spectra_gpu STATIC libs/gpu/src/context.cpp libs/gpu/src/gpu_pipeline.cpp ${SPIRV_CPP})
+    target_include_directories(spectra_gpu PUBLIC libs/gpu/include)
+    target_link_libraries(spectra_gpu PUBLIC spectra_pipeline Vulkan::Vulkan)
+    if(NOT MSVC)
+      target_compile_options(spectra_gpu PRIVATE -Wno-missing-field-initializers)
+    endif()
+  else()
+    message(WARNING "Vulkan headers / loader not found: building without the GPU backend")
+  endif()
+endif()
+
 add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp)
+if(SPECTRA_HAVE_GPU)
+  target_link_libraries(spectra-cli PRIVATE spectra_gpu)
+  target_compile_definitions(spectra-cli PRIVATE SPECTRA_HAVE_GPU=1)
+endif()
 target_link_libraries(spectra-cli PRIVATE spectra_pipeline)
 if(SPECTRA_HAVE_IO)
   target_link_libraries(spectra-cli PRIVATE spectra_io)

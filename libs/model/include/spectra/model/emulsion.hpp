@@ -55,6 +55,7 @@ struct GrainOptions {
     // Scale applied to the pixel-unit parameters (blur, USM sigma, dye-cloud
     // blur). 1 reproduces the Python reference.
     double pixel_param_scale = 1.0;
+    uint32_t origin_x = 0, origin_y = 0;  // position of this image inside the full image
 };
 
 // apply_grain: per channel and sub-layer compound Poisson-Binomial sampling,
@@ -77,12 +78,12 @@ int sample_binomial(PixelRng& rng, int n, double p, bool fast);
 // probability D / Dmax. `density` and `out` may alias.
 void sample_grain_layer(const double* density, double* out, int h, int w, double density_max,
                         double n_particles, double uniformity, uint64_t seed, uint32_t stream,
-                        bool fast);
+                        bool fast, uint32_t origin_x = 0, uint32_t origin_y = 0);
 
 // ---- Glare ------------------------------------------------------------------
 
 // add_glare: adds a blurred log-normal random amount of the illuminant.
 void add_glare(Image& xyz, const Vec3& illuminant_xyz, const GlareParams& g, uint64_t seed,
-               double pixel_param_scale = 1.0);
+               double pixel_param_scale = 1.0, uint32_t origin_x = 0, uint32_t origin_y = 0);
 
 }  // namespace spectra

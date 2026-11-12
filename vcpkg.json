@@ -6,6 +6,8 @@
     "tiff",
     "libpng",
     "libjpeg-turbo",
-    "openexr"
+    "openexr",
+    "vulkan-headers",
+    "vulkan-loader"
   ]
 }

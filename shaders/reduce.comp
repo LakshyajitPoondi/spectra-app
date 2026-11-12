@@ -1,0 +1,30 @@
+#version 450
+// Row-wise reduction: out[row * c + k] = max or sum over the row. The CPU
+// finishes the reduction over rows in double precision.
+#include "common.glsl"
+layout(local_size_x = 1, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 1) buffer B1 { float d[]; } O;
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1], c = pc.u[2];
+    uint row = gl_GlobalInvocationID.y;
+    if (gl_GlobalInvocationID.x != 0u || row >= h) return;
+    for (uint k = 0u; k < c; ++k) {
+        float acc = pc.u[3] == 0u ? S.d[row * w * c + k] : 0.0;
+        // Kahan summation keeps fp32 row sums accurate.
+        float comp = 0.0;
+        for (uint x = 0u; x < w; ++x) {
+            float v = S.d[(row * w + x) * c + k];
+            if (pc.u[3] == 0u) {
+                acc = max(acc, v);
+            } else {
+                float y = v - comp;
+                float t = acc + y;
+                comp = (t - acc) - y;
+                acc = t;
+            }
+        }
+        O.d[row * c + k] = acc;
+    }
+}

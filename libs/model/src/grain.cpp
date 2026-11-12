@@ -171,7 +171,7 @@ int sample_binomial(PixelRng& rng, int n, double p, bool fast) {
 
 void sample_grain_layer(const double* density, double* out, int h, int w, double density_max,
                         double n_particles, double uniformity, uint64_t seed, uint32_t stream,
-                        bool fast) {
+                        bool fast, uint32_t ox, uint32_t oy) {
     double od_particle = density_max / n_particles;
     parallel_for(h, [&](long y0, long y1) {
         for (long y = y0; y < y1; ++y)
@@ -179,7 +179,7 @@ void sample_grain_layer(const double* density, double* out, int h, int w, double
                 size_t i = static_cast<size_t>(y) * w + x;
                 double p = std::clamp(density[i] / density_max, 1e-6, 1.0 - 1e-6);
                 double saturation = 1.0 - p * uniformity * (1.0 - 1e-6);
-                PixelRng rng(seed, stream, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+                PixelRng rng(seed, stream, static_cast<uint32_t>(x) + ox, static_cast<uint32_t>(y) + oy);
                 int seeds = sample_poisson(rng, n_particles / saturation, fast);
                 int developed = sample_binomial(rng, seeds, p, fast);
                 out[i] = developed * od_particle * saturation;
@@ -275,7 +275,7 @@ Image apply_grain(const Image& density_cmy, double pixel_size_um, const GrainPar
                     }
             });
             sample_grain_layer(plane.data(), plane.data(), h, w, dmax, npp, u, opt.seed, stream,
-                               opt.use_fast_stats);
+                               opt.use_fast_stats, opt.origin_x, opt.origin_y);
             if (g.blur_dye_clouds_um > 0) {
                 gaussian_filter_plane(plane.data(), blurred.data(), h, w,
                                       g.blur_dye_clouds_um * std::sqrt(od_particle));
@@ -298,7 +298,7 @@ Image apply_grain(const Image& density_cmy, double pixel_size_um, const GrainPar
                 for (int x = 0; x < w; ++x)
                     for (int ch = 0; ch < n_ch; ++ch) {
                         PixelRng rng(opt.seed, kStreamClump + static_cast<uint32_t>(ch),
-                                     static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+                                     static_cast<uint32_t>(x) + opt.origin_x, static_cast<uint32_t>(y) + opt.origin_y);
                         clump.at(static_cast<int>(y), x, ch) = std::exp(rng.normal() * sd - 0.5 * sigma2);
                     }
         });
@@ -316,7 +316,7 @@ Image apply_grain(const Image& density_cmy, double pixel_size_um, const GrainPar
 }
 
 void add_glare(Image& xyz, const Vec3& illuminant_xyz, const GlareParams& g, uint64_t seed,
-               double pixel_param_scale) {
+               double pixel_param_scale, uint32_t ox, uint32_t oy) {
     if (!g.active || !(g.percent > 0)) return;
     int h = xyz.h, w = xyz.w;
     double m = g.percent, s = g.roughness * g.percent;
@@ -326,7 +326,7 @@ void add_glare(Image& xyz, const Vec3& illuminant_xyz, const GlareParams& g, uin
     parallel_for(h, [&](long y0, long y1) {
         for (long y = y0; y < y1; ++y)
             for (int x = 0; x < w; ++x) {
-                PixelRng rng(seed, kStreamGlare, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+                PixelRng rng(seed, kStreamGlare, static_cast<uint32_t>(x) + ox, static_cast<uint32_t>(y) + oy);
                 amount[static_cast<size_t>(y) * w + x] =
                     sigma < 1e-6 ? std::exp(mu) : std::exp(mu + sigma * rng.normal());
             }

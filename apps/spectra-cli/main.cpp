@@ -17,6 +17,9 @@
 #include "spectra/core/npy.hpp"
 #include "spectra/core/parallel.hpp"
 #include "spectra/pipeline/pipeline.hpp"
+#ifdef SPECTRA_HAVE_GPU
+#include "spectra/gpu/gpu_pipeline.hpp"
+#endif
 #ifdef SPECTRA_HAVE_IO
 #include "spectra/io/image_io.hpp"
 #include "spectra/io/raw.hpp"
@@ -54,6 +57,8 @@ int usage() {
         "  digest  [--film F] [--print P] [--params p.json]     print the digested parameters\n"
         "  bench-open --in RAW [--preview 1600] [--out FILE]   time RAW open to first preview\n"
         "  parity  cases.json [--filter s] [--report r.json] [--dump dir] [-v]\n"
+        "  gpu-info [--gpu NAME|INDEX]         list Vulkan devices\n"
+        "GPU: add --backend gpu to render / parity; [--gpu NAME|INDEX] [--tile N] [--budget-mb N]\n"
         "common options: --pack path/to/spektrafilm.sfpk   --threads N");
     return 2;
 }
@@ -124,6 +129,25 @@ int main(int argc, char** argv) {
     }
     try {
         if (opt.count("threads")) thread_count() = std::max(1, std::stoi(opt["threads"]));
+#ifdef SPECTRA_HAVE_GPU
+        if (cmd == "gpu-info") {
+            auto devices = gpu::Context::enumerate();
+            for (size_t i = 0; i < devices.size(); ++i) {
+                const auto& d = devices[i];
+                std::printf("[%zu] %s  (vendor 0x%04x, driver %s, Vulkan %u.%u.%u, %s, heap %.1f GiB%s)\n", i,
+                            d.name.c_str(), d.vendor_id, d.driver.c_str(), VK_VERSION_MAJOR(d.api_version),
+                            VK_VERSION_MINOR(d.api_version), VK_VERSION_PATCH(d.api_version),
+                            d.is_software() ? "software" : (d.type == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU ? "integrated" : "discrete/other"),
+                            d.heap_bytes / 1073741824.0, d.unified_memory ? ", unified memory" : "");
+            }
+            gpu::ContextOptions co;
+            if (opt.count("gpu")) co.device = opt["gpu"];
+            gpu::Context ctx(co);
+            std::printf("selected: %s (memory budget %.1f GiB)\n", ctx.info().name.c_str(),
+                        ctx.query_budget_bytes() / 1073741824.0);
+            return 0;
+        }
+#endif
         std::string pack_path = opt.count("pack") ? opt["pack"] : default_pack_path(argv[0]);
         auto pack = Pack::load(pack_path);
         if (cmd == "pack-verify") {
@@ -207,6 +231,11 @@ int main(int argc, char** argv) {
             po.report_path = opt.count("report") ? opt["report"] : "";
             po.dump_dir = opt.count("dump") ? opt["dump"] : "";
             po.verbose = verbose;
+            if (opt.count("backend")) po.backend = opt["backend"];
+            if (opt.count("gpu")) po.gpu_device = opt["gpu"];
+            if (opt.count("atol")) po.gpu_atol = std::stod(opt["atol"]);
+            if (opt.count("rtol")) po.gpu_rtol = std::stod(opt["rtol"]);
+            if (opt.count("tile")) po.gpu_tile_size = std::stoi(opt["tile"]);
             return run_parity(colour, po) == 0 ? 0 : 1;
         }
         if (cmd == "render" || cmd == "digest") {
@@ -226,9 +255,28 @@ int main(int argc, char** argv) {
             std::string in_space;
             Image in = load_input(*colour, opt["in"], opt, &in_space);
             if (!in_space.empty()) d.io.input_color_space = in_space;  // RAW: linear ACES2065-1
-            Pipeline pipe(colour, d, ro);
-            Image out = pipe.process(in, tap_from_string(opt.count("inject") ? opt["inject"] : "rgb_in"),
-                                     tap_from_string(opt.count("collect") ? opt["collect"] : "rgb_out"));
+            Image out;
+            Tap collect = tap_from_string(opt.count("collect") ? opt["collect"] : "rgb_out");
+            if (opt.count("backend") && opt["backend"] == "gpu") {
+#ifdef SPECTRA_HAVE_GPU
+                gpu::ContextOptions co;
+                if (opt.count("gpu")) co.device = opt["gpu"];
+                auto ctx = std::make_shared<gpu::Context>(co);
+                gpu::GpuOptions go;
+                if (opt.count("tile")) go.tile_size = std::stoi(opt["tile"]);
+                if (opt.count("budget-mb")) go.memory_budget_bytes = std::stoull(opt["budget-mb"]) << 20;
+                gpu::GpuRenderInfo gi;
+                out = gpu::GpuPipeline(ctx, colour, d, ro, go).process(in, collect, &gi);
+                std::printf("gpu: %s, %.0f ms, peak GPU memory %.0f MiB, %d tile(s)\n", ctx->info().name.c_str(),
+                            gi.total_ms, gi.peak_gpu_bytes / 1048576.0, gi.tiles);
+                for (auto& f : gi.cpu_fallbacks) std::printf("  ran on the CPU: %s\n", f.c_str());
+#else
+                throw std::runtime_error("this build has no GPU backend");
+#endif
+            } else {
+                Pipeline pipe(colour, d, ro);
+                out = pipe.process(in, tap_from_string(opt.count("inject") ? opt["inject"] : "rgb_in"), collect);
+            }
             save_output(opt["out"], out, opt);
             std::printf("rendered %dx%dx%d -> %s\n", out.w, out.h, out.c, opt["out"].c_str());
             return 0;

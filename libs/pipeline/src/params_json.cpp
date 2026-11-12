@@ -84,7 +84,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExtendedParams, retime_print_to_midgray, push
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Params, film, print, film_render, print_render, camera, enlarger,
                                    scanner, io, debug, settings, extended)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RenderOptions, match_python, seed, reference_pixel_um,
-                                   autoexposure_ev, boost_max_raw, full_long_edge_px)
+                                   autoexposure_ev, boost_max_raw, full_long_edge_px, origin_x, origin_y)
 
 namespace {
 void deep_update(json& target, const json& patch, const std::string& path) {

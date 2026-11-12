@@ -243,6 +243,9 @@ struct RenderOptions {
     std::optional<double> autoexposure_ev;   // overrides the metered EV
     std::optional<double> boost_max_raw;     // overrides max(raw) in the highlight boost
     std::optional<double> full_long_edge_px; // long edge of the full image (for pixel size)
+    // Position of this image inside the full image. Random streams are keyed by
+    // absolute pixel position, so a crop or tile reproduces the full render's grain.
+    uint32_t origin_x = 0, origin_y = 0;
 };
 
 struct Params {

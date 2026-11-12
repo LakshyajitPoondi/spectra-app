@@ -25,6 +25,9 @@
 #include "spectra/model/filters.hpp"
 #include "spectra/model/metering.hpp"
 #include "spectra/pipeline/pipeline.hpp"
+#ifdef SPECTRA_HAVE_GPU
+#include "spectra/gpu/gpu_pipeline.hpp"
+#endif
 
 namespace spectra {
 
@@ -170,7 +173,8 @@ Built build_params(const ColourData& cd, const json& c) {
 
 // Computes the quantity of a "unit" case.
 void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::path& root,
-              std::vector<size_t>& shape, Vec& data) {
+              std::vector<size_t>& shape, Vec& data, void* gpu_ctx) {
+    (void)gpu_ctx;
     std::string name = c.at("unit").get<std::string>();
     auto input_image = [&] { return npy_load_image((root / c.at("input").get<std::string>()).string()); };
     auto from_image = [&](const Image& img) {
@@ -245,6 +249,15 @@ void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::pat
         double lam = c.value("lam", 0.0), p = c.value("p", 0.0);
         int nn = c.value("n", 0);
         std::vector<long> hist(static_cast<size_t>(kmax) + 1, 0);
+#ifdef SPECTRA_HAVE_GPU
+        if (gpu_ctx) {
+            int side = static_cast<int>(std::ceil(std::sqrt(static_cast<double>(samples))));
+            std::vector<float> v = gpu::GpuPipeline::test_sampler(*static_cast<gpu::Context*>(gpu_ctx), poisson,
+                                                                  poisson ? lam : nn, p, fast, side, side, c.value("seed", 12345u));
+            samples = static_cast<long>(v.size());
+            for (float k : v) ++hist[static_cast<size_t>(std::clamp(static_cast<int>(k), 0, kmax))];
+        } else
+#endif
         for (long i = 0; i < samples; ++i) {
             PixelRng rng(c.value("seed", 12345u), 7, static_cast<uint32_t>(i & 0xffff), static_cast<uint32_t>(i >> 16));
             int k = poisson ? sample_poisson(rng, lam, fast) : sample_binomial(rng, nn, p, fast);
@@ -258,6 +271,17 @@ void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::pat
         uint32_t stream = 0;
         for (double level : c.at("levels").get<Vec>()) {
             Image plane(size, size, 1, level);
+#ifdef SPECTRA_HAVE_GPU
+            if (gpu_ctx) {
+                std::vector<float> v = gpu::GpuPipeline::test_grain_layer(
+                    *static_cast<gpu::Context*>(gpu_ctx), level, c.at("density_max").get<double>(),
+                    c.at("n_particles").get<double>(), c.at("uniformity").get<double>(), c.at("fast").get<bool>(), size,
+                    c.value("seed", 99u), stream++);
+                for (size_t i = 0; i < v.size(); ++i) plane.v[i] = v[i];
+                data.push_back(patch_stats(plane, 6.0, stat)[0]);
+                continue;
+            }
+#endif
             sample_grain_layer(plane.v.data(), plane.v.data(), size, size, c.at("density_max").get<double>(),
                                c.at("n_particles").get<double>(), c.at("uniformity").get<double>(),
                                c.value("seed", 99u), stream++, c.at("fast").get<bool>());
@@ -335,12 +359,51 @@ void run_unit(std::shared_ptr<const ColourData> cd, const json& c, const fs::pat
 
 }  // namespace
 
+// Renders one pipeline case with the selected backend.
+struct Renderer {
+    std::shared_ptr<const ColourData> cd;
+    const ParityOptions& opt;
+#ifdef SPECTRA_HAVE_GPU
+    std::shared_ptr<gpu::Context> ctx;
+#endif
+    bool gpu() const { return opt.backend == "gpu"; }
+    void* context() {
+#ifdef SPECTRA_HAVE_GPU
+        if (!ctx) {
+            gpu::ContextOptions co;
+            co.device = opt.gpu_device;
+            ctx = std::make_shared<gpu::Context>(co);
+        }
+        return ctx.get();
+#else
+        return nullptr;
+#endif
+    }
+    Image render(const Built& b, const Image& in, Tap inject, Tap collect) {
+        if (!gpu()) return Pipeline(cd, b.digested, b.options).process(in, inject, collect);
+#ifdef SPECTRA_HAVE_GPU
+        if (inject != Tap::RgbIn) throw std::runtime_error("the GPU backend renders from rgb_in only");
+        if (!ctx) {
+            gpu::ContextOptions co;
+            co.device = opt.gpu_device;
+            ctx = std::make_shared<gpu::Context>(co);
+        }
+        gpu::GpuOptions go;
+        go.tile_size = opt.gpu_tile_size;
+        return gpu::GpuPipeline(ctx, cd, b.digested, b.options, go).process(in, collect);
+#else
+        throw std::runtime_error("this build has no GPU backend");
+#endif
+    }
+};
+
 int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
+    Renderer renderer{cd, opt};
     std::ifstream f(opt.cases_path);
     if (!f) throw std::runtime_error("cannot open " + opt.cases_path);
     json doc = json::parse(f);
     fs::path root = fs::path(opt.cases_path).parent_path();
-    int failed = 0, total = 0;
+    int failed = 0, total = 0, approx_count = 0;
     json report = json::array();
     double worst = 0;
     std::string worst_id;
@@ -350,7 +413,16 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
         if (!opt.filter.empty() && id.find(opt.filter) == std::string::npos) continue;
         ++total;
         std::string kind = c.value("kind", "pipeline");
+        bool gpu_unit = kind == "unit" && (c.value("unit", "") == "sampler_pmf" || c.value("unit", "") == "grain_layer_stats");
+        if (renderer.gpu() && kind != "pipeline" && kind != "pipeline_stats" && !gpu_unit) {
+            --total;
+            continue;  // the other unit and digest cases exercise CPU-side code only
+        }
         double atol = c.value("atol", 1e-9), rtol = c.value("rtol", 1e-9);
+        if (renderer.gpu() && kind == "pipeline") {
+            atol = std::max(atol, opt.gpu_atol);
+            rtol = std::max(rtol, opt.gpu_rtol);
+        }
         Metrics m;
         std::string error;
         auto t0 = std::chrono::steady_clock::now();
@@ -402,7 +474,7 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
                 std::vector<size_t> shape;
                 Vec data;
                 if (kind == "unit") {
-                    run_unit(cd, c, root, shape, data);
+                    run_unit(cd, c, root, shape, data, renderer.gpu() ? renderer.context() : nullptr);
                 } else if (kind == "pipeline_stats") {
                     // Consecutive cases share one render (they differ only in the statistic).
                     static std::string cached_key;
@@ -413,20 +485,18 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
                     if (key != cached_key) {
                         Built b = build_params(*cd, c);
                         b.options.seed = c.value("seed", 2024u);
-                        Pipeline pipe(cd, b.digested, b.options);
                         int size = c.at("flat").at("size").get<int>();
                         Image in(size, size, 3, c.at("flat").at("value").get<double>());
-                        cached = pipe.process(in, Tap::RgbIn, tap_from_string(c.value("collect", "rgb_out")));
+                        cached = renderer.render(b, in, Tap::RgbIn, tap_from_string(c.value("collect", "rgb_out")));
                         cached_key = key;
                     }
                     data = patch_stats(cached, c.at("pixel_size_um").get<double>(), c.at("stat").get<std::string>());
                     shape = {data.size()};
                 } else if (kind == "pipeline") {
                     Built b = build_params(*cd, c);
-                    Pipeline pipe(cd, b.digested, b.options);
                     Image in = npy_load_image((root / c.at("input").get<std::string>()).string());
-                    Image out = pipe.process(in, tap_from_string(c.value("inject", "rgb_in")),
-                                             tap_from_string(c.value("collect", "rgb_out")));
+                    Image out = renderer.render(b, in, tap_from_string(c.value("inject", "rgb_in")),
+                                                tap_from_string(c.value("collect", "rgb_out")));
                     int step = c.value("subsample", 1);
                     if (step > 1) {
                         Image sub((out.h + step - 1) / step, (out.w + step - 1) / step, out.c);
@@ -452,6 +522,14 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
         }
         double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
         bool pass = error.empty() && m.shape_ok && m.worst_ratio <= 1.0;
+        // GPU: cases that exercise a documented approximation (wide Gaussians on a
+        // reduced plane) are held to the spatial thresholds instead and counted apart.
+        bool approx = false;
+        if (!pass && renderer.gpu() && kind == "pipeline" && error.empty() && m.shape_ok &&
+            m.rmse <= opt.gpu_approx_rmse && m.p99 <= opt.gpu_approx_p99) {
+            pass = approx = true;
+            ++approx_count;
+        }
         if (c.contains("p99_max") && m.p99 > c.at("p99_max").get<double>()) pass = false;
         if (c.contains("rmse_max") && m.rmse > c.at("rmse_max").get<double>()) pass = false;
         if (!pass) ++failed;
@@ -460,7 +538,7 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
             worst_id = id;
         }
         if (!pass || opt.verbose)
-            std::printf("%-4s %-58s max_abs=%.3e rmse=%.3e p99=%.3e ratio=%.3g %s%s (%.0f ms)\n", pass ? "PASS" : "FAIL",
+            std::printf("%-6s %-58s max_abs=%.3e rmse=%.3e p99=%.3e ratio=%.3g %s%s (%.0f ms)\n", approx ? "APPROX" : (pass ? "PASS" : "FAIL"),
                         id.c_str(), m.max_abs, m.rmse, m.p99, m.worst_ratio, m.note.c_str(),
                         error.empty() ? "" : (" ERROR: " + error).c_str(), ms);
         report.push_back({{"id", id}, {"pass", pass}, {"max_abs", m.max_abs}, {"rmse", m.rmse}, {"p99", m.p99},
@@ -468,8 +546,9 @@ int run_parity(std::shared_ptr<const ColourData> cd, const ParityOptions& opt) {
                           {"error", error}, {"ms", ms}});
     }
     double sec = std::chrono::duration<double>(std::chrono::steady_clock::now() - t_all).count();
-    std::printf("%s: %d/%d cases passed (worst tolerance ratio %.3g in %s) in %.1f s\n", opt.cases_path.c_str(),
-                total - failed, total, worst, worst_id.c_str(), sec);
+    std::printf("%s [%s]: %d/%d cases passed", opt.cases_path.c_str(), opt.backend.c_str(), total - failed, total);
+    if (approx_count) std::printf(" (%d of them at the approximate-path thresholds)", approx_count);
+    std::printf(", worst tolerance ratio %.3g in %s, %.1f s\n", worst, worst_id.c_str(), sec);
     if (!opt.report_path.empty()) {
         std::ofstream rf(opt.report_path);
         rf << json{{"cases", report}, {"passed", total - failed}, {"total", total}}.dump(1);

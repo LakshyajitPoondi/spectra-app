@@ -26,3 +26,20 @@ endif()
 add_executable(test_extended test_extended.cpp)
 target_link_libraries(test_extended PRIVATE spectra_pipeline)
 add_test(NAME extended_sanity COMMAND test_extended ${SPECTRA_PACK})
+
+# GPU backend parity. Runs on whatever Vulkan device is selected (SPECTRA_GPU
+# overrides); in CI that is Mesa lavapipe, a software renderer.
+if(SPECTRA_HAVE_GPU)
+  add_test(NAME gpu_info COMMAND spectra-cli gpu-info)
+  set_tests_properties(gpu_info PROPERTIES LABELS "gpu")
+  foreach(suite t2_nonspatial t3_spatial t4_stochastic t5_sweeps)
+    add_test(NAME gpu_parity_${suite} COMMAND spectra-cli parity
+             ${CMAKE_CURRENT_SOURCE_DIR}/golden/${suite}/cases.json --backend gpu --pack ${SPECTRA_PACK})
+    set_tests_properties(gpu_parity_${suite} PROPERTIES LABELS "gpu" TIMEOUT 3600)
+  endforeach()
+  # Fast preview: the GPU evaluates the spectral stages directly instead of the
+  # reference's 17^3 LUTs, so it is held to the looser fast-preview threshold.
+  add_test(NAME gpu_parity_fast_preview COMMAND spectra-cli parity
+           ${CMAKE_CURRENT_SOURCE_DIR}/golden/fast_preview/cases.json --backend gpu --atol 0.015 --pack ${SPECTRA_PACK})
+  set_tests_properties(gpu_parity_fast_preview PROPERTIES LABELS "gpu" TIMEOUT 3600)
+endif()

@@ -1,0 +1,57 @@
+#version 450
+// Output transfer function: the colour space's CCTF (after colour-science's
+// RGB_to_RGB matrix), or the Extended PQ / HLG signal.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;   // 3x3 matrix
+
+float encode(float v) {
+    uint id = pc.u[3];
+    if (id == 1u) return v <= 0.0031308 ? v * 12.92 : 1.055 * spow(v, 1.0 / 2.4) - 0.055;
+    if (id == 2u) {
+        float et = pow(16.0, 1.8 / (1.0 - 1.8));
+        return et > v ? v * 16.0 : spow(v, 1.0 / 1.8);
+    }
+    if (id == 3u) {
+        const float a = 1.099, b = 0.018;
+        return b > v ? v * 4.5 : a * spow(v, 0.45) - (a - 1.0);
+    }
+    if (id == 4u) return pow(v, 1.0 / pc.f[0]);
+    return v;
+}
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint i = (g.y * w + g.x) * 3u;
+    vec3 rgb = vec3(S.d[i], S.d[i + 1u], S.d[i + 2u]);
+    uint hdr = pc.u[4];
+    if (hdr == 0u) {
+        if (pc.u[5] != 0u) {
+            vec3 m = vec3(P.p[0] * rgb.r + P.p[1] * rgb.g + P.p[2] * rgb.b, P.p[3] * rgb.r + P.p[4] * rgb.g + P.p[5] * rgb.b,
+                          P.p[6] * rgb.r + P.p[7] * rgb.g + P.p[8] * rgb.b);
+            rgb = vec3(encode(m.r), encode(m.g), encode(m.b));
+        }
+    } else {
+        float peak = pc.f[1];
+        for (int k = 0; k < 3; ++k) {
+            float nits = clamp(rgb[k], 0.0, peak);
+            if (hdr == 1u) {
+                const float m1 = 2610.0 / 16384.0, m2 = 2523.0 / 32.0, c1 = 3424.0 / 4096.0, c2 = 2413.0 / 128.0, c3 = 2392.0 / 128.0;
+                float y = pow(nits / 10000.0, m1);
+                rgb[k] = pow((c1 + c2 * y) / (1.0 + c3 * y), m2);
+            } else {
+                float gamma = max(1.0 + 0.42 * log(max(peak, 1.0) / 1000.0) / log(10.0), 1e-6);
+                float e = pow(clamp(nits / peak, 0.0, 1.0), 1.0 / gamma);
+                const float a = 0.17883277, b = 1.0 - 4.0 * a, c = 0.55991073;
+                rgb[k] = e <= 1.0 / 12.0 ? sqrt(3.0 * e) : a * log(12.0 * e - b) + c;
+            }
+        }
+    }
+    O.d[i] = rgb.r;
+    O.d[i + 1u] = rgb.g;
+    O.d[i + 2u] = rgb.b;
+}

@@ -1,0 +1,108 @@
+#version 450
+// Scanner colour: XYZ (+ glare) -> output RGB -> output gamut compression
+// (off, ACES RGC, OkLCh, OkLrab) or the Extended HDR tone map.
+#include "common.glsl"
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set = 0, binding = 0) readonly buffer B0 { float d[]; } S;   // xyz
+layout(set = 0, binding = 1) readonly buffer B1 { float d[]; } G;   // glare amount, 1 channel
+layout(set = 0, binding = 2) buffer B2 { float d[]; } O;
+layout(set = 0, binding = 3) readonly buffer B3 { float d[]; } T;   // C_max table [n_l][n_h]
+layout(set = 0, binding = 7) readonly buffer B7 { float p[]; } P;
+// P: xyz->rgb (adapted) @0, illuminant xyz @9, rgb->xyz @12, xyz->rgb @21, oklab M1 @30, M2 @39,
+//    M1^-1 @48, M2^-1 @57, knee @66, lightness knee @69, l_grid first/last @72, l_white @74,
+//    hdr reference white, peak, exposure scale @75
+
+vec3 mul3(uint off, vec3 v) {
+    return vec3(P.p[off] * v.x + P.p[off + 1u] * v.y + P.p[off + 2u] * v.z,
+                P.p[off + 3u] * v.x + P.p[off + 4u] * v.y + P.p[off + 5u] * v.z,
+                P.p[off + 6u] * v.x + P.p[off + 7u] * v.y + P.p[off + 8u] * v.z);
+}
+
+float knee(float d, float thr, float lim, float pw) {
+    if (!(d > thr)) return d;
+    float scale = lim - thr;
+    float x = (d - thr) / scale;
+    return thr + scale * (x / pow(1.0 + pow(x, pw), 1.0 / pw));
+}
+
+float cmaxLookup(float L, float hue) {
+    int nl = int(pc.u[6]), nh = int(pc.u[7]);
+    float l0 = P.p[72], l1 = P.p[73];
+    L = clamp(L, l0, l1);
+    float hstep = 2.0 * PI / float(nh);
+    float hidx = (hue + PI) / hstep;
+    float fl = floor(hidx);
+    int hl = int(fl) % nh;
+    if (hl < 0) hl += nh;
+    int hh = (hl + 1) % nh;
+    float hf = hidx - fl;
+    float lidx = (L - l0) / (l1 - l0) * float(nl - 1);
+    int ll = clamp(int(floor(lidx)), 0, nl - 2);
+    float lf = lidx - float(ll);
+    float v00 = T.d[ll * nh + hl], v01 = T.d[ll * nh + hh], v10 = T.d[(ll + 1) * nh + hl], v11 = T.d[(ll + 1) * nh + hh];
+    return v00 * (1.0 - lf) * (1.0 - hf) + v01 * (1.0 - lf) * hf + v10 * lf * (1.0 - hf) + v11 * lf * hf;
+}
+
+vec3 compress(vec3 rgb) {
+    uint algo = pc.u[4];
+    vec3 kn = vec3(P.p[66], P.p[67], P.p[68]);
+    if (algo == 0u) return rgb;
+    if (algo == 1u) {
+        float ach = max(rgb.r, max(rgb.g, rgb.b));
+        if (!(ach > 1e-12)) return rgb;
+        vec3 o;
+        for (int k = 0; k < 3; ++k) o[k] = ach * (1.0 - knee((ach - rgb[k]) / ach, kn.x, kn.y, kn.z));
+        return o;
+    }
+    vec3 lms = mul3(30u, mul3(12u, rgb));
+    lms = vec3(spow(lms.x, 1.0 / 3.0), spow(lms.y, 1.0 / 3.0), spow(lms.z, 1.0 / 3.0));
+    vec3 lab = mul3(39u, lms);
+    float L = lab.x;
+    if (pc.u[5] != 0u) L = knee(L / P.p[74], P.p[69], P.p[70], P.p[71]) * P.p[74];
+    float lookup = L;
+    if (algo == 3u) {
+        const float k1 = 0.206, k2 = 0.03, k3 = (1.0 + k1) / (1.0 + k2);
+        float t = k3 * L - k1;
+        lookup = 0.5 * (t + sqrt(t * t + 4.0 * k2 * k3 * L));
+    }
+    float C = length(lab.yz), hue = atan(lab.z, lab.y);
+    float safeC = max(cmaxLookup(lookup, hue), 1e-9);
+    float cn = knee(C / safeC, kn.x, kn.y, kn.z) * safeC;
+    vec3 l2 = mul3(57u, vec3(L, cn * cos(hue), cn * sin(hue)));
+    l2 = vec3(spow(l2.x, 3.0), spow(l2.y, 3.0), spow(l2.z, 3.0));
+    return mul3(21u, mul3(48u, l2));
+}
+
+void main() {
+    uint w = pc.u[0], h = pc.u[1];
+    uvec2 g = gl_GlobalInvocationID.xy;
+    if (g.x >= w || g.y >= h) return;
+    uint i = (g.y * w + g.x) * 3u;
+    vec3 xyz = vec3(S.d[i], S.d[i + 1u], S.d[i + 2u]);
+    if (pc.u[3] != 0u) xyz += (G.d[g.y * w + g.x] / 100.0) * vec3(P.p[9], P.p[10], P.p[11]);
+    vec3 rgb = mul3(0u, xyz);
+    if (pc.f[0] != 0.0) {
+        // Extended HDR output: luminance tone map to display nits.
+        float ref = P.p[75], peak = P.p[76];
+        vec3 nits = rgb * P.p[77];
+        float y = dot(nits, vec3(0.2627, 0.6780, 0.0593));
+        if (!(y > 1e-6) || isinf(y)) {
+            nits = vec3(0.0);
+        } else {
+            float mapped = y;
+            if (pc.f[1] != 0.0) mapped = min(y, peak);
+            else if (y > ref) {
+                float sh = max(peak - ref, 1.0);
+                mapped = ref + sh * (1.0 - exp(-(y - ref) / sh));
+            }
+            nits *= mapped / y;
+        }
+        if (pc.u[4] != 0u) nits = compress(nits / peak) * peak;
+        for (int k = 0; k < 3; ++k) rgb[k] = isnan(nits[k]) ? 0.0 : clamp(nits[k], 0.0, peak);
+    } else {
+        rgb = compress(rgb);
+    }
+    O.d[i] = rgb.r;
+    O.d[i + 1u] = rgb.g;
+    O.d[i + 2u] = rgb.b;
+}
