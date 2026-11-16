@@ -10,15 +10,26 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libraw-dev libtiff-dev libpng-dev libjpeg-turbo8-dev libopenexr-dev \
-            libvulkan-dev mesa-vulkan-drivers glslang-tools glslc vulkan-tools
+          sudo apt-get install -y libraw-dev libtiff-dev libpng-dev libjpeg-turbo8-dev libopenexr-dev zlib1g-dev \
+            libvulkan-dev mesa-vulkan-drivers glslang-tools glslc vulkan-tools qt6-base-dev ninja-build
+      - name: RAW test files (CC0, raw.pixls.us)
+        uses: actions/cache@v4
+        with:
+          path: test_data/raw/pixls
+          key: raw-pixls-${{ hashFiles('scripts/fetch_test_raws.py', 'test_data/SOURCES.md') }}
+      - name: Fetch RAW test files
+        # A download problem must not fail the build: the RAW tests then report "skipped".
+        run: python3 scripts/fetch_test_raws.py || echo "RAW test files unavailable"
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --parallel
       - name: Test
-        # GPU suites run on Mesa lavapipe (software Vulkan). The 60 MP memory test is left to local runs.
+        # GPU suites and the app run on Mesa lavapipe (software Vulkan), the app without a display.
+        # The 60 MP memory test is left to local runs.
         run: ctest --test-dir build -LE memory --output-on-failure
+      - name: Interactive-path benchmark (software renderer, for the log)
+        run: ./build/spectra-cli bench-preview --mp 6 --repeats 3
   windows:
     runs-on: windows-2022
     env:
@@ -29,6 +40,12 @@ jobs:
         with:
           path: vcpkg-cache
           key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          arch: win64_msvc2022_64
+          cache: true
       - name: Configure
         run: >
           cmake -S . -B build
@@ -37,5 +54,33 @@ jobs:
       - name: Build
         run: cmake --build build --config Release --parallel
       - name: Test
-        # The Windows runner has no Vulkan device; the GPU suites run on Linux (lavapipe).
+        # The Windows runner has no Vulkan device: the GPU suites run on Linux (lavapipe)
+        # and the app self-tests exercise the CPU fallback here.
         run: ctest --test-dir build -C Release -LE "gpu|memory" --output-on-failure
+      - name: Package (installer and portable zip)
+        working-directory: build
+        run: cpack -C Release -G "NSIS;ZIP"
+      - name: Check the installed layout
+        # Install to a scratch folder and run from there with a bare PATH, so a
+        # missing DLL or plugin fails here and not on a user's machine.
+        shell: pwsh
+        run: |
+          cmake --install build --config Release --prefix stage
+          Get-ChildItem stage -Recurse -File | ForEach-Object { $_.FullName.Substring((Resolve-Path stage).Path.Length) } | Sort-Object
+          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+          Remove-Item Env:QT_PLUGIN_PATH -ErrorAction SilentlyContinue
+          Remove-Item Env:QML2_IMPORT_PATH -ErrorAction SilentlyContinue
+          & stage\bin\spectra-cli.exe pack-verify
+          if ($LASTEXITCODE -ne 0) { throw "spectra-cli failed in the installed layout" }
+          $out = Join-Path $env:RUNNER_TEMP "selftest"
+          $p = Start-Process -FilePath "stage\bin\spectra-app.exe" -ArgumentList "--cpu", "--selftest", "`"$out`"" -Wait -PassThru
+          Get-ChildItem $out
+          if ($p.ExitCode -ne 0) { throw "the installed app failed its self-test (exit code $($p.ExitCode))" }
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: spectra-app-windows-installer
+          path: |
+            build/spectra-app-*.exe
+            build/spectra-app-*.zip
+          if-no-files-found: error

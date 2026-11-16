@@ -46,6 +46,8 @@ std::string default_pack_path(const char* argv0) {
             if (!base.has_parent_path()) break;
             base = base.parent_path();
         }
+    fs::path shared = fs::absolute(argv0).parent_path() / ".." / "share" / "spectra-app" / "data" / "spektrafilm.sfpk";
+    if (fs::exists(shared)) return shared.string();
     return "data/spektrafilm.sfpk";
 }
 

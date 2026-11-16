@@ -5,6 +5,7 @@
 #include <QCommandLineParser>
 #include <QDir>
 #include <QFileInfo>
+#include <QIcon>
 #include <QMessageBox>
 #include <QPalette>
 #include <QSettings>
@@ -137,6 +138,7 @@ int main(int argc, char** argv) {
     QCoreApplication::setApplicationVersion(product::kVersion);
     QGuiApplication::setApplicationDisplayName(product::kName);
     applyTheme(app);
+    app.setWindowIcon(QIcon(":/app.png"));
 
     qRegisterMetaType<spectra::app::PreviewRequest>();
     qRegisterMetaType<spectra::app::PreviewInfo>();
@@ -178,6 +180,7 @@ int main(int argc, char** argv) {
     app::MainWindow window(pack, pack_path, cli.isSet(cpu));
     window.show();
     std::unique_ptr<SelfTest> test;
+    window.setUnattended(cli.isSet(selftest));
     if (cli.isSet(selftest)) test = std::make_unique<SelfTest>(&window, cli.value(selftest), cli.value(screenshot));
     else if (!cli.positionalArguments().isEmpty()) window.openFiles(cli.positionalArguments());
     if (!cli.isSet(selftest) && cli.isSet(screenshot)) {

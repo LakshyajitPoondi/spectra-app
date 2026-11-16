@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 cmake_minimum_required(VERSION 3.24)
+# With the vcpkg toolchain: also copy the DLLs of vcpkg libraries on install.
+set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON CACHE BOOL "")
 project(spectra-app VERSION 0.6.0 LANGUAGES CXX)
 
 # The product name shown in the app, the installer and exported files. This is
@@ -174,6 +176,9 @@ if(SPECTRA_BUILD_APP)
       apps/spectra-app/preview_widget.cpp apps/spectra-app/preview_widget.hpp
       apps/spectra-app/render_controller.cpp apps/spectra-app/render_controller.hpp
       apps/spectra-app/resources/resources.qrc)
+    if(WIN32)
+      target_sources(spectra-app PRIVATE apps/spectra-app/resources/app.rc)
+    endif()
     target_link_libraries(spectra-app PRIVATE spectra_engine Qt6::Core Qt6::Gui Qt6::Widgets)
     target_compile_definitions(spectra-app PRIVATE SPECTRA_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
       QT_NO_KEYWORDS QT_DISABLE_DEPRECATED_BEFORE=0x060400)
@@ -183,6 +188,57 @@ if(SPECTRA_BUILD_APP)
     message(WARNING "Qt 6 (Core, Gui, Widgets) not found: building without the desktop application")
   endif()
 endif()
+
+# ---- install and packaging ------------------------------------------------------
+# Layout: bin/ (programs and their DLLs), data/ (the data pack), doc/.
+# Windows: "cpack -G NSIS" builds the installer, "cpack -G ZIP" a portable folder.
+include(GNUInstallDirs)
+set(SPECTRA_DATA_DIR data)
+set(SPECTRA_DOC_DIR doc)
+if(NOT WIN32)
+  set(SPECTRA_DATA_DIR ${CMAKE_INSTALL_DATADIR}/spectra-app/data)
+  set(SPECTRA_DOC_DIR ${CMAKE_INSTALL_DOCDIR})
+endif()
+install(TARGETS spectra-cli RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES data/spektrafilm.sfpk data/pack_manifest.json data/SPEKTRAFILM_LICENSE.txt data/CHANGELOG.txt
+        DESTINATION ${SPECTRA_DATA_DIR})
+install(FILES LICENSE THIRD_PARTY_NOTICES.md LICENSES.md README.md DESTINATION ${SPECTRA_DOC_DIR})
+if(SPECTRA_HAVE_APP)
+  install(TARGETS spectra-app RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+  if(WIN32)
+    # Qt's DLLs and plugins (windeployqt), at install time.
+    qt_generate_deploy_app_script(TARGET spectra-app OUTPUT_SCRIPT SPECTRA_QT_DEPLOY_SCRIPT
+                                  NO_UNSUPPORTED_PLATFORM_ERROR NO_TRANSLATIONS)
+    install(SCRIPT ${SPECTRA_QT_DEPLOY_SCRIPT})
+  endif()
+endif()
+if(WIN32)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR})
+  include(InstallRequiredSystemLibraries)
+endif()
+
+set(CPACK_PACKAGE_NAME "${SPECTRA_PRODUCT_NAME}")
+set(CPACK_PACKAGE_VENDOR "spectra-app")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GPU-accelerated spectral film simulation (a port of spektrafilm)")
+set(CPACK_PACKAGE_FILE_NAME "spectra-app-${PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${SPECTRA_PRODUCT_NAME}")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_EXECUTABLES "spectra-app;${SPECTRA_PRODUCT_NAME}")
+set(CPACK_NSIS_DISPLAY_NAME "${SPECTRA_PRODUCT_NAME}")
+set(CPACK_NSIS_PACKAGE_NAME "${SPECTRA_PRODUCT_NAME}")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\spectra-app.exe")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/apps/spectra-app/resources/app.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/apps/spectra-app/resources/app.ico")
+set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/andreavolpato/spektrafilm")
+set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
+if(WIN32)
+  set(CPACK_GENERATOR "NSIS;ZIP")
+else()
+  set(CPACK_GENERATOR "TGZ")
+endif()
+include(CPack)
 
 if(SPECTRA_BUILD_TESTS)
   enable_testing()

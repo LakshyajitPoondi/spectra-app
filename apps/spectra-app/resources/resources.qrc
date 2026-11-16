@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/">
     <file>params_manifest.json</file>
+    <file>app.png</file>
     <file alias="THIRD_PARTY_NOTICES.md">../../../THIRD_PARTY_NOTICES.md</file>
     <file alias="SPEKTRAFILM_LICENSE.txt">../../../data/SPEKTRAFILM_LICENSE.txt</file>
   </qresource>

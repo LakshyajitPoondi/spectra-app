@@ -53,6 +53,8 @@ public:
     void exportCurrentTo(const QString& path);
     void exportLutTo(const QString& path);
     bool engineHasGpu() const { return gpu_; }
+    // No dialogs: results are reported through the signals only.
+    void setUnattended(bool on) { unattended_ = on; }
 
 Q_SIGNALS:
     void engineStarted();
@@ -123,6 +125,7 @@ private:
     bool engine_ready_ = false, gpu_ = false, have_image_ = false, image_is_proxy_ = false, calibrating_ = false;
     QString device_, device_id_, engine_note_, notice_, decode_info_;
     nlohmann::json clipboard_;
+    bool unattended_ = false;
     Params synthetic_base_;
 };
 

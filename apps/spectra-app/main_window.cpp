@@ -370,7 +370,7 @@ void MainWindow::startEngine() {
         }
         QString text = failed == 0 && message.isEmpty() ? tr("Exported %n file(s).", nullptr, ok) : message;
         status_render_->setText(text.section('\n', 0, 0));
-        if (failed > 0 && isVisible() && QApplication::platformName() != "offscreen")
+        if (failed > 0 && !unattended_)
             QMessageBox::warning(this, product::kName, text);
         Q_EMIT exportDone(ok, failed, message);
         requestPreview();  // the full render released the preview caches
@@ -748,7 +748,7 @@ ExportChoice askExportOptions(QWidget* parent, const QString& fixed_format, bool
 
 void MainWindow::runExport(const QVector<ExportJob>& jobs) {
     if (jobs.isEmpty()) return;
-    if (QApplication::platformName() != "offscreen") {
+    if (!unattended_) {
         progress_ = new QProgressDialog(tr("Exporting…"), tr("Cancel"), 0, jobs.size() * 100, this);
         progress_->setWindowModality(Qt::WindowModal);
         progress_->setMinimumDuration(300);
