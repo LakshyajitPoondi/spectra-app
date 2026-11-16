@@ -4,14 +4,183 @@
 |---|---|---|
 | 1 | Research and plan | Done, approved |
 | 2 | CPU reference pipeline in C++ + parity harness against Python | Done, approved |
-| 3 | RAW / image I/O, Extended features, reference gaps, Vulkan compute port, parity, benchmarks | **Done on software Vulkan; awaiting your GPU run and approval** |
-| 4 | UI + preview / final render system | Not started |
-| 5 | Presets, batch, LUT export, polish | Not started |
-| 6 | Windows installer + README with build steps | Not started |
+| 3 | RAW / image I/O, Extended features, reference gaps, Vulkan compute port, parity, benchmarks | Done, approved |
+| 4 | UI + preview / final render system | **Done; GPU path verified on software Vulkan only** |
+| 5 | Presets, batch, LUT export, polish | **Done** |
+| 6 | Windows installer + README with build steps | **Done; the installer is a CI artifact** |
+
+Phases 4 to 6 were done in one run without checkpoints, as instructed. What remains is one
+local run on the Arc 140T (`scripts\run_local_checks.ps1`) and a tuning pass on its report.
 
 Reference baseline: `andreavolpato/spektrafilm`, branch `dev`, commit
 `6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507`. The hash is recorded in the data pack
 (`spectra-cli info`) and in every `cases.json`.
+
+## Phases 4 to 6 results
+
+### What exists now
+
+- **Desktop app** (`apps/spectra-app`, Qt 6 Widgets): preview (fitted or 100 % with panning,
+  before / after), histogram, image strip, parameter panels, export, batch export, LUT export,
+  presets, settings, About with the attribution. Parameter labels, ranges, steps and tooltips
+  are exported from the reference GUI's own manifest (107 fields in 14 groups), so every
+  parameter the reference GUI offers is there, in basic / advanced tiers.
+- **Render engine** (`libs/engine`, no UI dependency, shared by the app and the CLI): owns the
+  Vulkan device, the loaded image, preview sizes, whole-image statistics, stage caches and the
+  calibration; falls back to the CPU reference when there is no Vulkan device.
+- **CLI additions**: `calibrate`, `bench-preview`, `batch`, `lut`, `presets`.
+- **Installer**: NSIS installer and a portable zip from `cpack`; Qt is deployed with
+  windeployqt, the vcpkg DLLs and the MSVC runtime are included. CI builds both, installs to a
+  scratch folder, runs the installed app's self-test from a bare `PATH`, and uploads them as
+  the artifact `spectra-app-windows-installer`.
+- **LibRaw 0.22.0** is fetched and built at a pinned commit (the version rawpy uses).
+
+### GPU optimisations applied without hardware numbers
+
+| What | How | Evidence |
+|---|---|---|
+| Fewer submissions | Dispatches are recorded and submitted in batches, bounded by count and by pixels touched | 78 dispatches per preview go out in 16 submissions (was 78); results are bit-identical |
+| Short submissions | The work bound keeps one submission to roughly 100 ms (calibrated), far from Windows' 2 s GPU watchdog, and is the granularity of cancellation | Calibration log |
+| Persistent buffers | Planes are pooled and reused by size; kernel parameter buffers are host-visible | Peak GPU memory at 20 / 30 MP unchanged (below) |
+| Stage cache | Film exposure, development, grain and print outputs stay on the GPU; a parameter change re-runs only what is downstream | Cached = fresh for 153 parameter changes, exactly |
+| Table reuse | The spectral-upsampling LUT and the gamut boundary are memoised; the draft and refined pass share one pipeline object | About 20 ms less CPU time per slider change |
+| Uploads overlap compute | A RAW file's full decode runs on a pool thread while the GPU renders the fast half-size decode; in tiled renders the next tile is cut and the previous tile stored on CPU threads while the GPU renders | — |
+| Asynchronous preview | The UI thread only posts requests to the render thread. A newer request drops queued ones and cuts the refinement of the running one short at the next batch | App self-test; `engine` test (cancellation leaves no GPU memory behind) |
+| Progressive preview | Every change renders a low-resolution draft first (never interrupted, so a moving slider always shows something), then the refined preview | App self-test counts both |
+
+### Self-tuning
+
+On first launch for a GPU (and from Settings > "Re-run performance calibration", or
+`spectra-cli calibrate`) the app renders a test picture a few times and chooses:
+
+- the **batching** (1, 8, 48 or 256 dispatches per submission, whichever is fastest) and the
+  work bound that gives about 100 ms per submission;
+- the **refined preview size**: the largest of 768 / 1024 / 1280 / 1600 / 1920 / 2560 px whose
+  complete render is predicted under 150 ms (so the common slider change, which re-runs only
+  later stages, lands well under 50 ms);
+- the **draft size**: the largest of 256 to 800 px predicted under 40 ms;
+- the **GPU memory budget** (60 % of what the driver reports, at most 4 GiB) and with it the
+  tile size for images that do not fit.
+
+The result is cached per device and driver version. Settings can override the preview size,
+the budget and the tile size by hand.
+
+### Parity and tests (all passing locally: 22 ctest targets, one skipped)
+
+| Target | What | Result |
+|---|---|---|
+| `parity_*` (6) | CPU against the Python goldens, 1,270 cases | pass, unchanged |
+| `gpu_parity_*` (5), `gpu_tiling`, `gpu_info` | GPU (lavapipe) against the Python goldens, tiling, Extended | pass, unchanged by batching, pooling and caching |
+| `engine` | Stage cache against fresh renders for every parameter; cancellation; batching; previews at both levels; 100 % view against the full render; calibration; presets; LUT | pass. Cache: max difference 0 over 153 changes. 100 % view centre vs full render: 0. Draft vs refined: mean 0.0006 |
+| `raw_pixls` | 7 RAW files (Canon R6 x2, Sony, Nikon x2 incl. portrait, Fujifilm X-Trans, square Panasonic): fast and full decode, orientation, preview | pass |
+| `raw_canon_r6` | your own R6 files | **skipped** (folder empty), by design |
+| `app_selftest`, `app_selftest_cpu` | The app, unattended and without a display: start, calibrate, preview, change a parameter, export an image and a LUT; on the Vulkan path and on the CPU fallback | pass |
+| `io_roundtrip`, `sanity`, `extended_sanity`, `pack_verify` | as before | pass |
+
+RAW decode against rawpy with LibRaw 0.22.0: every Bayer file is bit-identical; the X-Trans
+file differs by 8.9e-6 mean relative (was about 2 %). See DEVIATIONS D-11.
+
+### Numbers (Mesa lavapipe on 4 CPU cores; not representative of any GPU)
+
+Interactive path, Canon EOS R6 sample (`spectra-cli bench-preview --in canon_r6.cr3`); the
+calibration chose a 768 px preview and a 256 px draft on this renderer:
+
+| | Draft | Refined | Target |
+|---|---|---|---|
+| RAW open to first preview | 0.54 s | 1.02 s | < 1.5 s |
+| Slider: scanner (unsharp mask) | 17 ms | 84 ms | < 50 ms |
+| Slider: print exposure / filters | 25 to 28 ms | 155 ms | < 50 ms |
+| Slider: grain | 40 ms | 257 ms | < 50 ms |
+| Slider: film development (couplers) | 47 ms | 328 ms | < 50 ms |
+| Slider: camera exposure (everything) | 41 ms | 345 ms | < 50 ms |
+
+Full resolution (`spectra-cli bench`):
+
+| Image | Tiles | Peak GPU working set | Peak process memory |
+|---|---|---|---|
+| 20 MP (5472×3648) | 1 | 1.34 GiB | 1.90 GiB |
+| 30 MP (6704×4464) | 1 | 2.01 GiB | 2.82 GiB |
+| 60 MP (9488×6320) | 4 | 2.35 GiB | 6.54 GiB (limit 10 GB: OK) |
+
+Full-render times on this renderer are as in phase 3 (about 22 s and 35 s at 20 and 30 MP).
+The 60 MP process peak rose from 5.4 to 6.5 GiB because the next tile is now prepared while the
+current one renders.
+
+### Decisions taken in phases 4 to 6
+
+| # | Decision | Why |
+|---|---|---|
+| 1 | Qt 6 **Widgets**, not QML; the preview is painted from an 8-bit image the render thread hands over | Simplest robust path; the GPU work is compute-only and has no swapchain to share. A zero-copy presentation path is a possible later optimisation |
+| 2 | The engine is a plain C++ library without Qt | The CLI, the tests and the app drive exactly the same code |
+| 3 | **Stock defaults follow the reference GUI**: choosing a film loads that stock's grain, halation and coupler presets into the editable parameters and sets "Scan film" for slide films; other adjustments are kept; later renders do not re-apply the presets | This is what `spektrafilm_gui` does (`digest_after_selection`, then `apply_stocks_specifics=False`) |
+| 4 | Parameter panels are generated from the reference GUI manifest, exported by `tools/exporter/export_gui_manifest.py` | No hand-copied ranges or tooltips; the "basic" tier is the reference's |
+| 5 | Preview is always sRGB; the export colour space, transfer function and HDR apply to exports | A preview in an export encoding would look wrong on the monitor |
+| 6 | The draft pass is never cancelled; only the refinement is | Otherwise a fast-moving slider would show nothing until it stops |
+| 7 | 100 % view renders the visible part plus a 128 px border (DEVIATIONS P-01) | The exact support of the DIR-coupler tail would triple the pixels rendered per view |
+| 8 | App metering reduces by area to 1024 px before the reference's metering reduction (DEVIATIONS D-12) | The reference path costs about 5 s at 20 MP; measured difference at most 0.003 EV with the default method |
+| 9 | LibRaw is **fetched at the pinned commit** by CMake rather than copied into the repository | Keeps 2 MB of third-party source out of the tree while still pinning the exact version; builds need network access on first configure |
+| 10 | X-Trans: after pinning, the remaining difference is 8.9e-6 mean relative. Logged, not pursued | As instructed |
+| 11 | Diffusion filter on tiled renders: unavailable in v1. The app shows a notice above the preview as soon as it applies and blocks the export with the explanation; the CLI errors | As instructed. Tileable version: v2 |
+| 12 | Canon R6 test set: `raw_canon_r6` is a separate ctest target that reports "skipped" when the folder is empty | As instructed |
+| 13 | Product name: one CMake variable, `SPECTRA_PRODUCT_NAME`; everything visible follows it. The executable and settings folder keep the neutral id `spectra-app` | As instructed |
+| 14 | Presets store the difference from the defaults; loading starts from the stock defaults of the preset's film and print. Built-in presets are film / print pairings only | Presets stay valid when defaults or stock data change; no invented "looks" |
+| 15 | Per-image edits are remembered in the user's application-data folder (keyed by file path), not in sidecar files | No files appear next to the user's photos |
+| 16 | LUT export uses the reference's `lut_mode` (no spatial or stochastic effects, no autoexposure), with sRGB, Rec.709, Display P3 or ACEScct input | A LUT cannot hold grain or halation; ACEScct gives a scene-referred option |
+| 17 | Installer: NSIS through CPack; unsigned | No signing certificate. SmartScreen will warn (README says how to proceed) |
+| 18 | CI installs Qt with `jurplel/install-qt-action` (Qt 6.8.3); the local script can fetch the same with aqtinstall (`-InstallQt`) | Building Qt through vcpkg would take hours per cache miss |
+| 19 | Windows CI runs the app's self-test on the CPU fallback (no Vulkan device there); Linux CI runs it on lavapipe | Both paths get exercised on every push |
+
+### Not verified on real hardware
+
+Nothing below can be judged from a software renderer:
+
+1. **Every timing.** The 50 ms slider target, the 1.5 s open-to-preview target and the
+   full-resolution times on the Arc 140T.
+2. **What the calibration picks** on the Arc, and whether its choices feel right.
+3. **Intel driver behaviour**: shader compilation of the eleven kernels, long dispatches (the
+   recursive Gaussian runs a whole image line per invocation), device-lost handling, the
+   `VK_EXT_memory_budget` figures on shared memory.
+4. **Memory on shared-memory graphics**: GPU allocations of an integrated GPU come out of
+   system RAM, so the 10 GB process limit has to be read together with the GPU figure.
+5. **The UI on a real display**: high-DPI scaling, the look of the dark theme on Windows,
+   panning smoothness, drag and drop from Explorer, file dialogs.
+6. **The installer on a clean machine**: CI installs to a folder and runs the app from there
+   with a bare `PATH`, but it does not run the NSIS installer itself, and the runner has no GPU.
+7. **`scripts\run_local_checks.ps1`**: CI parses it and dry-runs it (without a GPU, so its GPU
+   steps fail there by design). The Qt download path (`-InstallQt`) has not been run.
+
+### The one local run
+
+1. Install what `docs/WINDOWS_SETUP.md` lists (Visual Studio 2022 with the C++ workload, Git,
+   a current Intel driver, Python).
+2. Optionally copy your R6 `.CR3` files into `test_data\raw\canon_r6\`.
+3. In "Developer PowerShell for VS 2022", in the repository:
+   `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, then
+   `.\scripts\run_local_checks.ps1 -InstallQt`.
+4. Send back `reports\local_check_<stamp>.txt` and `reports\calibration_<stamp>.json`.
+
+## Open issues
+
+1. **Unverified on real hardware**: the list above.
+2. **Refined-preview latency depends on the GPU.** On the software renderer only the draft pass
+   meets 50 ms. The design assumes the Arc is far faster than 4 CPU cores; if it is not, the
+   tuning pass has more to do (candidates: half-float planes, fusing the pointwise kernels,
+   presenting from the GPU instead of reading back).
+3. **CPU work per slider change** is about 20 ms on this machine (rebuilding the pipeline
+   tables). Fine for the draft, but it is a floor under every change; the remaining cost is
+   mostly the film / print curve preparation and could be cached per stage as well.
+4. **Diffusion filter**: runs on the CPU inside the GPU path (slow preview while it is on) and
+   is unavailable on tiled renders.
+5. **CPU fallbacks inside the GPU path**: `jzazbz` / `cam16ucs` gamut compression and
+   `mallett2019` upsampling (none is a default).
+6. **Exports carry no ICC profile and no EXIF.** Non-sRGB exports are untagged.
+7. **No crop, rotate or straighten tool**, and no lens correction.
+8. **The installer is unsigned.**
+9. **X-Trans** decode: 8.9e-6 mean relative difference from rawpy remains; the full X-Trans
+   demosaic takes about 11 s on this machine (the fast preview is unaffected).
+10. **Tiled grain unsharp mask** uses per-tile sums (RMS 1e-4), as in phase 3.
+11. Reduced previews show finer grain than the 100 % view (DEVIATIONS P-02).
+12. First configure needs network access (vcpkg ports, LibRaw).
 
 ## Phase 3 results
 
@@ -131,39 +300,6 @@ RAW open to first preview on this container (Canon EOS R6, 1600-px preview): hal
 about 200 ms warm (950 ms cold cache), reduce 12 ms, tables + render on software Vulkan 550 ms
 at 800 px. On a real GPU the render term is the part that should shrink.
 
-### What I need from you
-
-1. **Run `scripts\run_local_checks.ps1`** on the 285H / Arc 140T and paste the report
-   (`docs/WINDOWS_SETUP.md` lists what to install: Visual Studio 2022 with the C++ workload,
-   Git, a current Intel driver, optionally Python). No Vulkan SDK and no Qt are needed yet.
-2. **Your R6 files** in `test_data\raw\canon_r6\` before that run, if you have them ready
-   (8 scenes listed in `test_data/SOURCES.md`). Two public R6 samples are already in the set.
-
-## Open issues
-
-1. **Fujifilm X-Trans decode differs from the reference by about 2 %** (other brands match
-   exactly). The reference's rawpy bundles LibRaw 0.22.0; this build links LibRaw 0.21.2. I
-   could not build 0.22 here to confirm that is the cause. To check on Windows with whatever
-   LibRaw vcpkg provides, and pin 0.22 if it resolves it.
-2. **The GPU backend has only run on a software renderer.** Driver-specific problems on the
-   Arc (shader compiler, long dispatches) are unknown until the local run. One known risk: the
-   recursive Gaussian kernel runs a whole image line per invocation; if a single dispatch takes
-   longer than Windows' 2-second GPU watchdog at 20 to 30 MP, it has to be split.
-3. **Interactive preview is not built yet.** The benchmark reports the complete pipeline at
-   preview size and derives per-slider costs from the stage timings. Stage caching (re-running
-   only the stages after the changed parameter), batching dispatches into one submission, and
-   the half-float storage options from the architecture are phase 4 work, and are what the
-   50 ms target depends on.
-4. **CPU fallbacks inside the GPU path**: diffusion filters, `jzazbz` / `cam16ucs` gamut
-   compression, `mallett2019` upsampling. All are off by default. Diffusion filters cannot be
-   tiled yet (the render stops with a clear error).
-5. **Tiled grain unsharp mask** uses per-tile sums instead of whole-image sums (measured
-   effect: RMS 1e-4).
-6. Not ported: lens correction (lensfun), EXIF copy and ICC embedding on save.
-7. Windows CI now needs vcpkg to build LibRaw, OpenEXR and the Vulkan loader; the first run
-   after this push will show whether that works.
-8. CPU fp32 / SIMD fallback backend: still deferred.
-
 ## Phase 2 results (CPU reference; unchanged)
 
 
@@ -252,8 +388,8 @@ statistics equals the full render to 1e-12.
 
 ## Product name
 
-The name must not contain "spektrafilm". **Spectra (working title)** stays until you decide
-(before phase 5).
+The name must not contain "spektrafilm". **Spectra (working title)** stays until you decide.
+It is defined once, as `SPECTRA_PRODUCT_NAME` in `CMakeLists.txt`.
 Proposals (none checked against trademarks yet):
 
 1. **Emulsa**
@@ -263,6 +399,11 @@ Proposals (none checked against trademarks yet):
 5. **Halide Bench**
 
 ## v2 backlog
+
+- Tileable diffusion filter (and a GPU version of it).
+- ICC profile embedding and EXIF copy on export; lens correction; crop / rotate tool.
+- Zero-copy preview presentation; half-float planes; per-stage caching of the CPU tables.
+- Code signing for the installer.
 
 - Experimental-branch negative-scan workflow (`workflow.route`, convert-film). The stage
   sequence in `Pipeline::process` is route-driven so it can be added.

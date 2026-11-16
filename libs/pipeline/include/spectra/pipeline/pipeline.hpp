@@ -140,7 +140,7 @@ private:
     double scan_norm_ = 1.0;
     Vec3 scan_illuminant_xyz_{};
     Mat3 xyz_to_rgb_{};
-    std::unique_ptr<OutputGamutCompressor> compressor_;
+    std::shared_ptr<const OutputGamutCompressor> compressor_;
     double black_level_ = 0.0, white_level_ = 1.0;
 };
 

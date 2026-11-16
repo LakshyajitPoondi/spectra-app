@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "spectra/engine/engine.hpp"
 
+#include <stdexcept>
+#include <string>
+
 namespace spectra::engine {
 
 using nlohmann::json;

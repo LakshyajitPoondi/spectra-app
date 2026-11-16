@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Engine tests: the stage cache must give exactly what a fresh render gives for
 // a change of any parameter; previews, calibration, presets, LUT export.
+#include <atomic>
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 #include <fstream>

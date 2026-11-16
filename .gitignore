@@ -7,3 +7,4 @@ venv/
 test_data/raw/
 test_data/out/
 reports/
+.deps/

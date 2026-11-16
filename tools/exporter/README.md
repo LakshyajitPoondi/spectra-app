@@ -37,3 +37,15 @@ venv/bin/python tools/parity/make_golden.py
 To move to a newer upstream commit: change `PINNED_COMMIT` in both scripts, re-export,
 regenerate the goldens, run the test suite, and add an entry to `data/CHANGELOG.txt`.
 The pack and the goldens are committed, so building and testing the C++ code needs no Python.
+
+## GUI parameter manifest
+
+`apps/spectra-app/resources/params_manifest.json` holds the labels, ranges, steps, tiers and
+tooltips of the parameters as the reference GUI declares them. Regenerate it from a checkout of
+the pinned commit (only the manifest module is loaded; no GUI toolkit is needed):
+
+```bash
+python tools/exporter/export_gui_manifest.py path/to/spektrafilm apps/spectra-app/resources/params_manifest.json
+```
+
+The application icon is drawn by `tools/assets/make_icon.py` (needs Pillow).

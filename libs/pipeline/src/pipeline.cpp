@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <functional>
+#include <mutex>
 #include <stdexcept>
 
 #include "spectra/core/parallel.hpp"
@@ -130,6 +132,39 @@ struct Pipeline::State {
     RenderStats stats;
 };
 
+namespace {
+
+// Small memo for the two expensive tables that depend on only a few parameters
+// (the spectral-upsampling LUT and the output gamut boundary). An interactive
+// session rebuilds the pipeline on every slider change; these rarely change.
+template <class T>
+std::shared_ptr<const T> memo(const std::string& key, const std::shared_ptr<const ColourData>& cd,
+                              const std::function<std::shared_ptr<const T>()>& make) {
+    struct Entry {
+        std::string key;
+        std::shared_ptr<const ColourData> cd;  // keeps the data the value refers to alive
+        std::shared_ptr<const T> value;
+    };
+    static std::mutex mu;
+    static std::vector<Entry> entries;
+    {
+        std::lock_guard<std::mutex> lock(mu);
+        for (auto& e : entries)
+            if (e.key == key && e.cd == cd) return e.value;
+    }
+    std::shared_ptr<const T> v = make();
+    std::lock_guard<std::mutex> lock(mu);
+    if (entries.size() >= 8) entries.erase(entries.begin());
+    entries.push_back({key, cd, v});
+    return v;
+}
+
+std::string vec3_key(const Vec3& v) {
+    return std::to_string(v[0]) + "," + std::to_string(v[1]) + "," + std::to_string(v[2]);
+}
+
+}  // namespace
+
 Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& digested,
                    const RenderOptions& options)
     : cd_(std::move(colour)), p_(digested), opt_(options) {
@@ -192,7 +227,14 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
         ad.apply_window = p_.settings.apply_hanatos2025_adaptation_window;
         ad.apply_surface = p_.settings.apply_hanatos2025_adaptation_surface;
         ad.spectral_gaussian_blur = p_.settings.spectral_gaussian_blur;
-        tc_lut_ = compute_tc_lut(*cd_, film_sensitivity_filtered_, film_.n_ch, ad, p_.io.input_gamut_compress);
+        const InputGamutCompressSpec& ig = p_.io.input_gamut_compress;
+        std::string key = "tc|" + p_.film + "|" + p_.camera.color_filter + "|" + std::to_string(ad.apply_window) +
+                          std::to_string(ad.apply_surface) + "|" + std::to_string(ad.spectral_gaussian_blur) + "|" +
+                          std::to_string(ig.active) + ig.algorithm + vec3_key(ig.knee);
+        tc_lut_ = *memo<TcLut>(key, cd_, [&] {
+            return std::make_shared<const TcLut>(
+                compute_tc_lut(*cd_, film_sensitivity_filtered_, film_.n_ch, ad, p_.io.input_gamut_compress));
+        });
     } else if (p_.settings.rgb_to_raw_method != "mallett2019") {
         throw std::runtime_error("unsupported rgb_to_raw method: " + p_.settings.rgb_to_raw_method);
     }
@@ -284,8 +326,13 @@ Pipeline::Pipeline(std::shared_ptr<const ColourData> colour, const Params& diges
         Xy illum_xy{scan_illuminant_xyz_[0] / sum, scan_illuminant_xyz_[1] / sum};
         const ColourSpace& out_cs = cd_->space(p_.io.output_color_space);
         xyz_to_rgb_ = cd_->xyz_to_rgb(out_cs, &illum_xy, "CAT02");
-        compressor_ = std::make_unique<OutputGamutCompressor>(*cd_, p_.io.output_gamut_compress,
-                                                              p_.io.output_color_space);
+        const OutputGamutCompressSpec& og = p_.io.output_gamut_compress;
+        std::string key = "og|" + p_.io.output_color_space + "|" + og.algorithm + "|" + vec3_key(og.knee) + "|" +
+                          (og.lightness_compression ? vec3_key(*og.lightness_compression) : std::string("none"));
+        compressor_ = memo<OutputGamutCompressor>(key, cd_, [&] {
+            return std::make_shared<const OutputGamutCompressor>(*cd_, p_.io.output_gamut_compress,
+                                                                 p_.io.output_color_space);
+        });
     }
 }
 

@@ -1,6 +1,7 @@
 # Feature Matrix — spektrafilm → native Windows app (C++20 / Vulkan / Qt 6)
 
-Phase 1 research output. **No app code exists yet.**
+Phase 1 research output, kept as written. What was built from it is summarised in the last
+section, "Implementation status", and in `PROGRESS.md`.
 
 ## Sources studied
 
@@ -231,3 +232,24 @@ the sampled and morphed curves, DIR matrix and pre‑corrected curves, Langmuir 
 particle counts per (sub‑layer, channel), `tc_lut`, filtered enlarger and pre‑flash response
 (81×3), the mid‑grey exposure factor, black/white reference Y values, the XYZ→RGB matrix, gamut
 C_max tables, diffusion PSF components, halation weights.
+
+---
+
+## 5. Implementation status (after phase 6)
+
+| Area | Status in this app |
+|---|---|
+| Film and print profiles (section 1, 2) | All 31 profiles of the pinned commit, through the data pack. |
+| Input, I/O, colour management (3.1) | RAW through LibRaw 0.22.0 (as-shot / daylight / tungsten / custom white balance), TIFF, PNG, JPEG, EXR in and out. 7 colour spaces. Not done: lens correction, EXIF copy, ICC embedding. Crop and upscale work but have no UI. |
+| Spectral upsampling (3.2) | `hanatos2025` on CPU and GPU; `mallett2019` on the CPU (fallback inside the GPU path). |
+| Camera / exposure (3.3) | Complete, including every metering method and the colour filters. |
+| Film rendering (3.4) | Complete: chemistry morph, DIR couplers with Langmuir saturation, grain (all sub-layers, micro-structure), halation and scatter, base. Parity-tested on CPU and GPU. |
+| Enlarger / printing (3.5) | Complete, including preflash and neutral filters from the database. |
+| Diffusion filters (3.6) | Complete on the CPU; inside the GPU path they run on the CPU; not available on tiled renders (v2). |
+| Scanner / output (3.7) | Complete: all six output gamut algorithms, glare, unsharp mask, black / white correction. |
+| Settings / debug (3.8) | Complete. "Match Python exactly" toggle; resolution-independent by default. |
+| GUI (3.9) | Own Qt 6 interface. Every parameter of the reference GUI's manifest is exposed with its label, range and tooltip. Not carried over: napari layers, channel swap, monitor-profile display transform, crop preview (replaced by the 100 % view). |
+| Experimental branch (3.10) | Not included (v2 backlog). |
+| Extended (from spektrafilm-ofx) | Push / pull, bleach bypass, HDR export: labelled "Extended", off by default, sanity-tested, not parity-tested. Printer lights: excluded (licensed data). |
+| LUT export | `.cube`, 17 / 33 / 65, sRGB / Rec.709 / Display P3 / ACEScct input. |
+| Presets, batch | Built-in film / print pairings, user presets (JSON), per-image edits remembered, batch export in the app and the CLI. |

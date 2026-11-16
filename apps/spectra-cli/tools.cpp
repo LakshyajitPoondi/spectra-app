@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // spectra-cli commands built on the engine: calibrate, bench-preview, lut, batch, presets.
+#include <algorithm>
+#include <cmath>
+#include <functional>
 #include <chrono>
 #include <cstdio>
 #include <filesystem>

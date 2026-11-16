@@ -29,12 +29,31 @@ This project is licensed under GPL-3.0-or-later (see `LICENSE`).
   Copyright (C) 2010-2024 Max-Planck-Society, Peter Bell and contributors.
   The licence text is at the top of the header.
 
-## Libraries linked at build time (not bundled)
+## Fetched at build time
 
-- **LibRaw** (LGPL-2.1 / CDDL-1.0; used under LGPL-2.1), **libtiff** (libtiff licence), **libpng**
-  (PNG Reference Library License), **libjpeg-turbo** (IJG / BSD-3-Clause), **OpenEXR** (BSD-3-Clause),
+- **LibRaw 0.22.0** (https://github.com/LibRaw/LibRaw, commit `0b56545a`), LGPL-2.1 / CDDL-1.0, used
+  under LGPL-2.1. Copyright (C) 2008-2025 LibRaw LLC. It is the release the Python reference
+  decodes with (through rawpy). It is linked statically; this program is GPL-3.0-or-later and its
+  complete source is available, which satisfies the LGPL's relinking requirement.
+
+## Libraries linked at build time
+
+- **Qt 6** (Core, Gui, Widgets), LGPL-3.0, Copyright (C) The Qt Company Ltd. and other
+  contributors. Linked dynamically; the installer ships the unmodified Qt DLLs, which can be
+  replaced. Source: https://download.qt.io/official_releases/qt/
+- **libtiff** (libtiff licence), **libpng** (PNG Reference Library License), **libjpeg-turbo**
+  (IJG / BSD-3-Clause), **OpenEXR** and **Imath** (BSD-3-Clause), **zlib** (zlib licence),
   **Vulkan headers and loader** (Apache-2.0 / MIT).
+- The Windows installer is built with **NSIS** (zlib/libpng licence) and includes the Microsoft
+  Visual C++ runtime.
 - RAW test samples from https://raw.pixls.us are CC0; they are downloaded, not redistributed.
+  The screenshot in the README shows one of them (Nikon D750 sample).
+
+## Reference GUI metadata
+
+- `apps/spectra-app/resources/params_manifest.json` is exported from spektrafilm's
+  `spektrafilm_gui/params_manifest.py` (GPL-3.0): the labels, ranges, steps and tooltips of the
+  parameters, so the app presents them as the reference GUI does.
 
 ## Sampling algorithms
 

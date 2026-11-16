@@ -76,6 +76,23 @@ jobs:
           $p = Start-Process -FilePath "stage\bin\spectra-app.exe" -ArgumentList "--cpu", "--selftest", "`"$out`"" -Wait -PassThru
           Get-ChildItem $out
           if ($p.ExitCode -ne 0) { throw "the installed app failed its self-test (exit code $($p.ExitCode))" }
+      - name: Local-check script (syntax)
+        shell: pwsh
+        run: |
+          $errors = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/run_local_checks.ps1), [ref]$null, [ref]$errors)
+          if ($errors) { $errors | ForEach-Object { Write-Host $_ }; throw "scripts/run_local_checks.ps1 does not parse" }
+      - name: Local-check script (dry run; this runner has no GPU, so its GPU steps fail)
+        shell: pwsh
+        continue-on-error: true
+        run: ./scripts/run_local_checks.ps1 -SkipBuild -Quick -NoDownload
+      - name: Upload local-check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-check-dry-run
+          path: reports/
+          if-no-files-found: ignore
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:

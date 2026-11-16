@@ -2,6 +2,8 @@
 #include "spectra/engine/engine.hpp"
 
 #ifdef SPECTRA_HAVE_IO
+#include <cctype>
+#include <stdexcept>
 #include <algorithm>
 
 #include "spectra/io/image_io.hpp"

@@ -18,7 +18,8 @@ disagree. Rule: **follow the code**, and write the choice down here.
 | D-08 | Positive print stock with black/white correction | `black_white_printing_exposure_correction` returns `None` and the pipeline raises | Returns 1.0 | No positive print profile exists. |
 | D-09 | B&W grain preset padding | Missing channels are `None` | Missing channels keep their previous value (never read for one channel) | None. |
 | D-10 | Crop larger than the image | A negative slice start returns a sliver of the far edge | The crop is clamped to the image | Only for invalid crops. |
-| D-11 | X-Trans RAW decode | rawpy bundles LibRaw 0.22.0 | System / vcpkg LibRaw (0.21.x here) | Bayer files decode identically (99.9 % of pixels bit-equal). The Fujifilm X-T3 sample differs by about 2 % mean. Not yet confirmed to be the LibRaw version; see PROGRESS open issues. |
+| D-11 | X-Trans RAW decode | rawpy bundles LibRaw 0.22.0 | LibRaw 0.22.0, fetched and built at the pinned commit `0b56545a` (`cmake/libraw.cmake`) | All Bayer test files (Canon R6 raw and C-RAW, Sony, Nikon x2, Panasonic) are now bit-identical to rawpy. Fujifilm X-T3 (X-Trans): mean relative difference 8.9e-6, 99.9th percentile 3.4e-4, a handful of pixels up to 0.029 (it was about 2 % with LibRaw 0.21.2). The remaining difference is in LibRaw's X-Trans interpolation between two builds of the same version; logged, not pursued. |
+| D-12 | Autoexposure metering image in the app | 256 px metering preview reduced from the full frame with a Gaussian anti-aliasing filter (about 5 s at 20 MP in this port) | The app reduces by area to 1024 px first, then applies the reference's reduction. `spectra-cli render`, the parity tests and "Match Python exactly" use the reference's path unchanged. | Measured on three RAW files: at most 0.003 EV for `center_weighted` (default) and `matrix`, at most 0.02 EV for `highlight_weighted`. Needed for the 1.5 s open-to-preview target. |
 
 ## B. GPU backend: approximations and CPU fallbacks
 
@@ -41,10 +42,29 @@ Stages that still run on the CPU when used (the render reports them):
 
 | # | Stage | Note |
 |---|---|---|
-| F-01 | Camera and enlarger **diffusion filters** | CPU FFT, as the reference. Off by default. Cannot be combined with tiled rendering yet. |
+| F-01 | Camera and enlarger **diffusion filters** | CPU FFT, as the reference. Off by default. **Not available on tiled renders (60 MP and up, or a small GPU budget) in v1**: the app shows a notice above the preview and blocks the export with an explanation; the CLI stops with a clear error. A tileable version is on the v2 list. |
 | F-02 | Output gamut algorithms `jzazbz` and `cam16ucs` | `off`, `aces_rgc`, `oklch` (default) and `oklrab` run on the GPU. |
 | F-03 | `mallett2019` spectral upsampling | `hanatos2025` (default) runs on the GPU. |
 | F-04 | Auto-exposure metering, crop, upscale | Small or one-off work on the input image. |
+
+## B1. GPU execution (no effect on results)
+
+| # | What | How | Verified by |
+|---|---|---|---|
+| X-01 | Batched submissions | Dispatches are recorded into one command buffer with a memory barrier between them and submitted in batches bounded by dispatch count and by pixels touched. | `engine` test: batched and unbatched renders are bit-identical; 78 dispatches go out in 16 submissions. |
+| X-02 | Persistent buffers | Freed planes are pooled and reused by size, bounded to 1.5 planes on top of the working set; parameter buffers are host-visible. | All GPU parity suites; memory figures in `PROGRESS.md`. |
+| X-03 | Stage cache | The outputs of film exposure, development, grain and print are kept on the GPU per preview size; a parameter change re-runs only the stages after it. Which stage a parameter belongs to is a table in `GpuPipeline::stage_keys`; anything not listed re-renders everything. | `engine` test: for 153 single-parameter changes (every numeric, boolean and enumerated parameter, with black / white correction and the Extended features switched on), the cached render equals a fresh render exactly (max difference 0). |
+| X-04 | Cancellation | A render is abandoned at the next batch boundary when a newer request exists. | `engine` test: no GPU memory is left behind and the next render is correct. |
+
+## B4. Preview (app only; full renders and exports are not affected)
+
+| # | What | Preview | Final render |
+|---|---|---|---|
+| P-01 | Border around a 100 % view | 128 px of context around the visible part. Effects with a longer reach (DIR-coupler diffusion tail, halation at high resolution) are slightly truncated near the edge of the view. | Tiles carry the full support of every active effect. Measured in the centre of a view: identical to the full render. |
+| P-02 | Reduced previews | The fitted preview is an area-averaged reduction rendered with the resolution-independent parameter scaling (pixel-unit parameters are scaled to the film format). Grain is rendered at the preview's pixel size, so it looks finer than at 100 %; judge grain in the 100 % view. | Full resolution. |
+| P-03 | Fast first preview of a RAW file | LibRaw half-size decode (no demosaic interpolation) until the full decode arrives. | Full decode. |
+| P-04 | Highlight-boost maximum | Measured once on the loaded image and reused (per the phase 1 decision). On the CPU fallback it is taken from the preview itself. | Measured on the full image. |
+| P-05 | Preview colour | Always sRGB with its transfer function; HDR export is not previewed. | The export colour space and transfer function. |
 
 ## B2. Not ported
 
@@ -52,7 +72,9 @@ Stages that still run on the CPU when used (the render reports them):
 |---|---|---|
 | N-01 | Lens correction (lensfun) | Optional in the reference, off by default. |
 | N-02 | `logiflex8` adaptation window | No shipped profile uses it (all use `erf4`). |
-| N-03 | EXIF copy and ICC embedding on save | Phase 5. |
+| N-03 | EXIF copy and ICC embedding on save | Not done in v1: exported files carry no metadata and no ICC profile (sRGB is assumed by viewers). On the v2 list. |
+| N-04 | Crop / upscale controls of the reference GUI | The parameters work (`io.crop`, `io.upscale_factor`, parity-tested) but the app does not expose them; the 100 % view replaces the reference's crop preview. |
+| N-05 | Reference GUI extras | Channel swap, display transform through the monitor profile, white padding, napari layers. Not part of the model. |
 
 ## B3. Extended features (no reference)
 

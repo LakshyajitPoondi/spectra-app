@@ -3,6 +3,7 @@
 // expected orientation, and render to a sane preview. The files are not in the
 // repository (test_data/SOURCES.md); an empty or missing folder is a skip
 // (exit code 77), not a failure.
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <filesystem>

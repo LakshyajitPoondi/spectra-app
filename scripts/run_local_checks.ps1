@@ -21,11 +21,30 @@
 
 .PARAMETER Quick
   Skip the 60 MP tiling / memory benchmark.
+
+.PARAMETER QtDir
+  Qt 6 folder that contains bin\ and lib\ (for example C:\Qt\6.8.3\msvc2022_64).
+  Default: found automatically (QT_ROOT_DIR, C:\Qt, .deps\Qt). Without Qt the
+  desktop app is not built; every GPU check still runs through the CLI.
+
+.PARAMETER InstallQt
+  Download Qt 6.8.3 into .deps\Qt with aqtinstall (needs Python 3) when no Qt
+  is found.
+
+.PARAMETER NoDownload
+  Do not download the public RAW samples.
+
+.PARAMETER Package
+  Also build the installer with cpack (needs NSIS on PATH).
 #>
 param(
     [string]$BuildDir = "build",
     [string]$Gpu = "",
     [string]$VcpkgRoot = $env:VCPKG_ROOT,
+    [string]$QtDir = "",
+    [switch]$InstallQt,
+    [switch]$Package,
+    [switch]$NoDownload,
     [switch]$SkipBuild,
     [switch]$Quick
 )
@@ -81,6 +100,44 @@ try {
 
 if ($Gpu -ne "") { $env:SPECTRA_GPU = $Gpu }
 
+# ---- Qt 6 (only the desktop app needs it) ----
+function Find-Qt {
+    $candidates = @()
+    if ($QtDir -ne "") { $candidates += $QtDir }
+    if ($env:QT_ROOT_DIR) { $candidates += $env:QT_ROOT_DIR }
+    foreach ($root in @((Join-Path $repo ".deps\Qt"), "C:\Qt")) {
+        if (Test-Path $root) {
+            $candidates += Get-ChildItem -Path $root -Directory -Filter "6.*" -ErrorAction SilentlyContinue |
+                Sort-Object Name -Descending |
+                ForEach-Object { Get-ChildItem -Path $_.FullName -Directory -Filter "msvc*_64" -ErrorAction SilentlyContinue } |
+                ForEach-Object { $_.FullName }
+        }
+    }
+    foreach ($c in $candidates) {
+        if ($c -and (Test-Path (Join-Path $c "lib\cmake\Qt6\Qt6Config.cmake"))) { return $c }
+    }
+    return ""
+}
+Section "Qt"
+$qt = Find-Qt
+if ($qt -eq "" -and $InstallQt) {
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        Log "Downloading Qt 6.8.3 (msvc2022_64) into .deps\Qt with aqtinstall ..."
+        & python -m pip install --quiet --user aqtinstall 2>&1 | ForEach-Object { Log ([string]$_) }
+        & python -m aqt install-qt windows desktop 6.8.3 win64_msvc2022_64 -O (Join-Path $repo ".deps\Qt") 2>&1 | ForEach-Object { Log ([string]$_) }
+        $qt = Find-Qt
+    } else {
+        Log "python not found: cannot download Qt"
+    }
+}
+if ($qt -ne "") {
+    Log "Qt: $qt"
+    $env:PATH = (Join-Path $qt "bin") + ";" + $env:PATH
+} else {
+    Log "Qt 6 not found: the desktop app is NOT built or tested in this run (the GPU checks do not need it)."
+    Log "To include it, install Qt 6 (see docs\WINDOWS_SETUP.md) or re-run with -InstallQt."
+}
+
 if (-not $SkipBuild) {
     if (-not $VcpkgRoot -or -not (Test-Path (Join-Path $VcpkgRoot "scripts\buildsystems\vcpkg.cmake"))) {
         # Visual Studio 2022 ships a copy of vcpkg.
@@ -97,7 +154,9 @@ if (-not $SkipBuild) {
     }
     Log "vcpkg: $VcpkgRoot"
     $toolchain = Join-Path $VcpkgRoot "scripts\buildsystems\vcpkg.cmake"
-    $code = Step "Configure" "cmake" @("-S", ".", "-B", $BuildDir, "-DCMAKE_TOOLCHAIN_FILE=$toolchain", "-DVCPKG_TARGET_TRIPLET=x64-windows")
+    $configure = @("-S", ".", "-B", $BuildDir, "-DCMAKE_TOOLCHAIN_FILE=$toolchain", "-DVCPKG_TARGET_TRIPLET=x64-windows")
+    if ($qt -ne "") { $configure += "-DCMAKE_PREFIX_PATH=$qt" }
+    $code = Step "Configure" "cmake" $configure
     if ($code -ne 0) { Log "Configure failed; stopping."; exit 1 }
     $code = Step "Build" "cmake" @("--build", $BuildDir, "--config", "Release", "--parallel")
     if ($code -ne 0) { Log "Build failed; stopping."; exit 1 }
@@ -110,7 +169,9 @@ if (-not (Test-Path $cli)) { Log "ERROR: spectra-cli.exe not found in $BuildDir"
 # Public RAW samples (CC0). Needs Python 3; skipped when it is missing.
 Section "RAW samples"
 $python = Get-Command python -ErrorAction SilentlyContinue
-if ($python) {
+if ($NoDownload) {
+    Log "download of the public RAW samples skipped (-NoDownload)"
+} elseif ($python) {
     $output = & python scripts\fetch_test_raws.py 2>&1
     foreach ($line in $output) { Log ([string]$line) }
 } else {
@@ -125,8 +186,20 @@ foreach ($dir in @("test_data\raw\canon_r6", "test_data\raw\pixls")) {
 Log ("RAW files found: " + $raws.Count)
 
 Step "GPU devices" $cli @("gpu-info") | Out-Null
-Step "CPU tests (reference pipeline, parity against Python, I/O, Extended features)" "ctest" @("--test-dir", $BuildDir, "-C", "Release", "-LE", "gpu|memory", "--output-on-failure") | Out-Null
+Step "CPU tests (reference pipeline, parity against Python, I/O, Extended features, engine, RAW sets)" "ctest" @("--test-dir", $BuildDir, "-C", "Release", "-LE", "gpu|memory|app", "--output-on-failure") | Out-Null
 Step "GPU tests (parity against Python on this GPU, tiling, memory budget)" "ctest" @("--test-dir", $BuildDir, "-C", "Release", "-L", "gpu", "--output-on-failure") | Out-Null
+
+# Runtime calibration: what the app measures and chooses on first launch for this GPU.
+Step "Performance calibration on this GPU" $cli @("calibrate", "--out", "reports\calibration_$stamp.json") | Out-Null
+
+# The desktop app, unattended: start, calibrate, preview, adjust, export, LUT (GPU, then CPU fallback).
+$app = Join-Path $repo "$BuildDir\Release\spectra-app.exe"
+if (Test-Path $app) {
+    Step "Desktop app self-test (GPU path and CPU fallback)" "ctest" @("--test-dir", $BuildDir, "-C", "Release", "-L", "app", "--output-on-failure") | Out-Null
+} else {
+    Section "Desktop app self-test"
+    Log "skipped: spectra-app.exe was not built (Qt not found)"
+}
 
 # One line per parity suite with the worst error, for the record.
 foreach ($suite in @("t2_nonspatial", "t3_spatial", "t5_sweeps", "t4_stochastic")) {
@@ -140,6 +213,21 @@ foreach ($raw in $raws) {
     Step "RAW render: $name" $cli @("render", "--in", $raw, "--out", "test_data\out\$name.jpg", "--backend", "gpu", "--half", "1", "--bits", "8") | Out-Null
 }
 
+# The interactive path as the app drives it: first preview, then slider changes
+# through the stage cache (targets: < 50 ms per slider change, < 1.5 s RAW open to first preview).
+Step "Interactive benchmark: synthetic 20 MP" $cli @("bench-preview", "--mp", "20", "--repeats", "7") | Out-Null
+foreach ($raw in ($raws | Select-Object -First 3)) {
+    $name = [System.IO.Path]::GetFileName($raw)
+    Step "Interactive benchmark: $name" $cli @("bench-preview", "--in", $raw, "--calibration", "reports\calibration_$stamp.json", "--repeats", "5") | Out-Null
+}
+
+# Batch export and LUT export.
+$batchRaws = @($raws | Select-Object -First 3)
+if ($batchRaws.Count -gt 0) {
+    Step "Batch export (full resolution, JPEG)" $cli (@("batch", "--out-dir", "test_data\out\batch", "--format", "jpg") + $batchRaws) | Out-Null
+}
+Step "LUT export (33^3 .cube)" $cli @("lut", "--out", "test_data\out\portra_400.cube", "--size", "33") | Out-Null
+
 # Benchmarks: 20 MP and 30 MP are the headline numbers.
 $benchArgs = @("bench", "--backend", "gpu", "--mp", "20,30", "--repeats", "5")
 $benchRaws = $raws | Select-Object -First 6
@@ -148,6 +236,17 @@ Step "Benchmark: 20 MP and 30 MP on the GPU" $cli $benchArgs | Out-Null
 if (-not $Quick) {
     Step "Benchmark: 60 MP (tiling) with the 10 GB memory limit" $cli @("bench", "--backend", "gpu", "--mp", "60", "--repeats", "2", "--limit-gb", "10") | Out-Null
     Step "Benchmark: 30 MP forced into tiles (1 GB budget)" $cli @("bench", "--backend", "gpu", "--mp", "30", "--repeats", "1", "--budget-mb", "1024") | Out-Null
+}
+
+if ($Package) {
+    if (Get-Command makensis -ErrorAction SilentlyContinue) {
+        Push-Location $BuildDir
+        Step "Installer (cpack, NSIS + zip)" "cpack" @("-C", "Release", "-G", "NSIS;ZIP") | Out-Null
+        Pop-Location
+    } else {
+        Section "Installer"
+        Log "skipped: makensis (NSIS) is not on PATH. The CI build also produces the installer as an artifact."
+    }
 }
 
 Section "Summary"
