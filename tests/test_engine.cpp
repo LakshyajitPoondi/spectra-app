@@ -292,9 +292,9 @@ int main(int argc, char** argv) {
         CHECK(pr2.diff == d && pr2.name == "x", "preset JSON does not round-trip");
         Image img = test_image(48, 32);
         for (auto& b : engine::builtin_presets()) {
-            Params bp = engine::params_from_diff(b.diff);
             try {
-                Image out = simulate(cd, img, bp);
+                Params bp = engine::params_from_preset(*pack, b.diff);
+                Image out = Pipeline(cd, digest_params(*pack, bp, false)).process(img);
                 double mean = 0;
                 for (double v : out.v) mean += v;
                 mean /= out.v.size();
@@ -308,7 +308,7 @@ int main(int argc, char** argv) {
 
     // ---- 6. LUT export
     {
-        Params p;
+        Params p = engine::default_user_params(*pack, "kodak_portra_400", "kodak_portra_endura");
         for (const char* input : {"srgb", "rec709", "display_p3", "acescct"}) {
             engine::LutOptions lo;
             lo.size = 9;

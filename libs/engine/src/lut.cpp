@@ -61,7 +61,7 @@ Image render_lut_lattice(const Pack& pack, std::shared_ptr<const ColourData> col
     } else {
         throw std::runtime_error("unknown LUT input encoding '" + opt.input + "'");
     }
-    Params d = digest_params(pack, p);
+    Params d = digest_params(pack, p, false);
     Pipeline pipe(std::move(colour), d, RenderOptions{});
     return pipe.process(in);
 }

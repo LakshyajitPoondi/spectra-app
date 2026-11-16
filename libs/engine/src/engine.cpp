@@ -136,8 +136,18 @@ struct Engine::Impl {
     double boost_max = 0.0;
 #ifdef SPECTRA_HAVE_GPU
     std::shared_ptr<gpu::Context> ctx;
+    // The pipeline object (baked tables, GPU table buffers) of the last
+    // parameter set: the draft and the refined pass of one change share it.
+    std::unique_ptr<gpu::GpuPipeline> gp;
 #endif
+    std::unique_ptr<Pipeline> cpu;
+    std::string pipeline_key;
     void drop_caches() {
+#ifdef SPECTRA_HAVE_GPU
+        gp.reset();
+#endif
+        cpu.reset();
+        pipeline_key.clear();
 #ifdef SPECTRA_HAVE_GPU
         if (ctx)
             for (auto& l : level) l.cache.clear(*ctx);
@@ -277,7 +287,7 @@ Params Engine::digest(const Params& user) const {
         p.io.input_color_space = input_space_;
         p.io.input_cctf_decoding = false;
     }
-    return digest_params(*pack_, p);
+    return digest_params(*pack_, p, false);
 }
 
 namespace {
@@ -377,7 +387,13 @@ RenderResult Engine::render_preview(const Params& user, Level level, const ViewR
         if (changed) ls.cache.clear(ctx);
         gpu::GpuOptions go;
         go.memory_budget_bytes = gpu_budget_bytes();
-        gpu::GpuPipeline gp(impl_->ctx, cd_, d, ro, go);
+        std::string key = params_to_json(d).dump() + (cfg_.match_python ? "|py|" : "|") + std::to_string(go.memory_budget_bytes);
+        if (!impl_->gp || impl_->pipeline_key != key) {
+            impl_->gp.reset();
+            impl_->gp = std::make_unique<gpu::GpuPipeline>(impl_->ctx, cd_, d, ro, go);
+            impl_->pipeline_key = key;
+        }
+        gpu::GpuPipeline& gp = *impl_->gp;
         ro.autoexposure_ev = gp.cpu().meter_autoexposure_ev(impl_->meter);
         gp.set_options(ro);
         if (d.film_render.halation.boost_ev != 0) {
@@ -411,7 +427,12 @@ RenderResult Engine::render_preview(const Params& user, Level level, const ViewR
         return r;
     }
 #endif
-    Pipeline pipe(cd_, d, ro);
+    std::string key = params_to_json(d).dump() + (cfg_.match_python ? "|py" : "|");
+    if (!impl_->cpu || impl_->pipeline_key != key) {
+        impl_->cpu = std::make_unique<Pipeline>(cd_, d, ro);
+        impl_->pipeline_key = key;
+    }
+    Pipeline& pipe = *impl_->cpu;
     ro.autoexposure_ev = pipe.meter_autoexposure_ev(impl_->meter);
     pipe.set_options(ro);
     check_cancel(cancel);
@@ -554,7 +575,7 @@ Calibration Engine::calibrate(const std::function<void(const std::string&)>& pro
         std::snprintf(buf, sizeof buf, "%s: kernels compiled in %.0f ms", di.name.c_str(), c.warmup_ms);
         say(buf);
 
-        Params d = digest_params(*pack_, Params{});
+        Params d = digest_params(*pack_, Params{}, true);
         RenderOptions ro;
         ro.autoexposure_ev = 0.0;
         int base = c.software ? 384 : 1024;

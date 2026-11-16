@@ -40,11 +40,13 @@ engine::EngineConfig config_from(std::map<std::string, std::string>& opt) {
     return c;
 }
 
-Params user_params(std::map<std::string, std::string>& opt) {
-    Params p;
-    if (opt.count("preset")) p = engine::params_from_diff(engine::preset_from_json(read_json_file(opt["preset"])).diff);
-    if (opt.count("film")) p.film = opt["film"];
-    if (opt.count("print")) p.print = opt["print"];
+// User parameters: stock defaults of the film / print (or a preset), then --params on top.
+Params user_params(const Pack& pack, std::map<std::string, std::string>& opt) {
+    json diff = json::object();
+    if (opt.count("preset")) diff = engine::preset_from_json(read_json_file(opt["preset"])).diff;
+    if (opt.count("film")) diff["film"] = opt["film"];
+    if (opt.count("print")) diff["print"] = opt["print"];
+    Params p = engine::params_from_preset(pack, diff);
     if (opt.count("params")) apply_params_patch(p, read_json_file(opt["params"]));
     return p;
 }
@@ -88,7 +90,7 @@ int run_tool(const std::string& cmd, std::shared_ptr<const Pack> pack, std::shar
         if (opt.count("size")) lo.size = std::stoi(opt["size"]);
         if (opt.count("input")) lo.input = opt["input"];
         if (opt.count("title")) lo.title = opt["title"];
-        engine::export_cube_lut(*pack, colour, user_params(opt), lo, opt["out"]);
+        engine::export_cube_lut(*pack, colour, user_params(*pack, opt), lo, opt["out"]);
         std::printf("wrote %d^3 LUT (%s input) -> %s\n", lo.size, lo.input.c_str(), opt["out"].c_str());
         return 0;
     }
@@ -138,7 +140,7 @@ int run_tool(const std::string& cmd, std::shared_ptr<const Pack> pack, std::shar
         }
         auto t_first = now();
         eng.set_image(img, space, false);
-        Params p = user_params(opt);
+        Params p = user_params(*pack, opt);
         engine::RenderResult d0 = eng.render_preview(p, engine::Level::Draft, {});
         double first_draft = ms(t_first);
         engine::RenderResult p0 = eng.render_preview(p, engine::Level::Preview, {});
@@ -202,7 +204,7 @@ int run_tool(const std::string& cmd, std::shared_ptr<const Pack> pack, std::shar
         fs::create_directories(opt["out-dir"]);
         std::string format = opt.count("format") ? opt["format"] : "tif";
         engine::Engine eng(pack, colour, config_from(opt));
-        Params p = user_params(opt);
+        Params p = user_params(*pack, opt);
         int failed = 0;
         for (auto& in : positional) {
             engine::FileJob job;

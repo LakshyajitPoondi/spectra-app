@@ -67,3 +67,25 @@ add_executable(test_engine test_engine.cpp)
 target_link_libraries(test_engine PRIVATE spectra_engine)
 add_test(NAME engine COMMAND test_engine ${SPECTRA_PACK})
 set_tests_properties(engine PROPERTIES TIMEOUT 3600)
+
+# RAW test sets. The files are fetched by scripts/fetch_test_raws.py (other
+# brands, CC0) or supplied by the user (Canon R6); a missing or empty folder is
+# reported as skipped.
+if(SPECTRA_HAVE_IO)
+  add_executable(test_raw test_raw.cpp)
+  target_link_libraries(test_raw PRIVATE spectra_engine)
+  foreach(set pixls canon_r6)
+    add_test(NAME raw_${set} COMMAND test_raw ${SPECTRA_PACK} ${CMAKE_SOURCE_DIR}/test_data/raw/${set})
+    set_tests_properties(raw_${set} PROPERTIES LABELS "raw" SKIP_RETURN_CODE 77 TIMEOUT 3600)
+  endforeach()
+endif()
+
+# The desktop application, driven without a person and without a display:
+# start, calibrate, preview, change a parameter, export an image and a LUT.
+# Once on whatever Vulkan device there is, once on the CPU fallback.
+if(SPECTRA_HAVE_APP)
+  add_test(NAME app_selftest COMMAND spectra-app --selftest ${CMAKE_CURRENT_BINARY_DIR}/app_selftest)
+  add_test(NAME app_selftest_cpu COMMAND spectra-app --cpu --selftest ${CMAKE_CURRENT_BINARY_DIR}/app_selftest_cpu)
+  set_tests_properties(app_selftest app_selftest_cpu PROPERTIES
+    LABELS "app" TIMEOUT 900 ENVIRONMENT "QT_QPA_PLATFORM=offscreen;SPECTRA_PACK=${SPECTRA_PACK}")
+endif()

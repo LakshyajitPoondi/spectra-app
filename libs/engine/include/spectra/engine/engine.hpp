@@ -148,10 +148,20 @@ struct Cancelled : std::exception {
 // True when the exception is a cancellation from either backend.
 bool is_cancel(const std::exception& e);
 
-// ---- presets ------------------------------------------------------------------
-// A preset stores only what differs from the defaults.
+// ---- parameters and presets -----------------------------------------------------
+// "User parameters" throughout the engine are parameters whose stock-specific
+// sections (grain, halation, DIR couplers, scan-film) have already been set
+// for the chosen film, exactly as the reference GUI does when a stock is
+// selected; rendering then digests them without re-applying the stock presets,
+// so edits to those sections hold.
+void apply_stock_specifics(const Pack& pack, Params& p);
+// Default user parameters for a film / print pair.
+Params default_user_params(const Pack& pack, const std::string& film, const std::string& print);
+// A preset stores only what differs from Params{}. Loading one starts from the
+// stock defaults of its film / print and applies the stored differences.
 nlohmann::json params_diff(const Params& p);
 Params params_from_diff(const nlohmann::json& diff);
+Params params_from_preset(const Pack& pack, const nlohmann::json& diff);
 struct Preset {
     std::string name, description;
     nlohmann::json diff;  // patch for apply_params_patch on default Params

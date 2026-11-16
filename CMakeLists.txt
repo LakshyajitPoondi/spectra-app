@@ -156,6 +156,34 @@ add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp
                apps/spectra-cli/tools.cpp)
 target_link_libraries(spectra-cli PRIVATE spectra_engine)
 
+
+# The desktop application (Qt 6 Widgets). Skipped when Qt is not installed, so
+# the libraries, the CLI and the tests build without it.
+option(SPECTRA_BUILD_APP "Build the Qt desktop application" ON)
+set(SPECTRA_HAVE_APP OFF)
+if(SPECTRA_BUILD_APP)
+  find_package(Qt6 6.4 QUIET COMPONENTS Core Gui Widgets)
+  if(Qt6_FOUND)
+    set(SPECTRA_HAVE_APP ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+    add_executable(spectra-app WIN32
+      apps/spectra-app/main.cpp
+      apps/spectra-app/main_window.cpp apps/spectra-app/main_window.hpp
+      apps/spectra-app/param_panel.cpp apps/spectra-app/param_panel.hpp
+      apps/spectra-app/preview_widget.cpp apps/spectra-app/preview_widget.hpp
+      apps/spectra-app/render_controller.cpp apps/spectra-app/render_controller.hpp
+      apps/spectra-app/resources/resources.qrc)
+    target_link_libraries(spectra-app PRIVATE spectra_engine Qt6::Core Qt6::Gui Qt6::Widgets)
+    target_compile_definitions(spectra-app PRIVATE SPECTRA_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+      QT_NO_KEYWORDS QT_DISABLE_DEPRECATED_BEFORE=0x060400)
+    set(CMAKE_AUTOMOC OFF)
+    set(CMAKE_AUTORCC OFF)
+  else()
+    message(WARNING "Qt 6 (Core, Gui, Widgets) not found: building without the desktop application")
+  endif()
+endif()
+
 if(SPECTRA_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)

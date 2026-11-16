@@ -1,0 +1,1090 @@
+{
+ "source": "spektrafilm_gui/params_manifest.py",
+ "upstream_commit": "6cd00c8d4f30b5b550f50f4bbd3753c9f2a48507",
+ "licence": "GPL-3.0 (spektrafilm, Andrea Volpato)",
+ "groups": [
+  {
+   "title": "Couplers",
+   "path": "/film_render/dir_couplers",
+   "fields": [
+    {
+     "path": "/film_render/dir_couplers/active",
+     "tier": "basic",
+     "tooltip": "Enable DIR coupler inhibition."
+    },
+    {
+     "path": "/film_render/dir_couplers/amount",
+     "tier": "basic",
+     "tooltip": "Global multiplier on the DIR coupler inhibition matrix. 1.0 leaves the per-channel gammas as-is.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/dir_couplers/inhibition_samelayer",
+     "tier": "dev",
+     "tooltip": "Multiplier on the same-layer (diagonal) inhibition. Controls overall contrast / gamma reduction within each RGB layer.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/dir_couplers/inhibition_interlayer",
+     "tier": "dev",
+     "tooltip": "Multiplier on the cross-layer (off-diagonal) inhibition. Controls saturation enhancement from interlayer DIR effects.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/dir_couplers/gamma_samelayer_rgb",
+     "tier": "dev",
+     "tooltip": "Per-channel same-layer DIR gamma (R, G, B). Effective gamma reduction of each layer's density curve.",
+     "min": 0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/dir_couplers/gamma_interlayer_r_to_gb",
+     "tier": "dev",
+     "tooltip": "DIR inhibition from the R layer onto the G and B layers respectively (g_R->G, g_R->B).",
+     "min": 0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/dir_couplers/gamma_interlayer_g_to_rb",
+     "tier": "dev",
+     "tooltip": "DIR inhibition from the G layer onto the R and B layers respectively (g_G->R, g_G->B).",
+     "min": 0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/dir_couplers/gamma_interlayer_b_to_rg",
+     "tier": "dev",
+     "tooltip": "DIR inhibition from the B layer onto the R and G layers respectively (g_B->R, g_B->G).",
+     "min": 0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/dir_couplers/langmuir_donor_k_rgb",
+     "tier": "dev",
+     "tooltip": "NEGATIVE film: per-channel Langmuir saturation of DIR inhibitor release, normalized to each layer's d_max (R, G, B). Lower = earlier, stronger roll-off at high density (gentler shoulder, tames high-amount breakage); large values approach the linear model.",
+     "min": 0.1,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/dir_couplers/langmuir_receiver_k_rgb",
+     "tier": "dev",
+     "tooltip": "POSITIVE/reversal film: per-channel receiver-side Langmuir saturation (R, G, B), normalized to the arrived-inhibitor ceiling (the receiver analogue of langmuir_donor_k_rgb's d_max normalization). The donor (silver release) stays linear; this rolls off the receiving layer's response under a pushed amount. Lower = harder, more crash-proof knee (alters the operating-point look); large values approach linear.",
+     "min": 0.1,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/dir_couplers/diffusion_size_um",
+     "tier": "dev",
+     "tooltip": "Sigma in um for the diffusion of the couplers, (5-20 um), controls sharpness and affects saturation.",
+     "min": 0,
+     "step": 5
+    },
+    {
+     "path": "/film_render/dir_couplers/diffusion_tail_um",
+     "tier": "dev",
+     "tooltip": "Exponential tail scale in um for long-range coupler spread. Larger values extend the rare long-distance inhibition halo beyond the Gaussian core.",
+     "min": 0,
+     "step": 10
+    },
+    {
+     "path": "/film_render/dir_couplers/diffusion_tail_weight",
+     "tier": "dev",
+     "tooltip": "Fraction of coupler diffusion energy assigned to the long tail. 0 = pure Gaussian spread, higher values add a longer-range inhibition shoulder.",
+     "min": 0,
+     "max": 1,
+     "step": 0.01
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Halation",
+   "path": "/film_render/halation",
+   "fields": [
+    {
+     "path": "/film_render/halation/active",
+     "tier": "basic",
+     "tooltip": "Enable halation and in-emulsion scatter."
+    },
+    {
+     "path": "/film_render/halation/scatter_amount",
+     "tier": "basic",
+     "tooltip": "High-level scatter strength. 1.0 = full physical scatter, 0.0 = no scatter. Scales the fraction of light that undergoes in-emulsion scattering.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/halation/scatter_spatial_scale",
+     "tier": "basic",
+     "tooltip": "High-level scatter size multiplier (1.0 = physical defaults). Scales both core and tail sigmas.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/halation/halation_amount",
+     "tier": "basic",
+     "tooltip": "High-level halation strength multiplier (1.0 = physical defaults). Scales the per-channel halation amplitudes.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/halation/halation_spatial_scale",
+     "tier": "basic",
+     "tooltip": "High-level halation size multiplier (1.0 = physical defaults). Scales the first-bounce sigma.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/halation/boost_ev",
+     "tier": "basic",
+     "tooltip": "Maximum highlight boost in stops.",
+     "min": 0,
+     "step": 0.5
+    },
+    {
+     "path": "/film_render/halation/protect_ev",
+     "tier": "basic",
+     "tooltip": "Protected range above midgray for the boost onset in stops.",
+     "min": 0,
+     "step": 0.5
+    },
+    {
+     "path": "/film_render/halation/boost_range",
+     "tier": "basic",
+     "tooltip": "Controls how quickly the highlight boost ramps in, from 0 to 1.",
+     "min": 0,
+     "max": 1,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/halation/scatter_core_um",
+     "tier": "dev",
+     "tooltip": "Sigma of the scatter core Gaussian per channel [R,G,B], in micrometers. Controls fine-scale sharpness loss in the emulsion.",
+     "min": 0,
+     "step": 0.5
+    },
+    {
+     "path": "/film_render/halation/scatter_tail_um",
+     "tier": "dev",
+     "tooltip": "Decay constant of the scatter exponential tail per channel [R,G,B], in micrometers (internally approximated by a sum of Gaussians). Controls extended low-level spread within the emulsion.",
+     "min": 0,
+     "step": 1.0
+    },
+    {
+     "path": "/film_render/halation/scatter_tail_weight",
+     "tier": "dev",
+     "tooltip": "Weight of the scatter tail Gaussian per channel [R,G,B] (0-1). Tail weight + core weight = 1. Higher values put more scattered light into the long tail.",
+     "min": 0,
+     "max": 1,
+     "step": 0.01,
+     "decimals": 2
+    },
+    {
+     "path": "/film_render/halation/halation_strength",
+     "tier": "dev",
+     "tooltip": "Total back-reflection halation amplitude per channel [R,G,B] (0-1). Typical red channel: weak AH 0.02-0.08, no AH 0.08-0.25. The blue channel is usually near zero.",
+     "min": 0,
+     "step": 0.005,
+     "decimals": 3
+    },
+    {
+     "path": "/film_render/halation/halation_first_sigma_um",
+     "tier": "dev",
+     "tooltip": "Sigma of the first halation bounce per channel [R,G,B], in micrometers. Set by the base thickness (40-80 um for typical cine/still bases).",
+     "min": 0,
+     "step": 1.0
+    },
+    {
+     "path": "/film_render/halation/halation_n_bounces",
+     "tier": "dev",
+     "tooltip": "Number of multi-bounce Gaussians summed in the halation pass. Subsequent bounces use sqrt(k)-spaced widths. Typical: 2-3.",
+     "min": 1,
+     "max": 5,
+     "step": 1
+    },
+    {
+     "path": "/film_render/halation/halation_bounce_decay",
+     "tier": "dev",
+     "tooltip": "Per-bounce amplitude decay ratio (rho). Physical range 0.3-0.7. Controls how fast the halation energy falls off between bounces.",
+     "min": 0,
+     "max": 1,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/halation/halation_renormalize",
+     "tier": "dev",
+     "tooltip": "If enabled, divide by (1 + sum of bounce amplitudes) so mid-grey is preserved. If disabled, halation is purely additive and subtly lifts shadows as well as highlights."
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Grain",
+   "path": "/film_render/grain",
+   "fields": [
+    {
+     "path": "/film_render/grain/active",
+     "tier": "basic",
+     "tooltip": "Add grain to the negative"
+    },
+    {
+     "path": "/film_render/grain/rms_granularity",
+     "tier": "basic",
+     "tooltip": "Per-channel (RGB) RMS granularity from the datasheet (sigma_D x 1000, 48 um aperture, net density 1.0). Higher = coarser grain. Typical consumer films ~4 (fine) to ~40 (coarse).",
+     "min": 0,
+     "step": 1.0
+    },
+    {
+     "path": "/film_render/grain/density_min",
+     "tier": "dev",
+     "tooltip": "Minimum density of the grain, typical values (0.03-0.06)."
+    },
+    {
+     "path": "/film_render/grain/uniformity",
+     "tier": "dev",
+     "tooltip": "Grain uniformity per channel; lower bends the noise curve toward the Selwyn bell, typical values (0.94-0.98)."
+    },
+    {
+     "path": "/film_render/grain/particle_scale_sublayers",
+     "tier": "dev",
+     "tooltip": "Relative particle-area scale per emulsion sublayer (coarsest sublayer = 1, finer sublayers smaller).",
+     "min": 0,
+     "step": 0.25
+    },
+    {
+     "path": "/film_render/grain/blur",
+     "tier": "basic",
+     "tooltip": "Sigma of gaussian blur in pixels for the grain, to be increased at high magnifications, (should be 0.8-0.9 at high resolution, reduce down to 0.6 for lower res).",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/grain/mult_usm_sigma",
+     "tier": "dev",
+     "tooltip": "Radius (px) of the density unsharp mask. Broad (default 0.7) puts the acutance in the mid-band, away from Nyquist, so the pixel stays gone while perceived sharpness comes back.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/grain/mult_usm_amount",
+     "tier": "basic",
+     "tooltip": "Strength of the mass-conserving density unsharp mask applied after the grain blur: it makes the pixel/sampling grid disappear while keeping the grain and image content (positive, mass-conserving, not a denoiser). 0 disables. Default 1.5.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/grain/blur_dye_clouds_um",
+     "tier": "dev",
+     "tooltip": "Scale the sigma of gaussian blur in um for the dye clouds, to be used at high magnifications, (default 1).",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/film_render/grain/micro_structure",
+     "tier": "dev",
+     "tooltip": "Clumps at the molecular level, [sigma blur of micro-structure / ultimate light-resolution (0.10 um default), size of molecular clumps in nm (30 nm default)]. Only for insane magnifications.",
+     "min": 0,
+     "step": 0.1
+    }
+   ],
+   "subsections": [
+    {
+     "title": "pixel statistics",
+     "fields": [
+      "density_min",
+      "uniformity",
+      "particle_scale_sublayers"
+     ]
+    },
+    {
+     "title": "texture",
+     "fields": [
+      "blur",
+      "mult_usm_amount",
+      "mult_usm_sigma"
+     ]
+    },
+    {
+     "title": "micro substructure",
+     "fields": [
+      "blur_dye_clouds_um",
+      "micro_structure"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Glare",
+   "path": "/print_render/glare",
+   "fields": [
+    {
+     "path": "/print_render/glare/active",
+     "tier": "basic",
+     "tooltip": "Add glare to the print"
+    },
+    {
+     "path": "/print_render/glare/percent",
+     "tier": "basic",
+     "tooltip": "Percentage of the glare light (typically 0.1-0.25)",
+     "min": 0,
+     "max": 1,
+     "step": 0.01
+    },
+    {
+     "path": "/print_render/glare/roughness",
+     "tier": "basic",
+     "tooltip": "Roughness of the glare light (0-1)",
+     "min": 0,
+     "max": 1,
+     "step": 0.05
+    },
+    {
+     "path": "/print_render/glare/blur",
+     "tier": "basic",
+     "tooltip": "Sigma of gaussian blur in pixels for the glare",
+     "min": 0,
+     "step": 0.1
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Chemistry",
+   "path": "/print_render/chemistry",
+   "fields": [
+    {
+     "path": "/print_render/chemistry/development_time",
+     "tier": "basic",
+     "label": "Development time",
+     "tooltip": "Development time for a BW development-time family: selects the density curve and base+fog to render. '\u2014' uses the representative middle development; ignored for single-curve and color stocks."
+    },
+    {
+     "path": "/print_render/chemistry/active",
+     "tier": "basic",
+     "tooltip": "Enable print density-curve morphing."
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor",
+     "tier": "basic",
+     "label": "Gamma factor",
+     "tooltip": "Global coupled gamma multiplier for the print density curves.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor_fast",
+     "tier": "dev",
+     "label": "Gamma factor fast",
+     "tooltip": "Gamma factor applied to the fast sub-layer.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor_slow",
+     "tier": "dev",
+     "label": "Gamma factor slow",
+     "tooltip": "Gamma factor applied to the mid and slow sub-layers.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor_red",
+     "tier": "dev",
+     "label": "Gamma factor red",
+     "tooltip": "Per-channel gamma factor applied to the red channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor_green",
+     "tier": "dev",
+     "label": "Gamma factor green",
+     "tooltip": "Per-channel gamma factor applied to the green channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/print_render/chemistry/gamma_factor_blue",
+     "tier": "dev",
+     "label": "Gamma factor blue",
+     "tooltip": "Per-channel gamma factor applied to the blue channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/print_render/chemistry/developer_exhaustion",
+     "tier": "dev",
+     "label": "Developer exhaustion",
+     "tooltip": "Blend all three print sub-layers toward the matched Gumbel shoulder while preserving midgray via a common horizontal offset.",
+     "min": 0.0,
+     "max": 1.0,
+     "step": 0.02
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Base",
+   "path": "/film_render/base",
+   "fields": [
+    {
+     "path": "/film_render/base/active",
+     "tier": "basic",
+     "tooltip": "Enable base-density (film base + fog / orange mask) tuning."
+    },
+    {
+     "path": "/film_render/base/scale",
+     "tier": "basic",
+     "tooltip": "Overall multiplier on the base density.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/base/cyan",
+     "tier": "basic",
+     "tooltip": "Cyan-channel scale of the base density.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/base/magenta",
+     "tier": "basic",
+     "tooltip": "Magenta-channel scale of the base density.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/base/yellow",
+     "tier": "basic",
+     "tooltip": "Yellow-channel scale of the base density.",
+     "min": 0,
+     "step": 0.05
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Chemistry",
+   "path": "/film_render/chemistry",
+   "fields": [
+    {
+     "path": "/film_render/chemistry/development_time",
+     "tier": "basic",
+     "label": "Development time",
+     "tooltip": "Development time for a BW development-time family: selects the density curve and base+fog to render. '\u2014' uses the representative middle development; ignored for single-curve and color stocks."
+    },
+    {
+     "path": "/film_render/chemistry/active",
+     "tier": "basic",
+     "tooltip": "Enable film density-curve morphing."
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor",
+     "tier": "basic",
+     "label": "Gamma factor",
+     "tooltip": "Global coupled gamma multiplier for the film density curves.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor_fast",
+     "tier": "dev",
+     "label": "Gamma factor fast",
+     "tooltip": "Gamma factor applied to the fast sub-layer.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor_slow",
+     "tier": "dev",
+     "label": "Gamma factor slow",
+     "tooltip": "Gamma factor applied to the mid and slow sub-layers.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.05
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor_red",
+     "tier": "dev",
+     "label": "Gamma factor red",
+     "tooltip": "Per-channel gamma factor applied to the red channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor_green",
+     "tier": "dev",
+     "label": "Gamma factor green",
+     "tooltip": "Per-channel gamma factor applied to the green channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/chemistry/gamma_factor_blue",
+     "tier": "dev",
+     "label": "Gamma factor blue",
+     "tooltip": "Per-channel gamma factor applied to the blue channel.",
+     "min": 0.25,
+     "max": 4.0,
+     "step": 0.02
+    },
+    {
+     "path": "/film_render/chemistry/developer_exhaustion",
+     "tier": "dev",
+     "label": "Developer exhaustion",
+     "tooltip": "Blend all three film sub-layers toward the matched Gumbel shoulder while preserving midgray via a common horizontal offset.",
+     "min": 0.0,
+     "max": 1.0,
+     "step": 0.02
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Preflash",
+   "path": "/enlarger",
+   "fields": [
+    {
+     "path": "/enlarger/preflash_exposure",
+     "tier": "dev",
+     "label": "exposure",
+     "tooltip": "Preflash exposure value in ev for the print",
+     "min": 0,
+     "step": 0.005
+    },
+    {
+     "path": "/enlarger/preflash_y_filter_shift",
+     "tier": "dev",
+     "label": "y filter shift",
+     "tooltip": "Shift the Y filter of the enlarger from the neutral position for the preflash, typical values (-20-20), in Kodak CC units",
+     "step": 1
+    },
+    {
+     "path": "/enlarger/preflash_m_filter_shift",
+     "tier": "dev",
+     "label": "m filter shift",
+     "tooltip": "Shift the M filter of the enlarger from the neutral position for the preflash, typical values (-20-20), in Kodak CC units",
+     "step": 1
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Camera",
+   "path": "/camera",
+   "fields": [
+    {
+     "path": "/camera/exposure_compensation_ev",
+     "tier": "basic",
+     "tooltip": "Add a bias to the auto-exposure of the camera.",
+     "min": -100,
+     "max": 100,
+     "step": 0.25
+    },
+    {
+     "path": "/camera/auto_exposure",
+     "tier": "basic",
+     "tooltip": "Use the auto-exposure feature of the virtual camera."
+    },
+    {
+     "path": "/camera/film_format_mm",
+     "tier": "basic",
+     "tooltip": "Long edge of the film format in millimeters, e.g. 8, 16, 35, 60, 120.",
+     "min": 8.0,
+     "max": 120.0,
+     "step": 1.0,
+     "decimals": 0
+    },
+    {
+     "path": "/camera/auto_exposure_method",
+     "tier": "dev",
+     "tooltip": "Metering method used by the virtual camera's auto-exposure.",
+     "choices": [
+      "center_weighted",
+      "matrix",
+      "multi_zone",
+      "partial",
+      "highlight_weighted",
+      "median",
+      "average"
+     ]
+    },
+    {
+     "path": "/camera/color_filter",
+     "tier": "basic",
+     "tooltip": "Camera taking filter held in front of the lens. Its measured spectral transmittance multiplies the incoming light, so it both darkens and color-casts the exposure (e.g. Hoya Y2/YA3 yellow, R1 red, X0/X1 UV/haze). 'none' = no filter.",
+     "choices": [
+      "none",
+      "hoya_x0",
+      "hoya_x1",
+      "hoya_y2",
+      "hoya_ya3",
+      "hoya_r1"
+     ]
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Diffusion",
+   "path": "/camera/diffusion_filter",
+   "fields": [
+    {
+     "path": "/camera/diffusion_filter/active",
+     "tier": "basic",
+     "tooltip": "Toggle the diffusion filter (Pro-Mist family)."
+    },
+    {
+     "path": "/camera/diffusion_filter/filter_family",
+     "tier": "basic",
+     "tooltip": "PSF family. pro_mist / glimmerglass / cinebloom are transparent (energy-preserving); black_pro_mist absorbs a fraction of the deflected light, lifting shadows by reducing local contrast.",
+     "choices": [
+      "glimmerglass",
+      "black_pro_mist",
+      "pro_mist",
+      "cinebloom"
+     ]
+    },
+    {
+     "path": "/camera/diffusion_filter/strength",
+     "tier": "basic",
+     "tooltip": "Commercial filter stop: 0, 1/8=0.125, 1/4=0.25, 1/2=0.5, 1, 2. Maps internally to the (p_s, p_a) deflected/absorbed photon fractions.",
+     "min": 0,
+     "max": 2,
+     "step": 0.125
+    },
+    {
+     "path": "/camera/diffusion_filter/spatial_scale",
+     "tier": "dev",
+     "tooltip": "Multiplier on the image-plane PSF widths (all per-group lambdas). Adjust for image-format / print-size differences.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/camera/diffusion_filter/halo_warmth",
+     "tier": "dev",
+     "tooltip": "Additive offset on the family's halo warmth axis. Positive = warm outer halo / cool inner halo. Energy-preserving per channel. 0 = use family default.",
+     "min": -1.5,
+     "max": 1.5,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/core_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the core weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/core_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the core lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/halo_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the halo weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/halo_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the halo lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/bloom_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the bloom weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/camera/diffusion_filter/bloom_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the bloom lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Diffusion",
+   "path": "/enlarger/diffusion_filter",
+   "fields": [
+    {
+     "path": "/enlarger/diffusion_filter/active",
+     "tier": "basic",
+     "tooltip": "Toggle the diffusion filter (Pro-Mist family)."
+    },
+    {
+     "path": "/enlarger/diffusion_filter/filter_family",
+     "tier": "basic",
+     "tooltip": "PSF family. pro_mist / glimmerglass / cinebloom are transparent (energy-preserving); black_pro_mist absorbs a fraction of the deflected light, lifting shadows by reducing local contrast.",
+     "choices": [
+      "glimmerglass",
+      "black_pro_mist",
+      "pro_mist",
+      "cinebloom"
+     ]
+    },
+    {
+     "path": "/enlarger/diffusion_filter/strength",
+     "tier": "basic",
+     "tooltip": "Commercial filter stop: 0, 1/8=0.125, 1/4=0.25, 1/2=0.5, 1, 2. Maps internally to the (p_s, p_a) deflected/absorbed photon fractions.",
+     "min": 0,
+     "max": 2,
+     "step": 0.125
+    },
+    {
+     "path": "/enlarger/diffusion_filter/spatial_scale",
+     "tier": "dev",
+     "tooltip": "Multiplier on the image-plane PSF widths (all per-group lambdas). Adjust for image-format / print-size differences.",
+     "min": 0,
+     "step": 0.1
+    },
+    {
+     "path": "/enlarger/diffusion_filter/halo_warmth",
+     "tier": "dev",
+     "tooltip": "Additive offset on the family's halo warmth axis. Positive = warm outer halo / cool inner halo. Energy-preserving per channel. 0 = use family default.",
+     "min": -1.5,
+     "max": 1.5,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/core_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the core weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/core_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the core lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/halo_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the halo weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/halo_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the halo lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/bloom_intensity",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the bloom weight; the three group weights are renormalized to sum to 1. 1.0 = use family default.",
+     "min": 0,
+     "max": 4,
+     "step": 0.05
+    },
+    {
+     "path": "/enlarger/diffusion_filter/bloom_size",
+     "tier": "dev",
+     "tooltip": "Advanced. Multiplier on the bloom lambda. 1.0 = use family default.",
+     "min": 0.1,
+     "max": 4,
+     "step": 0.05
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Scanner",
+   "path": "/scanner",
+   "fields": [
+    {
+     "path": "/scanner/lens_blur",
+     "tier": "basic",
+     "tooltip": "Sigma of gaussian filter in pixel for the scanner lens blur.",
+     "min": 0,
+     "step": 0.05
+    },
+    {
+     "path": "/scanner/white_correction",
+     "tier": "basic",
+     "tooltip": "Enable white point correction applied to the scanner output."
+    },
+    {
+     "path": "/scanner/white_level",
+     "tier": "basic",
+     "tooltip": "Target white level applied when white correction is enabled.",
+     "min": 0,
+     "max": 1,
+     "step": 0.005,
+     "decimals": 3
+    },
+    {
+     "path": "/scanner/black_correction",
+     "tier": "basic",
+     "tooltip": "Enable black point correction applied to the scanner output."
+    },
+    {
+     "path": "/scanner/black_level",
+     "tier": "basic",
+     "tooltip": "Target black level applied when black correction is enabled.",
+     "min": 0,
+     "max": 1,
+     "step": 0.005,
+     "decimals": 3
+    },
+    {
+     "path": "/scanner/unsharp_mask",
+     "tier": "dev",
+     "tooltip": "Apply unsharp mask to the scan, [sigma in pixel, amount].",
+     "min": 0,
+     "step": 0.05
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Input gamut compress",
+   "path": "/io/input_gamut_compress",
+   "fields": [
+    {
+     "path": "/io/input_gamut_compress/active",
+     "tier": "basic",
+     "tooltip": "Compress input chromaticities toward the visible spectral locus before spectral upsampling. Off passes input through unchanged."
+    },
+    {
+     "path": "/io/input_gamut_compress/algorithm",
+     "tier": "basic",
+     "tooltip": "xy: radial compression in CIE 1931 chromaticity (ACES RGC family, hue-preserving). oklch: perceptual chroma reduction at constant Oklch (L, h).",
+     "choices": [
+      "xy",
+      "oklch"
+     ]
+    },
+    {
+     "path": "/io/input_gamut_compress/knee",
+     "tier": "dev",
+     "tooltip": "Reinhard knee (threshold, limit, power). Defaults (0.0, 1.0, 6.0) apply a soft full-range roll-off that asymptotes at the spectral locus boundary.",
+     "min": 0.0,
+     "step": 0.05,
+     "decimals": 3
+    }
+   ],
+   "subsections": []
+  },
+  {
+   "title": "Output gamut compress",
+   "path": "/io/output_gamut_compress",
+   "fields": [
+    {
+     "path": "/io/output_gamut_compress/algorithm",
+     "tier": "basic",
+     "tooltip": "off: disable output gamut compression. aces_rgc (default): per-channel ACES RGC v1.3, matches Resolve/Nuke/OCIO and is the cheapest per pixel. cam16ucs: CAM16-UCS chroma reduction with the smoothest constant-hue behavior (heaviest). oklch: perceptual chroma reduction in OkLab, preserves hue + lightness. oklrab/jzazbz: alternative perceptual spaces.",
+     "choices": [
+      "off",
+      "oklch",
+      "aces_rgc",
+      "oklrab",
+      "jzazbz",
+      "cam16ucs"
+     ]
+    },
+    {
+     "path": "/io/output_gamut_compress/knee",
+     "tier": "dev",
+     "tooltip": "Reinhard knee (threshold, limit, power) on normalized chroma C/C_max. Default (0.0, 1.0, 6.0) rolls off smoothly from the center with the asymptote on the output cube edge.",
+     "min": 0.0,
+     "step": 0.05,
+     "decimals": 3
+    }
+   ],
+   "subsections": []
+  }
+ ],
+ "panels": {
+  "INPUT_PANEL_FIELDS": [
+   {
+    "path": "/io/input_color_space",
+    "tier": "basic",
+    "label": "Input color space",
+    "tooltip": "Color space of the input image, will be internally converted to sRGB and negative values clipped",
+    "choices": [
+     "sRGB",
+     "DCI-P3",
+     "Display P3",
+     "Adobe RGB (1998)",
+     "ITU-R BT.2020",
+     "ProPhoto RGB",
+     "ACES2065-1"
+    ]
+   },
+   {
+    "path": "/io/input_cctf_decoding",
+    "tier": "basic",
+    "label": "Apply CCTF decoding",
+    "tooltip": "Apply the inverse cctf transfer function of the color space"
+   }
+  ],
+  "SPECTRAL_PANEL_FIELDS": [
+   {
+    "path": "/settings/rgb_to_raw_method",
+    "tier": "dev",
+    "label": "Spectral upsampling",
+    "tooltip": "Method to upsample the spectral resolution of the image, hanatos2025 works on the full visible locus, mallett2019 works only on sRGB (will clip input).",
+    "choices": [
+     "hanatos2025",
+     "mallett2019"
+    ]
+   },
+   {
+    "path": "/settings/apply_hanatos2025_adaptation_window",
+    "tier": "dev",
+    "label": "hanatos2025 adaptation window",
+    "tooltip": "Apply the hanatos2025 bandpass adaptation window when reconstructing spectra."
+   },
+   {
+    "path": "/settings/apply_hanatos2025_adaptation_surface",
+    "tier": "dev",
+    "label": "hanatos2025 adaptation surface",
+    "tooltip": "Apply the hanatos2025 surface adaptation polynomial when reconstructing spectra."
+   },
+   {
+    "path": "/settings/spectral_gaussian_blur",
+    "tier": "dev",
+    "label": "Spectral gaussian blur",
+    "tooltip": "Sigma in nm for Gaussian blur applied to reconstructed spectra.",
+    "min": 0,
+    "step": 0.1
+   }
+  ],
+  "SIMULATION_SPECIAL_BORROWED_FIELDS": [
+   {
+    "path": "/enlarger/illuminant",
+    "tier": "dev",
+    "label": "Print illuminant",
+    "tooltip": "Print illuminant to simulate",
+    "choices": [
+     "TH-KG3"
+    ]
+   }
+  ],
+  "SIMULATION_EXPOSURE_PANEL_FIELDS": [
+   {
+    "path": "/enlarger/print_exposure",
+    "tier": "dev",
+    "label": "Print exposure",
+    "tooltip": "Changes the exposure time set in the virtual enlarger",
+    "min": 0,
+    "step": 0.02
+   },
+   {
+    "path": "/enlarger/print_exposure_compensation",
+    "tier": "dev",
+    "label": "Print auto compensation",
+    "tooltip": "Auto adjust the print exposure for the camera exposure compensation ev"
+   }
+  ],
+  "SIMULATION_ENLARGER_PANEL_FIELDS": [
+   {
+    "path": "/enlarger/y_filter_shift",
+    "tier": "dev",
+    "label": "Print Y filter shift",
+    "tooltip": "Y filter shift of the color enlarger from a neutral position, in Kodak CC units",
+    "min": -200,
+    "step": 1
+   },
+   {
+    "path": "/enlarger/m_filter_shift",
+    "tier": "dev",
+    "label": "Print M filter shift",
+    "tooltip": "M filter shift of the color enlarger from a neutral position, in Kodak CC units",
+    "min": -200,
+    "step": 1
+   }
+  ],
+  "SIMULATION_OUTPUT_PANEL_FIELDS": [
+   {
+    "path": "/io/output_color_space",
+    "tier": "dev",
+    "label": "Output color space",
+    "tooltip": "Output color space of the simulation",
+    "choices": [
+     "sRGB",
+     "DCI-P3",
+     "Display P3",
+     "Adobe RGB (1998)",
+     "ITU-R BT.2020",
+     "ProPhoto RGB",
+     "ACES2065-1"
+    ]
+   },
+   {
+    "path": "/workflow/saving_color_space",
+    "tier": "dev",
+    "label": "Saving color space",
+    "tooltip": "Color space of the saved image file",
+    "choices": [
+     "sRGB",
+     "DCI-P3",
+     "Display P3",
+     "Adobe RGB (1998)",
+     "ITU-R BT.2020",
+     "ProPhoto RGB",
+     "ACES2065-1"
+    ]
+   },
+   {
+    "path": "/workflow/saving_cctf_encoding",
+    "tier": "dev",
+    "label": "Saving CCTF encoding",
+    "tooltip": "Add or not the CCTF to the saved image file"
+   }
+  ],
+  "SIMULATION_FOOTER_FIELDS": [
+   {
+    "path": "/workflow/auto_preview",
+    "tier": "dev",
+    "label": "Auto preview",
+    "tooltip": "trigger the preview after every change of gui parameters, use mouse scrollwheel on parameters field, read preview tooltip for details"
+   },
+   {
+    "path": "/io/scan_film",
+    "tier": "dev",
+    "label": "Scan film",
+    "tooltip": "Show a scan of the negative instead of the print"
+   }
+  ]
+ }
+}

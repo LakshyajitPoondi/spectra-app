@@ -36,6 +36,33 @@ Params params_from_diff(const json& d) {
     return p;
 }
 
+void apply_stock_specifics(const Pack& pack, Params& p) {
+    Params d = digest_params(pack, p, true);
+    p.film_render.grain = d.film_render.grain;
+    p.film_render.halation = d.film_render.halation;
+    p.film_render.dir_couplers = d.film_render.dir_couplers;
+    p.io.scan_film = load_profile(pack, p.film).is_positive();
+}
+
+Params default_user_params(const Pack& pack, const std::string& film, const std::string& print) {
+    Params p;
+    p.film = film;
+    p.print = print;
+    apply_stock_specifics(pack, p);
+    return p;
+}
+
+Params params_from_preset(const Pack& pack, const json& d) {
+    Params p;
+    if (d.is_object()) {
+        if (d.contains("film")) p.film = d.at("film").get<std::string>();
+        if (d.contains("print")) p.print = d.at("print").get<std::string>();
+    }
+    apply_stock_specifics(pack, p);
+    if (d.is_object()) apply_params_patch(p, d);
+    return p;
+}
+
 json preset_to_json(const Preset& p) {
     return json{{"format", "spectra-preset"}, {"version", 1}, {"name", p.name}, {"description", p.description},
                 {"params", p.diff}};
