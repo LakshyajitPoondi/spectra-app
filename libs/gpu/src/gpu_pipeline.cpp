@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <future>
 #include <cmath>
 #include <functional>
 #include <stdexcept>
@@ -87,21 +88,90 @@ GpuPipeline::~GpuPipeline() {
     for (auto& kv : tables_) ctx_->destroy(kv.second);
 }
 
-GpuPipeline::Plane GpuPipeline::make(int w, int h, int c) {
+Plane GpuPipeline::make(int w, int h, int c) {
     Plane p;
     p.w = w;
     p.h = h;
     p.c = c;
-    p.b = ctx_->create(p.floats());
+    p.b = ctx_->acquire(p.floats());
+    live_[p.b.buffer] = p.b;
     return p;
 }
 
 void GpuPipeline::free(Plane& p) {
-    ctx_->destroy(p.b);
+    live_.erase(p.b.buffer);
+    ctx_->release(p.b);
     p = Plane{};
 }
 
-GpuPipeline::Plane GpuPipeline::upload(const Image& img) {
+Plane GpuPipeline::copy(const Plane& p) {
+    Plane out = make(p.w, p.h, p.c);
+    combine(p, nullptr, out, {1.0}, {}, {}, {});
+    return out;
+}
+
+void GpuPipeline::detach(const Plane& p) { live_.erase(p.b.buffer); }
+
+void GpuPipeline::release_live() {
+    for (auto& kv : live_) ctx_->release(kv.second);
+    live_.clear();
+    for (auto& b : temp_) ctx_->destroy(b);
+    temp_.clear();
+}
+
+void StageCache::clear(Context& ctx) {
+    for (auto& p : plane) {
+        ctx.release(p.b);
+        p = Plane{};
+    }
+    for (auto& k : key) k.clear();
+    result = Image{};
+}
+
+uint64_t StageCache::bytes() const {
+    uint64_t n = 0;
+    for (auto& p : plane) n += p.b.bytes;
+    return n;
+}
+
+std::array<std::string, StageCache::kStages> GpuPipeline::stage_keys(const Params& digested, const RenderOptions& o) {
+    // Parameters that are read only from a given stage onwards. Everything not
+    // listed belongs to stage 0, so an unclassified parameter re-renders all.
+    static const char* const late[StageCache::kStages][12] = {
+        {nullptr},
+        {"/film_render/dir_couplers", "/film_render/chemistry", "/extended/push_pull/film_stops",
+         "/extended/push_pull/mode", "/extended/bleach_bypass/film_amount",
+         "/extended/bleach_bypass/leuco_cyan_coupling", nullptr},
+        {"/film_render/grain", "/settings/use_fast_stats", nullptr},
+        {"/enlarger", "/print", "/print_render/chemistry", "/extended/push_pull/print_stops",
+         "/extended/bleach_bypass/print_amount", "/extended/retime_print_to_midgray", nullptr},
+        {"/scanner/lens_blur", "/scanner/unsharp_mask", "/io/output_color_space", "/io/output_cctf_encoding",
+         "/io/output_gamut_compress", "/print_render/glare", "/extended/hdr_output", nullptr},
+    };
+    nlohmann::json j = params_to_json(digested);
+    std::array<std::string, StageCache::kStages> part;
+    for (int k = 1; k < StageCache::kStages; ++k)
+        for (int i = 0; late[k][i]; ++i) {
+            nlohmann::json::json_pointer ptr(late[k][i]);
+            if (!j.contains(ptr)) continue;
+            part[k] += j.at(ptr).dump();
+            part[k] += '|';
+            // erase from the remainder
+            nlohmann::json::json_pointer parent = ptr.parent_pointer();
+            j.at(parent).erase(ptr.back());
+        }
+    part[0] = j.dump() + render_options_to_json(o).dump();
+    std::array<std::string, StageCache::kStages> key;
+    std::string acc;
+    for (int k = 0; k < StageCache::kStages; ++k) {
+        acc += part[k];
+        acc += '#';
+        key[k] = acc;
+    }
+    return key;
+}
+
+Plane GpuPipeline::upload(const Image& img) {
     Plane p = make(img.w, img.h, img.c);
     std::vector<float> f(img.v.size());
     parallel_for(static_cast<long>(f.size()), [&](long a, long b) {
@@ -122,14 +192,14 @@ Image GpuPipeline::download(const Plane& p) {
 }
 
 const Buffer* GpuPipeline::params(const std::vector<float>& v) {
-    Buffer b = ctx_->create(std::max<size_t>(v.size(), 4));
+    Buffer b = ctx_->create_params(std::max<size_t>(v.size(), 4));
     if (!v.empty()) ctx_->upload(b, v.data(), v.size());
     temp_.push_back(b);
     return &temp_.back();
 }
 
 const Buffer* GpuPipeline::uparams(const std::vector<uint32_t>& v) {
-    Buffer b = ctx_->create(std::max<size_t>(v.size(), 4));
+    Buffer b = ctx_->create_params(std::max<size_t>(v.size(), 4));
     ctx_->upload(b, reinterpret_cast<const float*>(v.data()), v.size());
     temp_.push_back(b);
     return &temp_.back();
@@ -260,19 +330,19 @@ void GpuPipeline::gaussian(const Plane& src, Plane& dst, const Vec& sigma_in, co
         pc.u[4] = 0;  // rows first, as the reference
         const Buffer* p1 = params(pv);
         ctx_->dispatch("iir", {&src.b, &tmp.b, nullptr, nullptr, nullptr, nullptr, nullptr, p1}, pc,
-                       static_cast<uint32_t>((src.h + 15) / 16), 1);
+                       static_cast<uint32_t>((src.h + 15) / 16), 1, static_cast<uint64_t>(src.w) * src.h);
         for (int k = 0; k < c; ++k) pv[16 + k] = static_cast<float>(coef[k]);
         pc.u[4] = 1;
         const Buffer* p2 = params(pv);
         if (accumulate) {
             Plane res = make(src.w, src.h, c);
             ctx_->dispatch("iir", {&tmp.b, &res.b, nullptr, nullptr, nullptr, nullptr, nullptr, p2}, pc,
-                           static_cast<uint32_t>((src.w + 15) / 16), 1);
+                           static_cast<uint32_t>((src.w + 15) / 16), 1, static_cast<uint64_t>(src.w) * src.h);
             combine(dst, &res, dst, {1.0}, {1.0}, {}, {});
             free(res);
         } else {
             ctx_->dispatch("iir", {&tmp.b, &dst.b, nullptr, nullptr, nullptr, nullptr, nullptr, p2}, pc,
-                           static_cast<uint32_t>((src.w + 15) / 16), 1);
+                           static_cast<uint32_t>((src.w + 15) / 16), 1, static_cast<uint64_t>(src.w) * src.h);
         }
         free(tmp);
         return;
@@ -331,7 +401,8 @@ Vec GpuPipeline::reduce(const Plane& p, bool sum) {
     pc.u[1] = static_cast<uint32_t>(p.h);
     pc.u[2] = static_cast<uint32_t>(p.c);
     pc.u[3] = sum ? 1 : 0;
-    ctx_->dispatch("reduce", {&p.b, &rows.b}, pc, 1, static_cast<uint32_t>((p.h + 15) / 16));
+    ctx_->dispatch("reduce", {&p.b, &rows.b}, pc, 1, static_cast<uint32_t>((p.h + 15) / 16),
+                   static_cast<uint64_t>(p.w) * p.h);
     std::vector<float> f(rows.floats());
     ctx_->download(rows.b, f.data(), f.size());
     free(rows);
@@ -345,7 +416,7 @@ Vec GpuPipeline::reduce(const Plane& p, bool sum) {
     return out;
 }
 
-GpuPipeline::Plane GpuPipeline::cpu_stage(const Plane& p, const std::string& what,
+Plane GpuPipeline::cpu_stage(const Plane& p, const std::string& what,
                                           const std::function<Image(const Image&)>& fn) {
     if (fallbacks_ && std::find(fallbacks_->begin(), fallbacks_->end(), what) == fallbacks_->end())
         fallbacks_->push_back(what);
@@ -414,7 +485,7 @@ uint64_t GpuPipeline::estimate_bytes(int w, int h) const {
 
 // ---- stages -------------------------------------------------------------------
 
-GpuPipeline::Plane GpuPipeline::stage_expose(const Image& rgb, const Region& r, GpuRenderInfo* info, double ae_ev) {
+Plane GpuPipeline::stage_expose(const Image& rgb, const Region& r, GpuRenderInfo* info, double ae_ev) {
     const Pipeline& cpu = *cpu_;
     int fc = cpu.film_.n_ch;
     double scale = std::pow(2.0, ae_ev) * std::pow(2.0, p_.camera.exposure_compensation_ev);
@@ -536,7 +607,7 @@ GpuPipeline::Plane GpuPipeline::stage_expose(const Image& rgb, const Region& r, 
     return raw;
 }
 
-GpuPipeline::Plane GpuPipeline::stage_develop(Plane& log_raw, const Region& r) {
+Plane GpuPipeline::stage_develop(Plane& log_raw, const Region& r) {
     const Pipeline& cpu = *cpu_;
     const Vec& le = cd_->log_exposure();
     int n_le = static_cast<int>(le.size()), c = log_raw.c;
@@ -625,7 +696,7 @@ GpuPipeline::Plane GpuPipeline::stage_develop(Plane& log_raw, const Region& r) {
     return density;
 }
 
-GpuPipeline::Plane GpuPipeline::stage_grain(Plane& cmy, const Region& r) {
+Plane GpuPipeline::stage_grain(Plane& cmy, const Region& r) {
     const GrainParams& g = p_.film_render.grain;
     if (!g.active) return cmy;
     const Pipeline& cpu = *cpu_;
@@ -743,7 +814,7 @@ GpuPipeline::Plane GpuPipeline::stage_grain(Plane& cmy, const Region& r) {
     return out;
 }
 
-GpuPipeline::Plane GpuPipeline::stage_print(Plane& cmy, const Region& r) {
+Plane GpuPipeline::stage_print(Plane& cmy, const Region& r) {
     const Pipeline& cpu = *cpu_;
     int fc = cpu.film_.n_ch, pcn = cpu.print_.n_ch;
     std::vector<float> D(static_cast<size_t>(NL) * 4, 0.0f), R(static_cast<size_t>(NL) * 3, 0.0f);
@@ -790,7 +861,7 @@ GpuPipeline::Plane GpuPipeline::stage_print(Plane& cmy, const Region& r) {
     return raw;
 }
 
-GpuPipeline::Plane GpuPipeline::stage_scan(Plane& density, const Region& r) {
+Plane GpuPipeline::stage_scan(Plane& density, const Region& r) {
     const Pipeline& cpu = *cpu_;
     int c = cpu.scan_n_ch_, w = density.w, h = density.h;
     bool scan_film = p_.io.scan_film;
@@ -967,9 +1038,32 @@ GpuPipeline::Plane GpuPipeline::stage_scan(Plane& density, const Region& r) {
     return rgb;
 }
 
-Image GpuPipeline::render_region(const Image& rgb, Tap collect, const Region& region, GpuRenderInfo* info) {
+Image GpuPipeline::render_region(const Image& rgb, Tap collect, const Region& region, GpuRenderInfo* info,
+                                 StageCache* cache) {
+    try {
+        return render_region_impl(rgb, collect, region, info, cache);
+    } catch (...) {
+        // A cancelled or failed render must not leak GPU memory. Stage outputs
+        // already stored in the cache stay valid.
+        const std::atomic<bool>* none = nullptr;
+        ctx_->set_cancel_flag(none);
+        try {
+            ctx_->flush();
+        } catch (...) {
+        }
+        release_live();
+        throw;
+    }
+}
+
+Image GpuPipeline::render_region_impl(const Image& rgb, Tap collect, const Region& region, GpuRenderInfo* info,
+                                      StageCache* cache) {
     auto timed = [&](const char* name, std::chrono::steady_clock::time_point t0) {
-        if (info) info->stage_ms[name] += ms_since(t0);
+        // Stage boundaries submit the pending batch so that the timings are real.
+        if (info) {
+            ctx_->flush();
+            info->stage_ms[name] += ms_since(t0);
+        }
     };
     auto finish = [&](Plane& p) {
         auto t0 = std::chrono::steady_clock::now();
@@ -977,30 +1071,85 @@ Image GpuPipeline::render_region(const Image& rgb, Tap collect, const Region& re
         free(p);
         for (auto& b : temp_) ctx_->destroy(b);
         temp_.clear();
-        timed("download", t0);
+        if (info) info->stage_ms["download"] += ms_since(t0);
         return out;
     };
     temp_.reserve(4096);  // parameter buffers must not move during a render
+    // Persistent buffers: freed planes are kept for the next plane of the same
+    // size, bounded to 1.5 planes of the widest kind on top of the working set.
+    ctx_->set_pool_limit(static_cast<uint64_t>(rgb.w) * rgb.h * std::max(cpu_->film().n_ch, 3) * sizeof(float) * 3 / 2);
     double ae = region.opt.autoexposure_ev ? *region.opt.autoexposure_ev : 0.0;
+
+    // ---- stage cache bookkeeping
+    std::array<std::string, StageCache::kStages> keys;
+    int first = 0;
+    if (cache) {
+        if (collect != Tap::RgbOut) throw std::runtime_error("the stage cache renders rgb_out only");
+        RenderOptions ko = region.opt;
+        keys = stage_keys(p_, ko);
+        if (cache->plane[0].b.buffer && (cache->plane[0].w != rgb.w || cache->plane[0].h != rgb.h)) cache->clear(*ctx_);
+        while (first < StageCache::kStages && cache->key[first] == keys[first] && !keys[first].empty() &&
+               (first == StageCache::kStages - 1 ? !cache->result.v.empty()
+                                                 : (cache->plane[first].b.buffer != VK_NULL_HANDLE ||
+                                                    (first == 3 && p_.io.scan_film))))
+            ++first;
+        cache->first_stage_run = first;
+        if (info) info->first_stage_run = first;
+        if (first == StageCache::kStages) return cache->result;
+    }
+    auto store = [&](int k, Plane& p) {
+        // The cache takes ownership; everything downstream is now stale.
+        for (int i = k; i < StageCache::kStages - 1; ++i) {
+            ctx_->release(cache->plane[i].b);
+            cache->plane[i] = Plane{};
+        }
+        for (int i = k; i < StageCache::kStages; ++i) cache->key[i].clear();
+        cache->result = Image{};
+        ctx_->flush();  // the stage is complete on the device before it is published
+        detach(p);
+        cache->plane[k] = p;
+        cache->key[k] = keys[k];
+    };
+
     auto t0 = std::chrono::steady_clock::now();
-    Plane log_raw = stage_expose(rgb, region, info, ae);
-    timed("film exposure", t0);
-    if (collect == Tap::LogEFilm) return finish(log_raw);
-    t0 = std::chrono::steady_clock::now();
-    Plane cmy = stage_develop(log_raw, region);
-    free(log_raw);
-    timed("film development", t0);
-    t0 = std::chrono::steady_clock::now();
-    cmy = stage_grain(cmy, region);
-    timed("grain", t0);
-    if (collect == Tap::CmyFilm) return finish(cmy);
+    Plane log_raw;
+    if (first <= 0) {
+        log_raw = stage_expose(rgb, region, info, ae);
+        timed("film exposure", t0);
+        if (collect == Tap::LogEFilm) return finish(log_raw);
+        if (cache) store(0, log_raw);
+    } else {
+        log_raw = cache->plane[0];
+    }
+    Plane cmy;
+    if (first <= 1) {
+        t0 = std::chrono::steady_clock::now();
+        cmy = stage_develop(log_raw, region);
+        if (!cache) free(log_raw);
+        timed("film development", t0);
+        if (cache) store(1, cmy);
+    } else {
+        cmy = cache->plane[1];
+    }
+    if (first <= 2) {
+        t0 = std::chrono::steady_clock::now();
+        Plane in = cache ? copy(cmy) : cmy;
+        cmy = stage_grain(in, region);
+        timed("grain", t0);
+        if (collect == Tap::CmyFilm) return finish(cmy);
+        if (cache) store(2, cmy);
+    } else {
+        cmy = cache->plane[2];
+    }
     Plane density;
     if (p_.io.scan_film) {
         if (collect != Tap::RgbOut) throw std::runtime_error("the scan-film route has no print taps");
         density = cmy;
-    } else {
+        if (cache) cache->key[3] = keys[3];
+    } else if (first <= 3) {
         t0 = std::chrono::steady_clock::now();
-        Plane log_print = stage_print(cmy, region);
+        Plane in = cache ? copy(cmy) : cmy;
+        Plane log_print = stage_print(in, region);
         timed("print exposure", t0);
         if (collect == Tap::LogEPrint) return finish(log_print);
         t0 = std::chrono::steady_clock::now();
@@ -1021,14 +1170,80 @@ Image GpuPipeline::render_region(const Image& rgb, Tap collect, const Region& re
         free(log_print);
         timed("print development", t0);
         if (collect == Tap::CmyPrint) return finish(density);
+        if (cache) store(3, density);
+    } else {
+        density = cache->plane[3];
     }
     t0 = std::chrono::steady_clock::now();
-    Plane out = stage_scan(density, region);
+    Plane in = cache ? copy(density) : density;
+    Plane out = stage_scan(in, region);
     timed("scan", t0);
-    return finish(out);
+    Image result = finish(out);
+    if (cache) {
+        cache->result = result;
+        cache->key[4] = keys[4];
+    }
+    return result;
 }
 
-Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info) {
+int GpuPipeline::apron_px(double px) const {
+    double scale = opt_.match_python ? 1.0 : opt_.reference_pixel_um / px;
+    const HalationParams& hp = p_.film_render.halation;
+    const DirCouplersParams& dp = p_.film_render.dir_couplers;
+    double apron = 8;
+    apron += 4 * p_.camera.lens_blur_um / px;
+    if (hp.active) {
+        double core = std::max({hp.scatter_core_um[0], hp.scatter_core_um[1], hp.scatter_core_um[2]});
+        double tail = std::max({hp.scatter_tail_um[0], hp.scatter_tail_um[1], hp.scatter_tail_um[2]});
+        double first = std::max({hp.halation_first_sigma_um[0], hp.halation_first_sigma_um[1], hp.halation_first_sigma_um[2]});
+        apron += 4 * std::max(core, 2.7684 * tail) * hp.scatter_spatial_scale / px;
+        apron += 4 * first * std::sqrt(static_cast<double>(std::max(hp.halation_n_bounces, 1))) * hp.halation_spatial_scale / px;
+    }
+    if (dp.active && dp.diffusion_size_um > 0) apron += 4 * std::max(dp.diffusion_size_um, 2.7684 * dp.diffusion_tail_um) / px;
+    if (p_.film_render.grain.active)
+        apron += 4 * (p_.film_render.grain.blur + p_.film_render.grain.mult_usm_sigma) * scale + 8;
+    apron += 4 * (p_.print_render.glare.blur + p_.scanner.lens_blur + p_.scanner.unsharp_mask[0]) * scale;
+    return static_cast<int>(std::ceil(apron));
+}
+
+double GpuPipeline::measure_boost_max_raw(const Image& rgb) {
+    Region region;
+    region.opt = opt_;
+    if (!p_.camera.auto_exposure) region.opt.autoexposure_ev = 0.0;
+    region.pixel_size_um = 1.0;
+    Params saved = p_;
+    p_.film_render.halation.active = false;
+    p_.film_render.halation.boost_ev = 0;
+    p_.camera.lens_blur_um = 0;
+    p_.camera.diffusion_filter.active = false;
+    double mx = -INFINITY;
+    int rows = std::max(64, static_cast<int>((4 << 20) / std::max(rgb.w, 1)));
+    try {
+        for (int y0 = 0; y0 < rgb.h; y0 += rows) {
+            int y1 = std::min(rgb.h, y0 + rows);
+            Image strip(y1 - y0, rgb.w, 3);
+            for (int y = y0; y < y1; ++y)
+                for (int x = 0; x < rgb.w; ++x) std::copy(rgb.px(y, x), rgb.px(y, x) + 3, strip.px(y - y0, x));
+            Image lr = render_region(strip, Tap::LogEFilm, region, nullptr);
+            for (double v : lr.v) mx = std::max(mx, v);
+        }
+    } catch (...) {
+        p_ = saved;
+        throw;
+    }
+    p_ = saved;
+    return std::pow(10.0, mx) - 1e-10;
+}
+
+uint64_t GpuPipeline::budget() const {
+    uint64_t b = gopt_.memory_budget_bytes;
+    if (b == 0) b = std::min<uint64_t>(4ull << 30, ctx_->query_budget_bytes() * 6 / 10);
+    return b;
+}
+
+bool GpuPipeline::would_tile(int w, int h) const { return gopt_.tile_size > 0 || estimate_bytes(w, h) > budget(); }
+
+Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info, StageCache* cache) {
     auto t_all = std::chrono::steady_clock::now();
     GpuRenderInfo local;
     if (!info) info = &local;
@@ -1073,36 +1288,28 @@ Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info)
     info->pixel_size_um = pixel_size;
     info->stats.pixel_size_um = pixel_size;
 
-    uint64_t budget = gopt_.memory_budget_bytes;
-    if (budget == 0) budget = std::min<uint64_t>(4ull << 30, ctx_->query_budget_bytes() * 6 / 10);
+    uint64_t budget = this->budget();
     info->budget_bytes = budget;
     info->estimated_bytes = estimate_bytes(src->w, src->h);
-    bool tile = gopt_.tile_size > 0 || info->estimated_bytes > budget;
+    bool tile = !cache && (gopt_.tile_size > 0 || info->estimated_bytes > budget);
+    uint64_t submits0 = ctx_->submit_count(), dispatches0 = ctx_->dispatch_count();
     Image out;
     if (!tile) {
-        out = render_region(*src, collect, region, info);
+        out = render_region(*src, collect, region, info, cache);
         info->tiles = 1;
+        if (cache) {
+            if (info->first_stage_run == 0) {
+                cache->stats = info->stats;
+                cache->pixel_size_um = pixel_size;
+            } else {
+                info->stats = cache->stats;
+            }
+        }
     } else {
         if (p_.camera.diffusion_filter.active || p_.enlarger.diffusion_filter.active)
             throw std::runtime_error("the diffusion filter cannot be rendered in tiles yet; "
                                      "raise the GPU memory budget or use the CPU backend");
-        // Apron: the support of every spatial effect that is switched on.
-        const HalationParams& hp = p_.film_render.halation;
-        const DirCouplersParams& dp = p_.film_render.dir_couplers;
-        double px = pixel_size, apron = 8;
-        apron += 4 * p_.camera.lens_blur_um / px;
-        if (hp.active) {
-            double core = std::max({hp.scatter_core_um[0], hp.scatter_core_um[1], hp.scatter_core_um[2]});
-            double tail = std::max({hp.scatter_tail_um[0], hp.scatter_tail_um[1], hp.scatter_tail_um[2]});
-            double first = std::max({hp.halation_first_sigma_um[0], hp.halation_first_sigma_um[1], hp.halation_first_sigma_um[2]});
-            apron += 4 * std::max(core, 2.7684 * tail) * hp.scatter_spatial_scale / px;
-            apron += 4 * first * std::sqrt(static_cast<double>(std::max(hp.halation_n_bounces, 1))) * hp.halation_spatial_scale / px;
-        }
-        if (dp.active && dp.diffusion_size_um > 0) apron += 4 * std::max(dp.diffusion_size_um, 2.7684 * dp.diffusion_tail_um) / px;
-        if (p_.film_render.grain.active)
-            apron += 4 * (p_.film_render.grain.blur + p_.film_render.grain.mult_usm_sigma) * region.scale + 8;
-        apron += 4 * (p_.print_render.glare.blur + p_.scanner.lens_blur + p_.scanner.unsharp_mask[0]) * region.scale;
-        int A = static_cast<int>(std::ceil(apron));
+        int A = apron_px(pixel_size);
         int T = gopt_.tile_size;
         if (T <= 0) {
             // Largest square core whose padded tile fits the budget.
@@ -1125,39 +1332,61 @@ Image GpuPipeline::process(const Image& image, Tap collect, GpuRenderInfo* info)
         region.opt.full_long_edge_px = long_edge;
         // Whole-image statistic: the highlight boost needs the global maximum.
         if (p_.film_render.halation.boost_ev != 0 && !region.opt.boost_max_raw) {
-            Params saved = p_;
-            p_.film_render.halation.active = false;
-            p_.film_render.halation.boost_ev = 0;
-            p_.camera.lens_blur_um = 0;
-            double mx = 0;
-            for (int y0 = 0; y0 < src->h; y0 += T)
-                for (int x0 = 0; x0 < src->w; x0 += T) {
-                    Image t = crop(x0, y0, std::min(src->w, x0 + T), std::min(src->h, y0 + T));
-                    Image lr = render_region(t, Tap::LogEFilm, region, nullptr);
-                    for (double v : lr.v) mx = std::max(mx, v);
-                }
-            p_ = saved;
-            region.opt.boost_max_raw = std::pow(10.0, mx) - 1e-10;
+            RenderOptions saved = opt_;
+            opt_.autoexposure_ev = region.opt.autoexposure_ev;
+            region.opt.boost_max_raw = measure_boost_max_raw(*src);
+            opt_ = saved;
         }
+        struct Tile {
+            int x0, y0, x1, y1, ax0, ay0, ax1, ay1;
+        };
+        std::vector<Tile> tiles;
         for (int y0 = 0; y0 < src->h; y0 += T)
             for (int x0 = 0; x0 < src->w; x0 += T) {
                 int x1 = std::min(src->w, x0 + T), y1 = std::min(src->h, y0 + T);
                 // The padded tile starts on a multiple of 32 so that reduced-resolution
                 // planes (wide Gaussians) sample the same pixel groups in every tile.
-                int ax0 = std::max(0, x0 - A) / 32 * 32, ay0 = std::max(0, y0 - A) / 32 * 32,
-                    ax1 = std::min(src->w, x1 + A), ay1 = std::min(src->h, y1 + A);
-                Region tr = region;
-                tr.opt.origin_x = opt_.origin_x + static_cast<uint32_t>(ax0);
-                tr.opt.origin_y = opt_.origin_y + static_cast<uint32_t>(ay0);
-                Image t = render_region(crop(ax0, ay0, ax1, ay1), collect, tr, info);
-                if (out.v.empty()) out = Image(src->h, src->w, t.c);
-                for (int y = y0; y < y1; ++y)
-                    std::copy(t.px(y - ay0, x0 - ax0), t.px(y - ay0, x0 - ax0) + static_cast<size_t>(x1 - x0) * t.c,
-                              out.px(y, x0));
-                ++info->tiles;
+                tiles.push_back({x0, y0, x1, y1, std::max(0, x0 - A) / 32 * 32, std::max(0, y0 - A) / 32 * 32,
+                                 std::min(src->w, x1 + A), std::min(src->h, y1 + A)});
             }
+        // Upload preparation overlaps compute: while the GPU renders tile i, a CPU
+        // thread cuts tile i + 1 out of the source and another copies the result
+        // of tile i - 1 into the output.
+        auto prepare = [&](size_t i) { return crop(tiles[i].ax0, tiles[i].ay0, tiles[i].ax1, tiles[i].ay1); };
+        std::future<Image> next = std::async(std::launch::async, prepare, size_t(0));
+        std::future<void> store;
+        try {
+            for (size_t i = 0; i < tiles.size(); ++i) {
+                const Tile tl = tiles[i];
+                Image in = next.get();
+                if (i + 1 < tiles.size()) next = std::async(std::launch::async, prepare, i + 1);
+                Region tr = region;
+                tr.opt.origin_x = opt_.origin_x + static_cast<uint32_t>(tl.ax0);
+                tr.opt.origin_y = opt_.origin_y + static_cast<uint32_t>(tl.ay0);
+                auto t = std::make_shared<Image>(render_region(in, collect, tr, info));
+                if (store.valid()) store.get();
+                if (out.v.empty()) out = Image(src->h, src->w, t->c);
+                store = std::async(std::launch::async, [&out, t, tl] {
+                    for (int y = tl.y0; y < tl.y1; ++y)
+                        std::copy(t->px(y - tl.ay0, tl.x0 - tl.ax0),
+                                  t->px(y - tl.ay0, tl.x0 - tl.ax0) + static_cast<size_t>(tl.x1 - tl.x0) * t->c,
+                                  out.px(y, tl.x0));
+                });
+                ++info->tiles;
+                if (on_progress) on_progress(info->tiles, static_cast<int>(tiles.size()));
+            }
+            if (store.valid()) store.get();
+        } catch (...) {
+            if (next.valid()) next.wait();
+            if (store.valid()) store.wait();
+            ctx_->trim_pool();
+            throw;
+        }
+        ctx_->trim_pool();  // a tiled render is a one-off: give the memory back
     }
     info->peak_gpu_bytes = ctx_->peak_allocated_bytes();
+    info->submits = ctx_->submit_count() - submits0;
+    info->dispatches = ctx_->dispatch_count() - dispatches0;
     info->total_ms = ms_since(t_all);
     fallbacks_ = nullptr;
     return out;

@@ -2,7 +2,7 @@
   "name": "spectra-app",
   "version-string": "0.3.0",
   "dependencies": [
-    "libraw",
+    "zlib",
     "tiff",
     "libpng",
     "libjpeg-turbo",

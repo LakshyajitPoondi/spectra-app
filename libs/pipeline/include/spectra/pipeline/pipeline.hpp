@@ -74,6 +74,13 @@ public:
                   RenderStats* stats = nullptr) const;
 
     const Params& params() const { return p_; }
+    const RenderOptions& options() const { return opt_; }
+    // Per-render options (statistics, origin, seed) can change between renders;
+    // none of the baked tables depends on them.
+    void set_options(const RenderOptions& o) { opt_ = o; }
+    // Autoexposure EV metered on a metering preview of the full frame
+    // (metering_preview()); 0 when autoexposure is off.
+    double meter_autoexposure_ev(const Image& metering_image) const;
     const RuntimeProfile& film() const { return film_; }
     const RuntimeProfile& print() const { return print_; }
     const TcLut& tc_lut() const { return tc_lut_; }

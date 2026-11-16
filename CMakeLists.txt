@@ -1,6 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 cmake_minimum_required(VERSION 3.24)
-project(spectra-app VERSION 0.2.0 LANGUAGES CXX)
+project(spectra-app VERSION 0.6.0 LANGUAGES CXX)
+
+# The product name shown in the app, the installer and exported files. This is
+# the only place it is defined.
+set(SPECTRA_PRODUCT_NAME "Spectra (working title)")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -70,25 +74,24 @@ if(SPECTRA_WITH_IO)
   find_package(PNG)
   find_package(JPEG)
   find_package(OpenEXR CONFIG)
-  find_package(libraw CONFIG QUIET)
-  if(NOT TARGET libraw::raw_r AND NOT TARGET libraw::raw)
-    find_path(LIBRAW_INCLUDE_DIR libraw/libraw.h)
-    find_library(LIBRAW_LIBRARY NAMES raw_r raw)
-  endif()
-  if(TIFF_FOUND AND PNG_FOUND AND JPEG_FOUND AND OpenEXR_FOUND AND
-     (TARGET libraw::raw_r OR TARGET libraw::raw OR (LIBRAW_INCLUDE_DIR AND LIBRAW_LIBRARY)))
+  # LibRaw: by default the pinned upstream release is fetched and built
+  # (cmake/libraw.cmake). -DSPECTRA_SYSTEM_LIBRAW=ON uses an installed one.
+  option(SPECTRA_SYSTEM_LIBRAW "Use the system LibRaw instead of the pinned release" OFF)
+  if(TIFF_FOUND AND PNG_FOUND AND JPEG_FOUND AND OpenEXR_FOUND)
+    if(SPECTRA_SYSTEM_LIBRAW)
+      find_path(LIBRAW_INCLUDE_DIR libraw/libraw.h REQUIRED)
+      find_library(LIBRAW_LIBRARY NAMES raw_r raw REQUIRED)
+      add_library(spectra_libraw INTERFACE)
+      target_include_directories(spectra_libraw INTERFACE ${LIBRAW_INCLUDE_DIR})
+      target_link_libraries(spectra_libraw INTERFACE ${LIBRAW_LIBRARY})
+    else()
+      include(cmake/libraw.cmake)
+    endif()
     set(SPECTRA_HAVE_IO ON)
     add_library(spectra_io STATIC libs/io/src/image_io.cpp libs/io/src/raw.cpp)
     target_include_directories(spectra_io PUBLIC libs/io/include)
-    target_link_libraries(spectra_io PUBLIC spectra_model PRIVATE TIFF::TIFF PNG::PNG JPEG::JPEG OpenEXR::OpenEXR)
-    if(TARGET libraw::raw_r)
-      target_link_libraries(spectra_io PRIVATE libraw::raw_r)
-    elseif(TARGET libraw::raw)
-      target_link_libraries(spectra_io PRIVATE libraw::raw)
-    else()
-      target_include_directories(spectra_io PRIVATE ${LIBRAW_INCLUDE_DIR})
-      target_link_libraries(spectra_io PRIVATE ${LIBRAW_LIBRARY})
-    endif()
+    target_link_libraries(spectra_io PUBLIC spectra_model
+      PRIVATE TIFF::TIFF PNG::PNG JPEG::JPEG OpenEXR::OpenEXR spectra_libraw)
   else()
     message(WARNING "Image / RAW I/O libraries not found: building without file I/O")
   endif()
@@ -133,16 +136,25 @@ if(SPECTRA_WITH_GPU)
   endif()
 endif()
 
-add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp apps/spectra-cli/bench.cpp)
+# Rendering engine shared by the app and the CLI (no UI dependency).
+configure_file(libs/engine/include/spectra/engine/product.hpp.in
+               ${CMAKE_CURRENT_BINARY_DIR}/generated/spectra/engine/product.hpp @ONLY)
+add_library(spectra_engine STATIC
+  libs/engine/src/engine.cpp libs/engine/src/presets.cpp libs/engine/src/lut.cpp libs/engine/src/files.cpp)
+target_include_directories(spectra_engine PUBLIC libs/engine/include ${CMAKE_CURRENT_BINARY_DIR}/generated)
+target_link_libraries(spectra_engine PUBLIC spectra_pipeline)
 if(SPECTRA_HAVE_GPU)
-  target_link_libraries(spectra-cli PRIVATE spectra_gpu)
-  target_compile_definitions(spectra-cli PRIVATE SPECTRA_HAVE_GPU=1)
+  target_link_libraries(spectra_engine PUBLIC spectra_gpu)
+  target_compile_definitions(spectra_engine PUBLIC SPECTRA_HAVE_GPU=1)
 endif()
-target_link_libraries(spectra-cli PRIVATE spectra_pipeline)
 if(SPECTRA_HAVE_IO)
-  target_link_libraries(spectra-cli PRIVATE spectra_io)
-  target_compile_definitions(spectra-cli PRIVATE SPECTRA_HAVE_IO=1)
+  target_link_libraries(spectra_engine PUBLIC spectra_io)
+  target_compile_definitions(spectra_engine PUBLIC SPECTRA_HAVE_IO=1)
 endif()
+
+add_executable(spectra-cli apps/spectra-cli/main.cpp apps/spectra-cli/parity.cpp apps/spectra-cli/bench.cpp
+               apps/spectra-cli/tools.cpp)
+target_link_libraries(spectra-cli PRIVATE spectra_engine)
 
 if(SPECTRA_BUILD_TESTS)
   enable_testing()

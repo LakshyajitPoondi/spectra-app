@@ -59,3 +59,11 @@ if(SPECTRA_HAVE_GPU)
            --pack ${SPECTRA_PACK})
   set_tests_properties(memory_limit_60mp PROPERTIES LABELS "memory" TIMEOUT 7200)
 endif()
+
+# Engine: stage cache against fresh renders for every parameter, previews,
+# cancellation, calibration, presets and LUT export. Uses the GPU when there is
+# one and always exercises the CPU fallback.
+add_executable(test_engine test_engine.cpp)
+target_link_libraries(test_engine PRIVATE spectra_engine)
+add_test(NAME engine COMMAND test_engine ${SPECTRA_PACK})
+set_tests_properties(engine PROPERTIES TIMEOUT 3600)

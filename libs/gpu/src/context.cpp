@@ -187,23 +187,32 @@ Context::Context(const ContextOptions& opt) {
     plci.pushConstantRangeCount = 1;
     plci.pPushConstantRanges = &range;
     check(vkCreatePipelineLayout(device_, &plci, nullptr, &layout_), "vkCreatePipelineLayout");
-    VkDescriptorPoolSize ps{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, kMaxBindings};
+    VkDescriptorPoolSize ps{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, kMaxBindings * kMaxBatch};
     VkDescriptorPoolCreateInfo dpci{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
-    dpci.maxSets = 1;
+    dpci.maxSets = kMaxBatch;
     dpci.poolSizeCount = 1;
     dpci.pPoolSizes = &ps;
     check(vkCreateDescriptorPool(device_, &dpci, nullptr, &desc_pool_), "vkCreateDescriptorPool");
+    // One descriptor set per dispatch of a batch.
+    std::vector<VkDescriptorSetLayout> layouts(kMaxBatch, set_layout_);
+    desc_sets_.resize(kMaxBatch);
     VkDescriptorSetAllocateInfo dai{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO};
     dai.descriptorPool = desc_pool_;
-    dai.descriptorSetCount = 1;
-    dai.pSetLayouts = &set_layout_;
-    check(vkAllocateDescriptorSets(device_, &dai, &desc_set_), "vkAllocateDescriptorSets");
+    dai.descriptorSetCount = kMaxBatch;
+    dai.pSetLayouts = layouts.data();
+    check(vkAllocateDescriptorSets(device_, &dai, desc_sets_.data()), "vkAllocateDescriptorSets");
     dummy_ = create(4);
 }
 
 Context::~Context() {
     if (!device_) return;
+    if (recording_) {
+        vkEndCommandBuffer(cmd_);
+        recording_ = false;
+    }
     vkDeviceWaitIdle(device_);
+    pending_buffers_.clear();
+    trim_pool();
     for (auto& kv : pipelines_) {
         vkDestroyPipeline(device_, kv.second.pipeline, nullptr);
         vkDestroyShaderModule(device_, kv.second.module, nullptr);
@@ -272,9 +281,83 @@ Buffer Context::create_raw(size_t bytes, bool host_visible) {
 }
 
 Buffer Context::create(size_t n_floats) { return create_raw(n_floats * sizeof(float), false); }
+Buffer Context::create_params(size_t n_floats) { return create_raw(n_floats * sizeof(float), true); }
+
+Buffer Context::acquire(size_t n_floats) {
+    size_t bytes = std::max<size_t>(n_floats * sizeof(float), 16);
+    auto it = free_.find(bytes);
+    if (it != free_.end()) {
+        Buffer b = it->second;
+        free_.erase(it);
+        pooled_ -= b.bytes;
+        return b;
+    }
+    // Nothing of this size: make room so the pool never adds more than its limit
+    // to the working set.
+    while (!free_.empty() && pooled_ + bytes > pool_limit_) {
+        auto big = std::prev(free_.end());
+        Buffer b = big->second;
+        free_.erase(big);
+        pooled_ -= b.bytes;
+        destroy(b);
+    }
+    return create_raw(bytes, false);
+}
+
+void Context::release(Buffer& b) {
+    if (!b.buffer) return;
+    if (b.bytes > pool_limit_) {
+        destroy(b);
+        return;
+    }
+    while (!free_.empty() && pooled_ + b.bytes > pool_limit_) {
+        auto it = free_.begin();
+        Buffer old = it->second;
+        free_.erase(it);
+        pooled_ -= old.bytes;
+        destroy(old);
+    }
+    pooled_ += b.bytes;
+    free_.emplace(b.bytes, b);
+    b = Buffer{};
+}
+
+void Context::trim_pool() {
+    for (auto& kv : free_) {
+        Buffer b = kv.second;
+        destroy(b);
+    }
+    free_.clear();
+    pooled_ = 0;
+}
+
+void Context::warm_up() {
+    for (const char* k : {"pointwise", "blur", "iir", "resample", "reduce", "expose", "develop", "grain", "spectral",
+                          "color", "encode"})
+        pipeline(k);
+}
+
+void Context::flush() {
+    if (!recording_) return;
+    recording_ = false;
+    pending_ = 0;
+    pending_work_ = 0;
+    pending_buffers_.clear();
+    submit_and_wait();
+    ++submits_;
+    if (cancel_ && cancel_->load(std::memory_order_relaxed)) throw Cancelled{};
+}
 
 void Context::destroy(Buffer& b) {
     if (!b.buffer) return;
+    if (recording_ && pending_buffers_.count(b.buffer)) {
+        // The pending batch still uses it: run the batch first. A cancellation
+        // raised here is reported by the next flush instead.
+        const std::atomic<bool>* c = cancel_;
+        cancel_ = nullptr;
+        flush();
+        cancel_ = c;
+    }
     if (b.mapped) vkUnmapMemory(device_, b.memory);
     vkDestroyBuffer(device_, b.buffer, nullptr);
     vkFreeMemory(device_, b.memory, nullptr);
@@ -302,6 +385,7 @@ void Context::submit_and_wait() {
 
 void Context::upload(const Buffer& b, const float* data, size_t n, size_t offset) {
     size_t bytes = n * sizeof(float), off = offset * sizeof(float);
+    if (recording_ && (!b.mapped || pending_buffers_.count(b.buffer))) flush();
     if (b.mapped) {
         std::memcpy(static_cast<char*>(b.mapped) + off, data, bytes);
         return;
@@ -322,6 +406,7 @@ void Context::upload(const Buffer& b, const float* data, size_t n, size_t offset
 
 void Context::download(const Buffer& b, float* data, size_t n, size_t offset) {
     size_t bytes = n * sizeof(float), off = offset * sizeof(float);
+    flush();
     if (b.mapped) {
         std::memcpy(data, static_cast<const char*>(b.mapped) + off, bytes);
         return;
@@ -360,29 +445,47 @@ Context::Pipeline& Context::pipeline(const std::string& kernel) {
 }
 
 void Context::dispatch(const std::string& kernel, const std::vector<const Buffer*>& buffers,
-                       const PushConstants& pc, uint32_t gx, uint32_t gy) {
+                       const PushConstants& pc, uint32_t gx, uint32_t gy, uint64_t work_pixels) {
     auto t0 = std::chrono::steady_clock::now();
     Pipeline& p = pipeline(kernel);
+    if (!recording_) {
+        VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
+        bi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        check(vkBeginCommandBuffer(cmd_, &bi), "vkBeginCommandBuffer");
+        recording_ = true;
+        pending_ = 0;
+        pending_work_ = 0;
+    }
+    VkDescriptorSet set = desc_sets_[pending_];
     VkDescriptorBufferInfo infos[kMaxBindings];
     VkWriteDescriptorSet writes[kMaxBindings];
     for (int i = 0; i < kMaxBindings; ++i) {
         const Buffer* b = static_cast<size_t>(i) < buffers.size() && buffers[static_cast<size_t>(i)] ? buffers[static_cast<size_t>(i)] : &dummy_;
         infos[i] = {b->buffer, 0, VK_WHOLE_SIZE};
         writes[i] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-        writes[i].dstSet = desc_set_;
+        writes[i].dstSet = set;
         writes[i].dstBinding = static_cast<uint32_t>(i);
         writes[i].descriptorCount = 1;
         writes[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writes[i].pBufferInfo = &infos[i];
+        pending_buffers_.insert(b->buffer);
     }
     vkUpdateDescriptorSets(device_, kMaxBindings, writes, 0, nullptr);
-    VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
-    check(vkBeginCommandBuffer(cmd_, &bi), "vkBeginCommandBuffer");
     vkCmdBindPipeline(cmd_, VK_PIPELINE_BIND_POINT_COMPUTE, p.pipeline);
-    vkCmdBindDescriptorSets(cmd_, VK_PIPELINE_BIND_POINT_COMPUTE, layout_, 0, 1, &desc_set_, 0, nullptr);
+    vkCmdBindDescriptorSets(cmd_, VK_PIPELINE_BIND_POINT_COMPUTE, layout_, 0, 1, &set, 0, nullptr);
     vkCmdPushConstants(cmd_, layout_, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PushConstants), &pc);
     vkCmdDispatch(cmd_, gx, gy, 1);
-    submit_and_wait();
+    // The next dispatch of the batch may read what this one wrote.
+    VkMemoryBarrier mb{VK_STRUCTURE_TYPE_MEMORY_BARRIER};
+    mb.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+    mb.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    vkCmdPipelineBarrier(cmd_, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1, &mb,
+                         0, nullptr, 0, nullptr);
+    ++dispatches_;
+    ++pending_;
+    pending_work_ += work_pixels ? work_pixels : static_cast<uint64_t>(gx) * gy * 256;
+    uint32_t limit = std::clamp<uint32_t>(batch_.max_dispatches, 1, kMaxBatch);
+    if (pending_ >= limit || pending_work_ >= batch_.max_work_pixels) flush();
     kernel_ms_[kernel] += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
 }
 

@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Generated from CMakeLists.txt: change SPECTRA_PRODUCT_NAME there, nowhere else.
+#pragma once
+namespace spectra::product {
+inline constexpr const char* kName = "@SPECTRA_PRODUCT_NAME@";
+inline constexpr const char* kVersion = "@PROJECT_VERSION@";
+// Stable identifier for settings folders and file names; independent of the display name.
+inline constexpr const char* kId = "spectra-app";
+}  // namespace spectra::product

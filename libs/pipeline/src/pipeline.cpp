@@ -544,6 +544,12 @@ Pipeline::StaticCorrections Pipeline::static_corrections() const {
     return c;
 }
 
+double Pipeline::meter_autoexposure_ev(const Image& metering_image) const {
+    if (!p_.camera.auto_exposure) return 0.0;
+    Image meter = rgb_to_film_raw(metering_image, p_.io.input_color_space, p_.io.input_cctf_decoding);
+    return measure_raw_autoexposure_ev(meter, p_.camera.auto_exposure_method);
+}
+
 Image Pipeline::filming_expose(const Image& rgb, State& st) const {
     Image raw = rgb_to_film_raw(rgb, p_.io.input_color_space, p_.io.input_cctf_decoding);
     if (p_.camera.auto_exposure) {

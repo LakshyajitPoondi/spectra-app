@@ -29,6 +29,8 @@ using namespace spectra;
 
 namespace spectra {
 int run_bench(std::shared_ptr<const ColourData> cd, std::map<std::string, std::string>& opt);
+int run_tool(const std::string& cmd, std::shared_ptr<const Pack> pack, std::shared_ptr<const ColourData> colour,
+             std::map<std::string, std::string>& opt, const std::vector<std::string>& positional);
 }
 using nlohmann::json;
 
@@ -64,6 +66,14 @@ int usage() {
         "  gpu-info [--gpu NAME|INDEX]         list Vulkan devices\n"
         "  bench [--backend gpu|cpu] [--mp 20,30] [--preview 1600] [--in a.cr3,b.cr3] [--report FILE]\n"
         "        [--limit-gb 10]               timings, memory; exit code 1 above the memory limit\n"
+        "  calibrate [--out calib.json]        measure this GPU and choose preview size and batching\n"
+        "  bench-preview [--in RAW | --mp 20] [--calibration calib.json] [--preview N]\n"
+        "                                      interactive path: first preview and slider-change latency\n"
+        "  lut --out look.cube [--size 33] [--input srgb|rec709|display_p3|acescct] [--film F] [--print P]\n"
+        "      [--params p.json] [--preset preset.json]\n"
+        "  batch --out-dir DIR [--format tif|png|jpg|exr] [--bits N] [--long-edge N] [--preset preset.json]\n"
+        "        [--film F] [--print P] [--params p.json] [--wb ...] files...\n"
+        "  presets                             list the built-in presets\n"
         "GPU: add --backend gpu to render / parity; [--gpu NAME|INDEX] [--tile N] [--budget-mb N]\n"
         "common options: --pack path/to/spektrafilm.sfpk   --threads N");
     return 2;
@@ -177,6 +187,7 @@ int main(int argc, char** argv) {
         }
         auto colour = std::make_shared<const ColourData>(pack);
         if (cmd == "bench") return run_bench(colour, opt);
+        if (int rc = run_tool(cmd, pack, colour, opt, positional); rc >= 0) return rc;
         if (cmd == "convert") {
             // Decode a file (RAW or raster) and write it unprocessed: linear data as loaded.
             if (!opt.count("in") || !opt.count("out")) return usage();
