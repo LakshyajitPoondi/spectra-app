@@ -58,6 +58,7 @@ public:
 
 Q_SIGNALS:
     void engineStarted();
+    void engineError(const QString& message);
     void previewShown(bool draft);
     void exportDone(int ok, int failed, const QString& message);
     void calibrationFinished();

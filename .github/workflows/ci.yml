@@ -61,6 +61,7 @@ jobs:
         working-directory: build
         run: cpack -C Release -G "NSIS;ZIP"
       - name: Check the installed layout
+        timeout-minutes: 12
         # Install to a scratch folder and run from there with a bare PATH, so a
         # missing DLL or plugin fails here and not on a user's machine.
         shell: pwsh
@@ -73,9 +74,10 @@ jobs:
           & stage\bin\spectra-cli.exe pack-verify
           if ($LASTEXITCODE -ne 0) { throw "spectra-cli failed in the installed layout" }
           $out = Join-Path $env:RUNNER_TEMP "selftest"
-          $p = Start-Process -FilePath "stage\bin\spectra-app.exe" -ArgumentList "--cpu", "--selftest", "`"$out`"" -Wait -PassThru
-          Get-ChildItem $out
-          if ($p.ExitCode -ne 0) { throw "the installed app failed its self-test (exit code $($p.ExitCode))" }
+          $p = Start-Process -FilePath "stage\bin\spectra-app.exe" -ArgumentList "--cpu", "--selftest", "`"$out`"" -PassThru
+          if (-not $p.WaitForExit(300000)) { $p.Kill(); Write-Host "the installed app did not finish within 5 minutes" }
+          if (Test-Path "$out\selftest.log") { Get-Content "$out\selftest.log" } else { Write-Host "no selftest.log: the app did not start" }
+          if (-not $p.HasExited -or $p.ExitCode -ne 0) { throw "the installed app failed its self-test" }
       - name: Local-check script (syntax)
         shell: pwsh
         run: |

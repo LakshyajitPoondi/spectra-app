@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include <cstdarg>
 #include <cstdio>
 
 #include <QApplication>
@@ -63,6 +64,23 @@ void applyTheme(QApplication& app) {
         "QListWidget { background: #1e1e20; }");
 }
 
+// Self-test messages go to stdout and to <dir>/selftest.log (a Windows GUI
+// program has no console to print to).
+FILE* g_selftest_log = nullptr;
+void say(const char* fmt, ...) {
+    va_list a, b;
+    va_start(a, fmt);
+    va_copy(b, a);
+    std::vprintf(fmt, a);
+    std::fflush(stdout);
+    if (g_selftest_log) {
+        std::vfprintf(g_selftest_log, fmt, b);
+        std::fflush(g_selftest_log);
+    }
+    va_end(a);
+    va_end(b);
+}
+
 // Drives the window through open -> preview -> adjust -> export without a
 // person, for CI: exit code 0 only if every step produced its result.
 class SelfTest : public QObject {
@@ -70,12 +88,18 @@ public:
     SelfTest(app::MainWindow* w, const QString& out_dir, const QString& screenshot)
         : w_(w), out_(out_dir), shot_(screenshot) {
         QDir().mkpath(out_);
+        g_selftest_log = std::fopen((out_ + "/selftest.log").toLocal8Bit().constData(), "w");
+        say("selftest: started, platform %s\n", QGuiApplication::platformName().toUtf8().constData());
+        connect(w_, &app::MainWindow::engineError, this, [this](const QString& m) {
+            say("selftest: engine FAILED: %s\n", m.toUtf8().constData());
+            finish(1);
+        });
         connect(w_, &app::MainWindow::engineStarted, this, [this] {
-            std::printf("selftest: engine started (%s)\n", w_->engineHasGpu() ? "GPU" : "CPU");
+            say("selftest: engine started (%s)\n", w_->engineHasGpu() ? "GPU" : "CPU");
             if (!w_->engineHasGpu()) begin();
         });
         connect(w_, &app::MainWindow::calibrationFinished, this, [this] {
-            std::printf("selftest: calibration finished\n");
+            say("selftest: calibration finished\n");
             begin();
         });
         connect(w_, &app::MainWindow::previewShown, this, [this](bool draft) {
@@ -85,11 +109,11 @@ public:
             }
             ++refined_;
             if (step_ == 1) {
-                std::printf("selftest: first preview shown (%d draft, %d refined)\n", drafts_, refined_);
+                say("selftest: first preview shown (%d draft, %d refined)\n", drafts_, refined_);
                 step_ = 2;
                 w_->setParameter("/enlarger/print_exposure", 1.25);
             } else if (step_ == 2) {
-                std::printf("selftest: preview after a parameter change shown\n");
+                say("selftest: preview after a parameter change shown\n");
                 if (!shot_.isEmpty()) w_->grab().save(shot_);
                 step_ = 3;
                 w_->exportCurrentTo(out_ + "/selftest.png");
@@ -98,18 +122,18 @@ public:
         connect(w_, &app::MainWindow::exportDone, this, [this](int ok, int failed, const QString& message) {
             if (step_ == 3) {
                 bool good = ok == 1 && failed == 0 && QFileInfo(out_ + "/selftest.png").size() > 1000;
-                std::printf("selftest: export %s %s\n", good ? "ok" : "FAILED", message.toUtf8().constData());
+                say("selftest: export %s %s\n", good ? "ok" : "FAILED", message.toUtf8().constData());
                 if (!good) return finish(1);
                 step_ = 4;
                 w_->exportLutTo(out_ + "/selftest.cube");
             } else if (step_ == 4) {
                 bool good = ok == 1 && QFileInfo(out_ + "/selftest.cube").size() > 1000;
-                std::printf("selftest: LUT export %s\n", good ? "ok" : "FAILED");
+                say("selftest: LUT export %s\n", good ? "ok" : "FAILED");
                 finish(good && drafts_ > 0 ? 0 : 1);
             }
         });
         QTimer::singleShot(600000, this, [this] {
-            std::printf("selftest: TIMEOUT at step %d\n", step_);
+            say("selftest: TIMEOUT at step %d\n", step_);
             finish(1);
         });
     }

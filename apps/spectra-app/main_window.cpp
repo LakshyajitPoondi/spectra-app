@@ -328,10 +328,12 @@ void MainWindow::startEngine() {
             });
     connect(controller_, &RenderController::engineFailed, this, [this](const QString& m) {
         setBanner(tr("The rendering engine could not start: %1").arg(m));
+        Q_EMIT engineError(m);
     });
     connect(controller_, &RenderController::previewReady, this, &MainWindow::onPreviewReady);
     connect(controller_, &RenderController::previewFailed, this, [this](const QString& m, quint64) {
         status_render_->setText(tr("Render failed: %1").arg(m));
+        Q_EMIT engineError(m);
     });
     connect(controller_, &RenderController::calibrationProgress, this,
             [this](const QString& line) { status_render_->setText(tr("Calibrating: %1").arg(line)); });
